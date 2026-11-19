@@ -416,4 +416,7 @@
 "upd.done":"Kapibo u përditësua në versionin {v} ✨",
 "news.110":"Ikona kapibare, tema, Kapi që të nxit, ngjitëse për koleksion, kavanozi i yuzut, instalim i lehtë, përditësime automatike dhe tur i risive.",
 "news.111":"Njoftim i ri privatësie dhe kushte përdorimi, më të plota, me miratim të veçantë të klauzolave.",
-"o.advanced":"Opsione të avancuara"}
+"o.advanced":"Opsione të avancuara",
+"inst.and1":"Nëse Kapibo u hap brenda një aplikacioni tjetër, prek ⋮ dhe zgjidh «Hap në Chrome»",
+"inst.and2":"Në Chrome prek ⋮ dhe pastaj «Instalo aplikacionin» (ose «Shto në ekranin bazë»)",
+"o.impHint2":"Në Android, nëse skedari është Google Sheet në Drive, shkarkoje së pari: te Sheets prek ⋮ › Ndaj dhe eksporto › Ruaj si Excel."}

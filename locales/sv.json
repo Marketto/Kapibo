@@ -416,4 +416,7 @@
 "upd.done":"Kapibo uppdaterad till version {v} ✨",
 "news.110":"Kapybaraikoner, teman, Kapi som hejar på dig, klistermärken att samla, yuzu-burken, enkel installation, automatiska uppdateringar och en rundtur bland nyheterna.",
 "news.111":"Ny, mer fullständig integritetspolicy och användarvillkor med särskilt godkännande av klausulerna.",
-"o.advanced":"Avancerade alternativ"}
+"o.advanced":"Avancerade alternativ",
+"inst.and1":"Om Kapibo öppnades i en annan app, tryck på ⋮ och välj ”Öppna i Chrome”",
+"inst.and2":"I Chrome trycker du på ⋮ och sedan ”Installera app” (eller ”Lägg till på startskärmen”)",
+"o.impHint2":"På Android: om filen är ett Google Kalkylark på Drive, ladda ner det först. I Kalkylark trycker du på ⋮ › Dela och exportera › Spara som Excel."}

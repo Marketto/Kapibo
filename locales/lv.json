@@ -416,4 +416,7 @@
 "upd.done":"Kapibo atjaunināts uz versiju {v} ✨",
 "news.110":"Kapibaras ikonas, motīvi, Kapi tev uzmundrina, kolekcionējamas uzlīmes, yuzu burka, vienkārša instalēšana, automātiskie atjauninājumi un jaunumu ievads.",
 "news.111":"Jauns, pilnīgāks privātuma paziņojums un lietošanas noteikumi ar atsevišķu klauzulu apstiprināšanu.",
-"o.advanced":"Papildu iespējas"}
+"o.advanced":"Papildu iespējas",
+"inst.and1":"Ja Kapibo atvērās citā lietotnē, pieskaries ⋮ un izvēlies “Atvērt pārlūkā Chrome”",
+"inst.and2":"Pārlūkā Chrome pieskaries ⋮ un pēc tam “Instalēt lietotni” (vai “Pievienot sākuma ekrānam”)",
+"o.impHint2":"Android ierīcē: ja fails ir Google izklājlapa pakalpojumā Drive, vispirms lejupielādē to. Izklājlapās pieskaries ⋮ › Kopīgot un eksportēt › Saglabāt kā Excel."}

@@ -416,4 +416,7 @@
 "upd.done":"Kapibo auf Version {v} aktualisiert ✨",
 "news.110":"Kapibara-Icons, Designs, Kapi als Anfeuerin, Sammelsticker, das Yuzu-Glas, einfache Installation, automatische Updates und ein Neuigkeiten-Rundgang.",
 "news.111":"Neue, vollständigere Datenschutzerklärung und Nutzungsbedingungen mit gesonderter Zustimmung zu den Klauseln.",
-"o.advanced":"Erweiterte Optionen"}
+"o.advanced":"Erweiterte Optionen",
+"inst.and1":"Falls Kapibo in einer anderen App geöffnet wurde, tippe auf ⋮ und wähle „In Chrome öffnen“",
+"inst.and2":"Tippe in Chrome auf ⋮ und dann auf „App installieren“ (oder „Zum Startbildschirm hinzufügen“)",
+"o.impHint2":"Auf Android: Wenn die Datei eine Google-Tabelle in Drive ist, lade sie zuerst herunter. In Google Tabellen tippe auf ⋮ › Teilen und exportieren › Als Excel speichern."}

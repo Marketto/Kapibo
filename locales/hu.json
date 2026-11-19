@@ -416,4 +416,7 @@
 "upd.done":"A Kapibo frissült a(z) {v} verzióra ✨",
 "news.110":"Kapibara-ikonok, témák, szurkoló Kapi, gyűjthető matricák, yuzu-befőttesüveg, egyszerű telepítés, automatikus frissítések és újdonságbemutató.",
 "news.111":"Új, részletesebb adatvédelmi tájékoztató és felhasználási feltételek, a kikötések külön jóváhagyásával.",
-"o.advanced":"Speciális beállítások"}
+"o.advanced":"Speciális beállítások",
+"inst.and1":"Ha a Kapibo egy másik appon belül nyílt meg, koppints a ⋮ elemre, és válaszd a „Megnyitás Chrome-ban” lehetőséget",
+"inst.and2":"A Chrome-ban koppints a ⋮ elemre, majd az „Alkalmazás telepítése” (vagy „Hozzáadás a kezdőképernyőhöz”) lehetőségre",
+"o.impHint2":"Androidon, ha a fájl Google Táblázat a Drive-on, előbb töltsd le: a Táblázatokban koppints a ⋮ › Megosztás és exportálás › Mentés Excelként elemre."}

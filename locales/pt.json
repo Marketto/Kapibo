@@ -416,4 +416,7 @@
 "upd.done":"Kapibo atualizado para a versão {v} ✨",
 "news.110":"Ícones de capivara, temas, a Kapi a dar-te força, autocolantes de coleção, o frasco de yuzu, instalação fácil, atualizações automáticas e uma visita às novidades.",
 "news.111":"Novo aviso de privacidade e condições de utilização, mais completos, com aprovação específica das cláusulas.",
-"o.advanced":"Opções avançadas"}
+"o.advanced":"Opções avançadas",
+"inst.and1":"Se o Kapibo abriu dentro de outra app, toca em ⋮ e escolhe «Abrir no Chrome»",
+"inst.and2":"No Chrome toca em ⋮ e depois em «Instalar aplicação» (ou «Adicionar ao ecrã principal»)",
+"o.impHint2":"No Android, se o ficheiro for uma Folha de cálculo Google no Drive, transfere-o primeiro: nas Folhas de cálculo toca em ⋮ › Partilhar e exportar › Guardar como Excel."}

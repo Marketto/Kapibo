@@ -416,4 +416,7 @@
 "upd.done":"Kapibo atnaujinta į {v} versiją ✨",
 "news.110":"Kapibaros piktogramos, temos, Kapi tave palaiko, kolekciniai lipdukai, yuzu stiklainis, paprastas įdiegimas, automatiniai atnaujinimai ir naujovių apžvalga.",
 "news.111":"Nauji, išsamesni privatumo pranešimas ir naudojimo sąlygos su atskiru straipsnių patvirtinimu.",
-"o.advanced":"Išplėstinės parinktys"}
+"o.advanced":"Išplėstinės parinktys",
+"inst.and1":"Jei Kapibo atsidarė kitoje programoje, palieskite ⋮ ir pasirinkite „Atidaryti naudojant „Chrome““",
+"inst.and2":"„Chrome“ palieskite ⋮, tada „Įdiegti programą“ (arba „Pridėti prie pagrindinio ekrano“)",
+"o.impHint2":"„Android“: jei failas yra „Google“ skaičiuoklė „Drive“, pirmiausia atsisiųskite. „Skaičiuoklėse“ palieskite ⋮ › Bendrinti ir eksportuoti › Išsaugoti kaip „Excel“."}

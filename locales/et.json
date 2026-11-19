@@ -416,4 +416,7 @@
 "upd.done":"Kapibo uuendati versioonile {v} ✨",
 "news.110":"Kapibara ikoonid, teemad, Kapi hoiab sulle pöialt, kogutavad kleebised, yuzu purk, lihtne paigaldus, automaatsed uuendused ja uudiste tutvustus.",
 "news.111":"Uus, põhjalikum privaatsusteatis ja kasutustingimused koos klauslite eraldi kinnitamisega.",
-"o.advanced":"Täpsemad valikud"}
+"o.advanced":"Täpsemad valikud",
+"inst.and1":"Kui Kapibo avanes teises rakenduses, puuduta ⋮ ja vali „Ava Chrome'is“",
+"inst.and2":"Chrome'is puuduta ⋮ ja siis „Installi rakendus“ (või „Lisa avakuvale“)",
+"o.impHint2":"Androidis: kui fail on Google'i tabel Drive'is, laadi see esmalt alla. Tabelites puuduta ⋮ › Jaga ja ekspordi › Salvesta Excelina."}

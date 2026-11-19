@@ -416,4 +416,7 @@
 "upd.done":"Kapibo s-a actualizat la versiunea {v} ✨",
 "news.110":"Pictograme cu capibara, teme, Kapi care te încurajează, abțibilduri de colecție, borcanul cu yuzu, instalare ușoară, actualizări automate și un tur al noutăților.",
 "news.111":"Notă de confidențialitate și condiții de utilizare noi, mai complete, cu aprobarea specifică a clauzelor.",
-"o.advanced":"Opțiuni avansate"}
+"o.advanced":"Opțiuni avansate",
+"inst.and1":"Dacă Kapibo s-a deschis într-o altă aplicație, atinge ⋮ și alege „Deschide în Chrome”",
+"inst.and2":"În Chrome atinge ⋮, apoi „Instalează aplicația” (sau „Adaugă pe ecranul de pornire”)",
+"o.impHint2":"Pe Android, dacă fișierul este o foaie de calcul Google în Drive, descarc-o mai întâi: în Foi de calcul atinge ⋮ › Trimite și exportă › Salvează ca Excel."}

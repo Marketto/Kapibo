@@ -416,4 +416,7 @@
 "upd.done":"Kapibo is bijgewerkt naar versie {v} ✨",
 "news.110":"Capibara-pictogrammen, thema's, Kapi die je aanmoedigt, verzamelbare stickers, de yuzu-pot, eenvoudig installeren, automatische updates en een rondleiding met nieuwtjes.",
 "news.111":"Nieuwe, completere privacyverklaring en gebruiksvoorwaarden, met specifieke goedkeuring van de bepalingen.",
-"o.advanced":"Geavanceerde opties"}
+"o.advanced":"Geavanceerde opties",
+"inst.and1":"Als Kapibo in een andere app is geopend, tik op ⋮ en kies “Openen in Chrome”",
+"inst.and2":"Tik in Chrome op ⋮ en dan op “App installeren” (of “Toevoegen aan startscherm”)",
+"o.impHint2":"Op Android: als het bestand een Google Spreadsheet op Drive is, download het dan eerst. Tik in Spreadsheets op ⋮ › Delen en exporteren › Opslaan als Excel."}

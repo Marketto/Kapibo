@@ -416,4 +416,7 @@
 "upd.done":"Kapibo er oppdatert til versjon {v} ✨",
 "news.110":"Kapybara-ikoner, temaer, Kapi som heier på deg, klistremerker å samle, yuzu-glasset, enkel installasjon, automatiske oppdateringer og en omvisning i nyhetene.",
 "news.111":"Ny, mer fullstendig personvernerklæring og bruksvilkår med særskilt godkjenning av klausulene.",
-"o.advanced":"Avanserte innstillinger"}
+"o.advanced":"Avanserte innstillinger",
+"inst.and1":"Hvis Kapibo åpnet seg i en annen app, trykk på ⋮ og velg «Åpne i Chrome»",
+"inst.and2":"I Chrome trykker du på ⋮ og så «Installer appen» (eller «Legg til på startskjermen»)",
+"o.impHint2":"På Android: hvis filen er et Google Regneark på Disk, last det ned først. I Regneark trykker du på ⋮ › Del og eksporter › Lagre som Excel."}

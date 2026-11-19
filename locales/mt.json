@@ -416,4 +416,7 @@
 "upd.done":"Kapibo aġġornata għall-verżjoni {v} ✨",
 "news.110":"Ikoni tal-kapibara, temi, Kapi titħajjar, stikers li tiġbor, il-vażett tal-yuzu, installazzjoni faċli, aġġornamenti awtomatiċi u tour tal-ġdid.",
 "news.111":"Avviż ta' privatezza u kundizzjonijiet ta' użu ġodda, aktar kompluti, bl-approvazzjoni speċifika tal-klawżoli.",
-"o.advanced":"Għażliet avvanzati"}
+"o.advanced":"Għażliet avvanzati",
+"inst.and1":"Jekk Kapibo nfetaħ ġol-app oħra, ittokka ⋮ u agħżel “Iftaħ f'Chrome”",
+"inst.and2":"F'Chrome ittokka ⋮ imbagħad “Installa l-app” (jew “Żid mal-iskrin tad-dar”)",
+"o.impHint2":"Fuq Android, jekk il-fajl huwa Google Sheet fuq Drive, niżżlu l-ewwel: f'Sheets ittokka ⋮ › Aqsam u esporta › Issejvja bħala Excel."}

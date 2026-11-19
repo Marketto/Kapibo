@@ -416,4 +416,7 @@
 "upd.done":"Kapibo zaktualizowano do wersji {v} ✨",
 "news.110":"Ikony kapibary, motywy, Kapi, która ci kibicuje, naklejki do zbierania, słoik yuzu, łatwa instalacja, automatyczne aktualizacje i przewodnik po nowościach.",
 "news.111":"Nowa, pełniejsza polityka prywatności i regulamin ze szczegółową akceptacją poszczególnych klauzul.",
-"o.advanced":"Opcje zaawansowane"}
+"o.advanced":"Opcje zaawansowane",
+"inst.and1":"Jeśli Kapibo otworzyło się w innej aplikacji, kliknij ⋮ i wybierz „Otwórz w Chrome”",
+"inst.and2":"W Chrome kliknij ⋮, a potem „Zainstaluj aplikację” (lub „Dodaj do ekranu głównego”)",
+"o.impHint2":"Na Androidzie: jeśli plik to Arkusz Google na Dysku, najpierw go pobierz. W Arkuszach kliknij ⋮ › Udostępnij i eksportuj › Zapisz jako Excel."}

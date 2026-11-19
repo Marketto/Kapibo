@@ -416,4 +416,7 @@
 "upd.done":"Kapibo ažuriran na verziju {v} ✨",
 "news.110":"Kapibara ikone, teme, Kapi koja te bodri, naljepnice za skupljanje, tegla yuzua, jednostavna instalacija, automatska ažuriranja i obilazak novosti.",
 "news.111":"Novo, potpunije obavještenje o privatnosti i uslovi korištenja, sa posebnim odobrenjem klauzula.",
-"o.advanced":"Napredne opcije"}
+"o.advanced":"Napredne opcije",
+"inst.and1":"Ako se Kapibo otvorio unutar druge aplikacije, dodirni ⋮ i odaberi „Otvori u Chromeu“",
+"inst.and2":"U Chromeu dodirni ⋮, zatim „Instaliraj aplikaciju“ (ili „Dodaj na početni ekran“)",
+"o.impHint2":"Na Androidu, ako je datoteka Google tabela na Driveu, prvo je preuzmi: u Tabelama dodirni ⋮ › Dijeli i izvezi › Sačuvaj kao Excel."}

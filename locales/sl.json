@@ -416,4 +416,7 @@
 "upd.done":"Kapibo posodobljen na različico {v} ✨",
 "news.110":"Ikone kapibare, teme, Kapi, ki ti navija, zbirateljske nalepke, kozarec yuzuja, preprosta namestitev, samodejne posodobitve in predstavitev novosti.",
 "news.111":"Novo, popolnejše obvestilo o zasebnosti in pogoji uporabe s posebno odobritvijo klavzul.",
-"o.advanced":"Napredne možnosti"}
+"o.advanced":"Napredne možnosti",
+"inst.and1":"Če se je Kapibo odprl v drugi aplikaciji, tapni ⋮ in izberi »Odpri v Chromu«",
+"inst.and2":"V Chromu tapni ⋮ in nato »Namesti aplikacijo« (ali »Dodaj na začetni zaslon«)",
+"o.impHint2":"V Androidu: če je datoteka Google preglednica na Disku, jo najprej prenesi. V Preglednicah tapni ⋮ › Deli in izvozi › Shrani kot Excel."}

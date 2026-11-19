@@ -416,4 +416,7 @@
 "upd.done":"Kapibo aktualizováno na verzi {v} ✨",
 "news.110":"Ikony kapybary, motivy, Kapi, která ti fandí, sběratelské nálepky, sklenice yuzu, snadná instalace, automatické aktualizace a prohlídka novinek.",
 "news.111":"Nové, úplnější zásady ochrany soukromí a podmínky použití se zvláštním schválením jednotlivých ustanovení.",
-"o.advanced":"Pokročilé možnosti"}
+"o.advanced":"Pokročilé možnosti",
+"inst.and1":"Pokud se Kapibo otevřelo v jiné aplikaci, klepni na ⋮ a vyber „Otevřít v Chromu“",
+"inst.and2":"V Chromu klepni na ⋮ a pak na „Nainstalovat aplikaci“ (nebo „Přidat na plochu“)",
+"o.impHint2":"V Androidu: pokud je soubor tabulka Google na Disku, nejdřív ho stáhni. V Tabulkách klepni na ⋮ › Sdílet a exportovat › Uložit jako Excel."}
