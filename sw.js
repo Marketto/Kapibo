@@ -2,7 +2,7 @@
 const VERSION = "dev";
 const CACHE = "kapibo-" + VERSION, MODS = "kapibo-moduli";
 const CORE = ["./", "index.html", "css/style.css", "css/icons.css", "css/fonts.css", "css/extra.css", "js/legal.js", "js/tour.js", "js/install.js", "locales/legal/en.json", "fonts/kapi-icons.woff2", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png",
-  "js/app.js", "js/i18n.js", "js/store.js", "js/categories.js", "js/money.js", "js/mascot.js", "js/cheer.js", "js/jar.js", "js/stickers.js", "js/stats.js", "js/charts.js", "js/version.js", "js/ai.js",
+  "js/app.js", "js/i18n.js", "js/store.js", "js/categories.js", "js/money.js", "js/mascot.js", "js/cheer.js", "js/jar.js", "js/stickers.js", "js/stats.js", "js/charts.js", "js/version.js", "js/ai.js", "js/config.js",
   "js/sync/index.js", "js/sync/dropbox.js", "js/sync/gdrive.js", "locales/en.json"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {})));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("kapibo-") && k !== CACHE && k !== MODS).map(k => caches.delete(k)))).then(() => self.clients.claim())));

@@ -1,8 +1,9 @@
 // Dropbox dal browser (OAuth PKCE, nessun server). Token solo su questo dispositivo.
 // Ripreso da Mochi Spesa, con la correzione della variabile `t` che nascondeva la funzione di traduzione.
+import { CONFIG } from "../config.js";
 const LS = "kapibo.dropbox";
-// App key pubblica dell'app Dropbox "Kapibo" (PKCE: non è un segreto). Chi vuole può usare la propria da Altro.
-export const DEFAULT_KEY = "lyksebe50pm4wtq";
+// App key predefinita: arriva dal deploy (variabile DROPBOX_APP_KEY), non è nel sorgente.
+export const DEFAULT_KEY = CONFIG.dropboxKey;
 const read = () => { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch { return {}; } };
 const write = v => { try { localStorage.setItem(LS, JSON.stringify(v)); } catch {} };
 const fail = code => Object.assign(new Error(code), { code });

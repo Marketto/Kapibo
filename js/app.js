@@ -675,7 +675,7 @@ async function dropboxConnect() {
   const r = await dialog(t("o.connect", { p: "Dropbox" }), `<p class="muted">${t("o.cloudHint")}</p>
     <details><summary>${t("o.advanced")}</summary><label class="f">${t("o.dbxPath")}<input name="p" value="${esc(dbx.path())}" required></label>
     <label class="f">App key<input name="k" value="${esc(dbx.appKey())}" required autocomplete="off"></label><p class="hint">${t("o.dbxHint", { uri: dbx.redirectUri() })}</p></details>`, { ok: t("o.connectGo") });
-  if (!r) return; dbx.setPath(r.p.startsWith("/") ? r.p : "/" + r.p); dbx.startAuth((r.k || dbx.DEFAULT_KEY).trim());
+  if (!r) return; dbx.setPath(r.p.startsWith("/") ? r.p : "/" + r.p); const key = (r.k || dbx.DEFAULT_KEY || "").trim(); if (!key) return toast(t("o.dbxHint", { uri: dbx.redirectUri() })); dbx.startAuth(key);
 }
 async function gdriveConnect() {
   const r = await dialog(t("o.connect", { p: "Google Drive" }), `<p class="hint">${t("o.gdHint", { origin: location.origin })}</p><label class="f">OAuth Client ID<input name="k" value="${esc(gd.clientId())}" required autocomplete="off"></label>`, { ok: t("o.connectGo") });

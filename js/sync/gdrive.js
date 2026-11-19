@@ -1,5 +1,6 @@
 // Google Drive dal browser (Google Identity Services, permesso drive.file: solo i file creati da Kapibo).
 // Serve un "Client ID OAuth" di tipo Web con origine https://marketto.github.io (vedi docs/CLOUD.md).
+import { CONFIG } from "../config.js";
 const LS = "kapibo.gdrive";
 const read = () => { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch { return {}; } };
 const write = v => { try { localStorage.setItem(LS, JSON.stringify(v)); } catch {} };
@@ -7,7 +8,7 @@ const fail = code => Object.assign(new Error(code), { code });
 const NAME = "kapibo.json";
 
 export const isConnected = () => !!read().on;
-export const clientId = () => read().clientId || "";
+export const clientId = () => read().clientId || CONFIG.googleClientId;
 export const disconnect = () => { const d = read(); if (d.token && window.google) google.accounts.oauth2.revoke(d.token, () => {}); write({ clientId: d.clientId }); };
 
 let gis = null;
