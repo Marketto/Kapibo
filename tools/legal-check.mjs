@@ -7,6 +7,6 @@ for (const f of fs.readdirSync(dir).filter(f => f.endsWith(".json"))) {
   if (!fs.existsSync(p)) { console.log("manca legal/" + f); bad = 1; continue; }
   const d = JSON.parse(fs.readFileSync(p));
   for (const k of ["privacy", "terms", "summary"]) if (!Array.isArray(d[k]) || d[k].length !== en[k].length) { console.log(`legal/${f}: ${k} diverso`); bad = 1; }
-  if (!d.title || !d.updated) { console.log(`legal/${f}: titolo o data mancanti`); bad = 1; }
+  if (!d.title || !d.updated || !d.approve) { console.log(`legal/${f}: titolo o data mancanti`); bad = 1; }
 }
 console.log(bad ? "Testi legali incompleti" : "Testi legali OK"); process.exit(bad);

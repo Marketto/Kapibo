@@ -28,3 +28,4 @@ dialog.legal form { padding: 20px; }
 
 .install-steps { padding-inline-start: 1.3em; } .install-steps li { margin: 6px 0; }
 @media (prefers-reduced-motion: reduce) { .tour-hole { transition: none; } }
+.gate-spec { font-weight: 400; font-size: .86rem; background: var(--c-bg); border-radius: var(--r-s); padding: 10px; }
