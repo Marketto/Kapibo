@@ -88,6 +88,7 @@ async function boot() {
   await legal.gate(kapi.KAPI_SVG);
   startTour(false);
   inst.onChange(() => tab === "more" && render());
+  setTimeout(gd.preload, 3000);
   if (sync.connected().length) doSync();
   if ("serviceWorker" in navigator && location.protocol === "https:") registerSW();
 }
@@ -671,16 +672,18 @@ async function newsDialog() {
 
 // ---------- sync ----------
 async function dropboxConnect() {
-  // con la app key predefinita basta un tocco; nome del file e chiave propria restano nelle opzioni avanzate
-  const r = await dialog(t("o.connect", { p: "Dropbox" }), `<p class="muted">${t("o.cloudHint")}</p>
-    <details><summary>${t("o.advanced")}</summary><label class="f">${t("o.dbxPath")}<input name="p" value="${esc(dbx.path())}" required></label>
-    <label class="f">App key<input name="k" value="${esc(dbx.appKey())}" required autocomplete="off"></label><p class="hint">${t("o.dbxHint", { uri: dbx.redirectUri() })}</p></details>`, { ok: t("o.connectGo") });
-  if (!r) return; dbx.setPath(r.p.startsWith("/") ? r.p : "/" + r.p); const key = (r.k || dbx.DEFAULT_KEY || "").trim(); if (!key) return toast(t("o.dbxHint", { uri: dbx.redirectUri() })); dbx.startAuth(key);
+  // chiave pubblicata col sito: un tocco e via; il dialogo con i campi serve solo se manca (sviluppo locale)
+  if (dbx.DEFAULT_KEY) return dbx.startAuth(dbx.appKey());
+  const r = await dialog(t("o.connect", { p: "Dropbox" }), `<p class="hint">${t("o.dbxHint", { uri: dbx.redirectUri() })}</p><label class="f">App key<input name="k" required autocomplete="off"></label>`, { ok: t("o.connectGo") });
+  if (r?.k) dbx.startAuth(r.k.trim());
 }
 async function gdriveConnect() {
-  const r = await dialog(t("o.connect", { p: "Google Drive" }), `<p class="hint">${t("o.gdHint", { origin: location.origin })}</p><label class="f">OAuth Client ID<input name="k" value="${esc(gd.clientId())}" required autocomplete="off"></label>`, { ok: t("o.connectGo") });
-  if (!r) return;
-  try { await gd.connect(r.k.trim()); toast(t("sync.connected", { p: "Google Drive" })); render(); doSync(true); } catch (e) { toast(t(e.code || "sync.retry")); }
+  let cid = gd.clientId();
+  if (!cid) {
+    const r = await dialog(t("o.connect", { p: "Google Drive" }), `<p class="hint">${t("o.gdHint", { origin: location.origin })}</p><label class="f">OAuth Client ID<input name="k" required autocomplete="off"></label>`, { ok: t("o.connectGo") });
+    if (!r?.k) return; cid = r.k.trim();
+  }
+  try { await gd.connect(cid); toast(t("sync.connected", { p: "Google Drive" })); render(); doSync(true); } catch (e) { toast(t(e.code || "sync.retry")); }
 }
 async function doSync(manual) {
   const btn = $("#syncBtn"); btn.dataset.state = "busy";

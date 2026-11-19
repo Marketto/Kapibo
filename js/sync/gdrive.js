@@ -14,6 +14,9 @@ export const disconnect = () => { const d = read(); if (d.token && window.google
 let gis = null;
 const loadGis = () => (gis ||= new Promise((res, rej) => document.head.appendChild(Object.assign(document.createElement("script"), { src: "https://accounts.google.com/gsi/client", onload: res, onerror: () => { gis = null; rej(fail("sync.retry")); } }))));
 
+/** Carica in anticipo lo script di Google, così la finestra di accesso si apre subito al tocco. */
+export const preload = () => { if (clientId()) loadGis().catch(() => {}); };
+
 /** Chiede il permesso (finestra Google). interactive=false prova senza finestra. */
 export async function connect(cid, interactive = true) {
   await loadGis();
