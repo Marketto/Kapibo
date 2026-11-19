@@ -1,0 +1,7 @@
+{
+  "model": "sonnet",
+  "permissions": {
+    "allow": ["Bash(node --test:*)", "Bash(node tools/:*)", "Bash(git status:*)", "Bash(git diff:*)"],
+    "deny": ["Read(vendor/**)", "Read(./config.local.js)"]
+  }
+}
