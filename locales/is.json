@@ -419,4 +419,5 @@
 "o.advanced":"Ítarlegir valkostir",
 "inst.and1":"Ef Kapibo opnaðist í öðru forriti, ýttu á ⋮ og veldu „Opna í Chrome“",
 "inst.and2":"Í Chrome ýttu á ⋮ og svo „Setja upp forrit“ (eða „Bæta við heimaskjá“)",
-"o.impHint2":"Í Android: ef skráin er Google reiknirit á Drive, sæktu hana fyrst. Í Töflureiknum ýttu á ⋮ › Deila og flytja út › Vista sem Excel."}
+"o.impHint2":"Í Android: ef skráin er Google reiknirit á Drive, sæktu hana fyrst. Í Töflureiknum ýttu á ⋮ › Deila og flytja út › Vista sem Excel.",
+"o.importDrive":"Flytja inn af Google Drive"}

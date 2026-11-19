@@ -419,4 +419,5 @@
 "o.advanced":"Rozšírené možnosti",
 "inst.and1":"Ak sa Kapibo otvorilo v inej aplikácii, klepni na ⋮ a vyber „Otvoriť v Chrome“",
 "inst.and2":"V Chrome klepni na ⋮ a potom na „Inštalovať aplikáciu“ (alebo „Pridať na plochu“)",
-"o.impHint2":"V Androide: ak je súbor Tabuľka Google na Disku, najprv ho stiahni. V Tabuľkách klepni na ⋮ › Zdieľať a exportovať › Uložiť ako Excel."}
+"o.impHint2":"V Androide: ak je súbor Tabuľka Google na Disku, najprv ho stiahni. V Tabuľkách klepni na ⋮ › Zdieľať a exportovať › Uložiť ako Excel.",
+"o.importDrive":"Importovať z Disku Google"}

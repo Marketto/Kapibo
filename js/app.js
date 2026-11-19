@@ -161,7 +161,7 @@ async function onAction(e) {
     reading: () => readingDialog(id),
     bill: () => billDialog(S().bills.find(x => x.id === id)),
     offer: () => offerDialog(S().offers.find(x => x.id === id)),
-    import: () => $("#fileXls").click(),
+    import: () => $("#fileXls").click(), importDrive,
     backup: exportBackup, restore: () => $("#fileJson").click(),
     dbx: dropboxConnect, dbxOff: () => { dbx.disconnect(); render(); }, gd: gdriveConnect, gdOff: () => { gd.disconnect(); render(); },
     sync: () => doSync(true), newCat: () => catDialog(), editCat: () => catDialog(catById(id)),
@@ -585,7 +585,7 @@ function viewMore() {
     <label class="f sw"><input type="checkbox" class="chk" id="oBuzz" ${st.buzz ? "checked" : ""}> ${t("o.buzz")}</label>
     ${vb ? `<p class="muted">${t("o.vBalance", { v: money(vb) })}</p>` : ""}</div>
   ${albumCard()}
-  <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><p class="hint">${t("o.impHint2")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button></div></div>
+  <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><p class="hint">${t("o.impHint2")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button>${gd.canPick() ? `<button class="btn soft" data-act="importDrive">${ic("cloud")} ${t("o.importDrive")}</button>` : ""}</div></div>
   ${installCard()}
   <div class="card" id="cloud"><h2>${ic("cloud")} ${t("o.cloud")}</h2><p class="muted">${t("o.cloudHint")}</p>
     <h3>Dropbox ${dbx.isConnected() ? ic("check") : ""}</h3>${dbx.isConnected() ? `<p class="muted">${esc(dbx.path())}</p><div class="btns"><button class="btn small" data-act="sync">${ic("sync")} ${t("o.syncNow")}</button><button class="btn small ghost" data-act="dbxOff">${t("o.disconnect")}</button></div>`
@@ -628,8 +628,11 @@ document.addEventListener("click", e => {
 });
 
 // importazione Excel
-$("#fileXls").addEventListener("change", async e => {
-  const f = e.target.files[0]; if (!f) return; e.target.value = "";
+$("#fileXls").addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) importFile(f); });
+async function importDrive() {
+  try { const f = await gd.pickSpreadsheet(lang()); if (f) importFile(f); } catch (e) { toast(t(e.code || "o.impError")); }
+}
+async function importFile(f) {
   kapi.mood("think"); kapi.say("kapi.think");
   try {
     const { readWorkbook, importSheets } = await import("./importer.js");
@@ -646,7 +649,7 @@ $("#fileXls").addEventListener("change", async e => {
     const last = Object.keys(res.months).sort().pop(); if (last) cur = last;
     kapi.confetti(40); go("stats"); afterSave({ say: ["import", { m: Object.keys(res.months).length }, 1], before, ev: ["import"] });
   } catch (err) { console.error(err); toast(t("o.impError")); kapi.say("kapi.oops"); }
-});
+}
 
 // backup
 function exportBackup() {

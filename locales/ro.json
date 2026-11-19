@@ -419,4 +419,5 @@
 "o.advanced":"Opțiuni avansate",
 "inst.and1":"Dacă Kapibo s-a deschis într-o altă aplicație, atinge ⋮ și alege „Deschide în Chrome”",
 "inst.and2":"În Chrome atinge ⋮, apoi „Instalează aplicația” (sau „Adaugă pe ecranul de pornire”)",
-"o.impHint2":"Pe Android, dacă fișierul este o foaie de calcul Google în Drive, descarc-o mai întâi: în Foi de calcul atinge ⋮ › Trimite și exportă › Salvează ca Excel."}
+"o.impHint2":"Pe Android, dacă fișierul este o foaie de calcul Google în Drive, descarc-o mai întâi: în Foi de calcul atinge ⋮ › Trimite și exportă › Salvează ca Excel.",
+"o.importDrive":"Importă din Google Drive"}

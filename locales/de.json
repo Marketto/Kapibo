@@ -419,4 +419,5 @@
 "o.advanced":"Erweiterte Optionen",
 "inst.and1":"Falls Kapibo in einer anderen App geöffnet wurde, tippe auf ⋮ und wähle „In Chrome öffnen“",
 "inst.and2":"Tippe in Chrome auf ⋮ und dann auf „App installieren“ (oder „Zum Startbildschirm hinzufügen“)",
-"o.impHint2":"Auf Android: Wenn die Datei eine Google-Tabelle in Drive ist, lade sie zuerst herunter. In Google Tabellen tippe auf ⋮ › Teilen und exportieren › Als Excel speichern."}
+"o.impHint2":"Auf Android: Wenn die Datei eine Google-Tabelle in Drive ist, lade sie zuerst herunter. In Google Tabellen tippe auf ⋮ › Teilen und exportieren › Als Excel speichern.",
+"o.importDrive":"Aus Google Drive importieren"}

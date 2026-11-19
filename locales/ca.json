@@ -419,4 +419,5 @@
 "o.advanced":"Opcions avançades",
 "inst.and1":"Si Kapibo s'ha obert dins d'una altra aplicació, toca ⋮ i tria «Obre a Chrome»",
 "inst.and2":"A Chrome toca ⋮ i després «Instal·la l'aplicació» (o «Afegeix a la pantalla d'inici»)",
-"o.impHint2":"A Android, si el fitxer és un full de càlcul de Google a Drive, baixa'l primer: a Fulls de càlcul toca ⋮ › Comparteix i exporta › Desa com a Excel."}
+"o.impHint2":"A Android, si el fitxer és un full de càlcul de Google a Drive, baixa'l primer: a Fulls de càlcul toca ⋮ › Comparteix i exporta › Desa com a Excel.",
+"o.importDrive":"Importa des de Google Drive"}

@@ -18,14 +18,14 @@ const loadGis = () => (gis ||= new Promise((res, rej) => document.head.appendChi
 export const preload = () => { if (clientId()) loadGis().catch(() => {}); };
 
 /** Chiede il permesso (finestra Google). interactive=false prova senza finestra. */
-export async function connect(cid, interactive = true) {
+export async function connect(cid, interactive = true, { sync = true } = {}) {
   await loadGis();
   const d = read();
   return new Promise((res, rej) => {
     const tc = google.accounts.oauth2.initTokenClient({ client_id: cid || d.clientId, scope: "https://www.googleapis.com/auth/drive.file",
-      callback: r => { if (r.error) return rej(fail("sync.auth")); write({ ...read(), clientId: cid || d.clientId, on: 1, token: r.access_token, exp: Date.now() + (r.expires_in - 60) * 1000 }); res(true); },
+      callback: r => { if (r.error) return rej(fail("sync.auth")); write({ ...read(), clientId: cid || d.clientId, ...(sync ? { on: 1 } : {}), token: r.access_token, exp: Date.now() + (r.expires_in - 60) * 1000 }); res(true); },
       error_callback: () => rej(fail("sync.auth")) });
-    tc.requestAccessToken({ prompt: interactive ? (d.on ? "" : "consent") : "none" });
+    tc.requestAccessToken({ prompt: interactive ? (d.on || d.token ? "" : "consent") : "none" });
   });
 }
 async function token() {
@@ -62,4 +62,32 @@ export async function upload(data) {
   const fd = new FormData(); fd.append("metadata", new Blob([JSON.stringify(meta)], { type: "application/json" })); fd.append("file", new Blob([body], { type: "application/json" }));
   const j = await (await api("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", { method: "POST", body: fd })).json();
   write({ ...read(), fileId: j.id });
+}
+
+// ---------- importazione di un foglio da Drive (Google Picker) ----------
+// L'utente sceglie il file nella finestra di Google: drive.file dà accesso solo a quel file.
+// Fogli Google vengono esportati in .xlsx; .xlsx/.ods/.csv si scaricano così come sono.
+export const canPick = () => !!(clientId() && CONFIG.googleApiKey);
+let gapiP = null;
+const loadPicker = () => (gapiP ||= new Promise((res, rej) => document.head.appendChild(Object.assign(document.createElement("script"), {
+  src: "https://apis.google.com/js/api.js", onload: () => window.gapi.load("picker", { callback: res, onerror: rej }), onerror: () => { gapiP = null; rej(fail("sync.retry")); } }))));
+const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+export async function pickSpreadsheet(locale = "it") {
+  const d = read();
+  if (!d.token || !(d.exp > Date.now())) await connect(clientId(), true, { sync: false });
+  await loadPicker();
+  const tok = read().token, P = window.google.picker;
+  const doc = await new Promise(res => {
+    const sheets = new P.DocsView(P.ViewId.SPREADSHEETS).setMode(P.DocsViewMode.LIST);
+    const files = new P.DocsView(P.ViewId.DOCS).setMimeTypes([XLSX_MIME, "application/vnd.ms-excel", "application/vnd.oasis.opendocument.spreadsheet", "text/csv"].join(",")).setMode(P.DocsViewMode.LIST);
+    new P.PickerBuilder().addView(sheets).addView(files).setOAuthToken(tok).setDeveloperKey(CONFIG.googleApiKey)
+      .setAppId(clientId().split("-")[0]).setLocale(locale).setCallback(r => { if (r.action === P.Action.PICKED) res(r.docs[0]); else if (r.action === P.Action.CANCEL) res(null); })
+      .build().setVisible(true);
+  });
+  if (!doc) return null;
+  const native = doc.mimeType === "application/vnd.google-apps.spreadsheet";
+  const url = native ? `https://www.googleapis.com/drive/v3/files/${doc.id}/export?mimeType=${encodeURIComponent(XLSX_MIME)}` : `https://www.googleapis.com/drive/v3/files/${doc.id}?alt=media`;
+  const r = await fetch(url, { headers: { Authorization: "Bearer " + tok } });
+  if (!r.ok) throw fail("sync.retry");
+  return new File([await r.blob()], doc.name + (native ? ".xlsx" : ""), { type: native ? XLSX_MIME : doc.mimeType });
 }

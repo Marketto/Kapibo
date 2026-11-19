@@ -419,4 +419,5 @@
 "o.advanced":"Opcje zaawansowane",
 "inst.and1":"Jeśli Kapibo otworzyło się w innej aplikacji, kliknij ⋮ i wybierz „Otwórz w Chrome”",
 "inst.and2":"W Chrome kliknij ⋮, a potem „Zainstaluj aplikację” (lub „Dodaj do ekranu głównego”)",
-"o.impHint2":"Na Androidzie: jeśli plik to Arkusz Google na Dysku, najpierw go pobierz. W Arkuszach kliknij ⋮ › Udostępnij i eksportuj › Zapisz jako Excel."}
+"o.impHint2":"Na Androidzie: jeśli plik to Arkusz Google na Dysku, najpierw go pobierz. W Arkuszach kliknij ⋮ › Udostępnij i eksportuj › Zapisz jako Excel.",
+"o.importDrive":"Importuj z Dysku Google"}

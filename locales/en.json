@@ -419,4 +419,5 @@
 "o.advanced":"Advanced options",
 "inst.and1":"If Kapibo opened inside another app, tap ⋮ and choose “Open in Chrome”",
 "inst.and2":"In Chrome tap ⋮ then “Install app” (or “Add to Home screen”)",
-"o.impHint2":"On Android, if the file is a Google Sheet on Drive, download it first: in Sheets tap ⋮ › Share & export › Save as Excel."}
+"o.impHint2":"On Android, if the file is a Google Sheet on Drive, download it first: in Sheets tap ⋮ › Share & export › Save as Excel.",
+"o.importDrive":"Import from Google Drive"}

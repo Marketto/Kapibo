@@ -419,4 +419,5 @@
 "o.advanced":"Napredne opcije",
 "inst.and1":"Ako se Kapibo otvorio unutar druge aplikacije, dodirni ⋮ i odaberi „Otvori u Chromeu“",
 "inst.and2":"U Chromeu dodirni ⋮, zatim „Instaliraj aplikaciju“ (ili „Dodaj na početni ekran“)",
-"o.impHint2":"Na Androidu, ako je datoteka Google tabela na Driveu, prvo je preuzmi: u Tabelama dodirni ⋮ › Dijeli i izvezi › Sačuvaj kao Excel."}
+"o.impHint2":"Na Androidu, ako je datoteka Google tabela na Driveu, prvo je preuzmi: u Tabelama dodirni ⋮ › Dijeli i izvezi › Sačuvaj kao Excel.",
+"o.importDrive":"Uvezi iz Google Drivea"}

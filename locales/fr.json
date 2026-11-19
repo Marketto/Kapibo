@@ -419,4 +419,5 @@
 "o.advanced":"Options avancées",
 "inst.and1":"Si Kapibo s'est ouvert dans une autre appli, touche ⋮ et choisis « Ouvrir dans Chrome »",
 "inst.and2":"Dans Chrome, touche ⋮ puis « Installer l'application » (ou « Ajouter à l'écran d'accueil »)",
-"o.impHint2":"Sur Android, si le fichier est une feuille Google Sheets sur Drive, télécharge-le d'abord : dans Sheets, touche ⋮ › Partager et exporter › Enregistrer en tant qu'Excel."}
+"o.impHint2":"Sur Android, si le fichier est une feuille Google Sheets sur Drive, télécharge-le d'abord : dans Sheets, touche ⋮ › Partager et exporter › Enregistrer en tant qu'Excel.",
+"o.importDrive":"Importer depuis Google Drive"}

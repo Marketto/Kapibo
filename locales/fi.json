@@ -419,4 +419,5 @@
 "o.advanced":"Lisäasetukset",
 "inst.and1":"Jos Kapibo avautui toisen sovelluksen sisällä, napauta ⋮ ja valitse ”Avaa Chromessa”",
 "inst.and2":"Napauta Chromessa ⋮ ja sitten ”Asenna sovellus” (tai ”Lisää aloitusnäytölle”)",
-"o.impHint2":"Androidilla: jos tiedosto on Google-taulukko Drivessa, lataa se ensin. Taulukoissa napauta ⋮ › Jaa ja vie › Tallenna Excelinä."}
+"o.impHint2":"Androidilla: jos tiedosto on Google-taulukko Drivessa, lataa se ensin. Taulukoissa napauta ⋮ › Jaa ja vie › Tallenna Excelinä.",
+"o.importDrive":"Tuo Google Drivesta"}

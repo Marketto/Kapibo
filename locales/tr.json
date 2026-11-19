@@ -419,4 +419,5 @@
 "o.advanced":"Gelişmiş seçenekler",
 "inst.and1":"Kapibo başka bir uygulamanın içinde açıldıysa ⋮ simgesine dokun ve “Chrome'da aç” seçeneğini seç",
 "inst.and2":"Chrome'da ⋮ simgesine dokun, ardından “Uygulamayı yükle” (veya “Ana ekrana ekle”) seçeneğini seç",
-"o.impHint2":"Android'de dosya Drive'daki bir Google E-Tablo ise önce indir: E-Tablolar'da ⋮ › Paylaş ve dışa aktar › Excel olarak kaydet seçeneğine dokun."}
+"o.impHint2":"Android'de dosya Drive'daki bir Google E-Tablo ise önce indir: E-Tablolar'da ⋮ › Paylaş ve dışa aktar › Excel olarak kaydet seçeneğine dokun.",
+"o.importDrive":"Google Drive'dan içe aktar"}

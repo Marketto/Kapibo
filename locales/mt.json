@@ -419,4 +419,5 @@
 "o.advanced":"Għażliet avvanzati",
 "inst.and1":"Jekk Kapibo nfetaħ ġol-app oħra, ittokka ⋮ u agħżel “Iftaħ f'Chrome”",
 "inst.and2":"F'Chrome ittokka ⋮ imbagħad “Installa l-app” (jew “Żid mal-iskrin tad-dar”)",
-"o.impHint2":"Fuq Android, jekk il-fajl huwa Google Sheet fuq Drive, niżżlu l-ewwel: f'Sheets ittokka ⋮ › Aqsam u esporta › Issejvja bħala Excel."}
+"o.impHint2":"Fuq Android, jekk il-fajl huwa Google Sheet fuq Drive, niżżlu l-ewwel: f'Sheets ittokka ⋮ › Aqsam u esporta › Issejvja bħala Excel.",
+"o.importDrive":"Importa minn Google Drive"}

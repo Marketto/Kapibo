@@ -419,4 +419,5 @@
 "o.advanced":"Napredne možnosti",
 "inst.and1":"Če se je Kapibo odprl v drugi aplikaciji, tapni ⋮ in izberi »Odpri v Chromu«",
 "inst.and2":"V Chromu tapni ⋮ in nato »Namesti aplikacijo« (ali »Dodaj na začetni zaslon«)",
-"o.impHint2":"V Androidu: če je datoteka Google preglednica na Disku, jo najprej prenesi. V Preglednicah tapni ⋮ › Deli in izvozi › Shrani kot Excel."}
+"o.impHint2":"V Androidu: če je datoteka Google preglednica na Disku, jo najprej prenesi. V Preglednicah tapni ⋮ › Deli in izvozi › Shrani kot Excel.",
+"o.importDrive":"Uvozi iz Google Drive"}

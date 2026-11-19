@@ -419,4 +419,5 @@
 "o.advanced":"Avancerade alternativ",
 "inst.and1":"Om Kapibo öppnades i en annan app, tryck på ⋮ och välj ”Öppna i Chrome”",
 "inst.and2":"I Chrome trycker du på ⋮ och sedan ”Installera app” (eller ”Lägg till på startskärmen”)",
-"o.impHint2":"På Android: om filen är ett Google Kalkylark på Drive, ladda ner det först. I Kalkylark trycker du på ⋮ › Dela och exportera › Spara som Excel."}
+"o.impHint2":"På Android: om filen är ett Google Kalkylark på Drive, ladda ner det först. I Kalkylark trycker du på ⋮ › Dela och exportera › Spara som Excel.",
+"o.importDrive":"Importera från Google Drive"}

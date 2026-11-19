@@ -419,4 +419,5 @@
 "o.advanced":"Papildu iespējas",
 "inst.and1":"Ja Kapibo atvērās citā lietotnē, pieskaries ⋮ un izvēlies “Atvērt pārlūkā Chrome”",
 "inst.and2":"Pārlūkā Chrome pieskaries ⋮ un pēc tam “Instalēt lietotni” (vai “Pievienot sākuma ekrānam”)",
-"o.impHint2":"Android ierīcē: ja fails ir Google izklājlapa pakalpojumā Drive, vispirms lejupielādē to. Izklājlapās pieskaries ⋮ › Kopīgot un eksportēt › Saglabāt kā Excel."}
+"o.impHint2":"Android ierīcē: ja fails ir Google izklājlapa pakalpojumā Drive, vispirms lejupielādē to. Izklājlapās pieskaries ⋮ › Kopīgot un eksportēt › Saglabāt kā Excel.",
+"o.importDrive":"Importēt no Google diska"}

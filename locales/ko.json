@@ -419,4 +419,5 @@
 "o.advanced":"고급 옵션",
 "inst.and1":"Kapibo가 다른 앱 안에서 열렸다면 ⋮를 탭하고 “Chrome에서 열기”를 선택하세요",
 "inst.and2":"Chrome에서 ⋮를 탭한 다음 “앱 설치”(또는 “홈 화면에 추가”)를 선택하세요",
-"o.impHint2":"Android에서 파일이 Drive의 Google 스프레드시트라면 먼저 다운로드하세요. 스프레드시트에서 ⋮ › 공유 및 내보내기 › Excel로 저장을 탭하세요."}
+"o.impHint2":"Android에서 파일이 Drive의 Google 스프레드시트라면 먼저 다운로드하세요. 스프레드시트에서 ⋮ › 공유 및 내보내기 › Excel로 저장을 탭하세요.",
+"o.importDrive":"Google 드라이브에서 가져오기"}

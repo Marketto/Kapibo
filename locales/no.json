@@ -419,4 +419,5 @@
 "o.advanced":"Avanserte innstillinger",
 "inst.and1":"Hvis Kapibo åpnet seg i en annen app, trykk på ⋮ og velg «Åpne i Chrome»",
 "inst.and2":"I Chrome trykker du på ⋮ og så «Installer appen» (eller «Legg til på startskjermen»)",
-"o.impHint2":"På Android: hvis filen er et Google Regneark på Disk, last det ned først. I Regneark trykker du på ⋮ › Del og eksporter › Lagre som Excel."}
+"o.impHint2":"På Android: hvis filen er et Google Regneark på Disk, last det ned først. I Regneark trykker du på ⋮ › Del og eksporter › Lagre som Excel.",
+"o.importDrive":"Importer fra Google Disk"}

@@ -419,4 +419,5 @@
 "o.advanced":"Täpsemad valikud",
 "inst.and1":"Kui Kapibo avanes teises rakenduses, puuduta ⋮ ja vali „Ava Chrome'is“",
 "inst.and2":"Chrome'is puuduta ⋮ ja siis „Installi rakendus“ (või „Lisa avakuvale“)",
-"o.impHint2":"Androidis: kui fail on Google'i tabel Drive'is, laadi see esmalt alla. Tabelites puuduta ⋮ › Jaga ja ekspordi › Salvesta Excelina."}
+"o.impHint2":"Androidis: kui fail on Google'i tabel Drive'is, laadi see esmalt alla. Tabelites puuduta ⋮ › Jaga ja ekspordi › Salvesta Excelina.",
+"o.importDrive":"Impordi Google Drive'ist"}

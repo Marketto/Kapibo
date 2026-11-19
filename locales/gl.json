@@ -419,4 +419,5 @@
 "o.advanced":"Opcións avanzadas",
 "inst.and1":"Se Kapibo se abriu dentro doutra app, toca ⋮ e escolle «Abrir en Chrome»",
 "inst.and2":"En Chrome toca ⋮ e despois «Instalar aplicación» (ou «Engadir á pantalla de inicio»)",
-"o.impHint2":"En Android, se o ficheiro é unha folla de cálculo de Google en Drive, descárgao antes: en Follas de cálculo toca ⋮ › Compartir e exportar › Gardar como Excel."}
+"o.impHint2":"En Android, se o ficheiro é unha folla de cálculo de Google en Drive, descárgao antes: en Follas de cálculo toca ⋮ › Compartir e exportar › Gardar como Excel.",
+"o.importDrive":"Importar de Google Drive"}
