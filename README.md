@@ -2,7 +2,7 @@
 
 **I conti di casa con Kapi, la capibara con lo yuzu in testa.** PWA installabile, gratuita, senza server.
 
-👉 **https://marketto.github.io/kapibo/**
+👉 **https://marketto.github.io/Kapibo/**
 
 - 📸 **Scansiona** scontrini, buste paga, estratti conto, bollette e contatori: Kapi legge il documento (OCR sul telefono), riconosce le voci e le divide per categoria. Tu escludi righe o cambi/aggiungi categorie (una voce può averne più di una: l'importo si divide).
 - ✍️ **Inserimento manuale** sempre possibile, con aggiunta veloce per categoria.
@@ -12,6 +12,7 @@
 - 📥 **Importa il vecchio foglio** (Excel/ODS/CSV, anche da Google Fogli → File › Scarica › xlsx): mesi, categorie, entrate, letture e bollette su intestazioni a più righe.
 - ☁️ **Dropbox e/o Google Drive** per sincronizzare tra dispositivi (unione per record, vince la modifica più recente).
 - 🌍 **42 lingue**: tutte le europee + russo, cinese, giapponese, coreano, arabo (RTL).
+- 🎨 **Set di icone capibara in formato font** (`kapi-icons`, 76 icone) e **temi**: Capibara gioioso, Onsen, Notte di capibara, automatico.
 - ♿ Accessibile (contrasto AA, tastiera, lettori di schermo, `prefers-reduced-motion`), tema scuro automatico.
 
 ## Motore di lettura
@@ -24,7 +25,7 @@ Nessuna build. Servire la cartella superiore che contiene `kapibo/` e `pdf-tiny-
 node --test tests/*.test.mjs   # parser, import, merge
 node tools/i18n-check.mjs      # traduzioni
 node tools/privacy-check.mjs   # niente dati personali nel repo
-node tools/build-icons.mjs     # icone dalla mascotte
+npm i && npm run icons         # font di icone + icone dell'app
 ```
 Documentazione: `docs/MAPPA.md` (dove sta cosa), `docs/DATI.md` (formato), `docs/CLOUD.md` (Dropbox/Drive), `CLAUDE.md` (router per gli agenti).
 

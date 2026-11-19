@@ -39,36 +39,36 @@ export function tips(s, m, fmt) {
   // categorie in crescita
   for (const [c, v] of Object.entries(cur.byCat)) {
     const a = avg[c]; if (!a || a < 20) continue;
-    if (v > a * 1.3 && v - a > 25) out.push({ key: "tip.up", vars: { cat: c, pct: Math.round((v / a - 1) * 100), diff: fmt(v - a) }, weight: v - a, icon: "📈" });
+    if (v > a * 1.3 && v - a > 25) out.push({ key: "tip.up", vars: { cat: c, pct: Math.round((v / a - 1) * 100), diff: fmt(v - a) }, weight: v - a, icon: "stats" });
   }
   // tabacco: costo annuo
   const tob = prev.concat(cur).reduce((x, y) => x + (y.byCat.tobacco || 0), 0) / Math.max(1, prev.length + 1);
-  if (tob > 20) out.push({ key: "tip.tobacco", vars: { year: fmt(tob * 12) }, weight: tob * 3, icon: "🚭" });
+  if (tob > 20) out.push({ key: "tip.tobacco", vars: { year: fmt(tob * 12) }, weight: tob * 3, icon: "c-tobacco" });
   // abbonamenti
   const subs = avg.subs || cur.byCat.subs || 0;
-  if (subs > 15) out.push({ key: "tip.subs", vars: { year: fmt(subs * 12) }, weight: subs * 2, icon: "📺" });
+  if (subs > 15) out.push({ key: "tip.subs", vars: { year: fmt(subs * 12) }, weight: subs * 2, icon: "c-subs" });
   // uscite e cibo fuori
-  if ((avg.fun || 0) > 150) out.push({ key: "tip.fun", vars: { save: fmt(avg.fun * 0.2 * 12) }, weight: avg.fun * 0.2, icon: "🍹" });
+  if ((avg.fun || 0) > 150) out.push({ key: "tip.fun", vars: { save: fmt(avg.fun * 0.2 * 12) }, weight: avg.fun * 0.2, icon: "c-fun" });
   // spese non segnate
   if (cur.untracked != null && cur.untracked > 100 && cur.effective > 0 && cur.untracked / cur.effective > 0.1)
-    out.push({ key: "tip.untracked", vars: { amt: fmt(cur.untracked) }, weight: cur.untracked / 2, icon: "🔍" });
+    out.push({ key: "tip.untracked", vars: { amt: fmt(cur.untracked) }, weight: cur.untracked / 2, icon: "search" });
   // tasso di risparmio
-  if (cur.rate != null && cur.income > 0 && cur.rate < 0.1) out.push({ key: "tip.rate", vars: { pct: Math.round(cur.rate * 100), goal: fmt(cur.income * 0.2) }, weight: 60, icon: "🐷" });
+  if (cur.rate != null && cur.income > 0 && cur.rate < 0.1) out.push({ key: "tip.rate", vars: { pct: Math.round(cur.rate * 100), goal: fmt(cur.income * 0.2) }, weight: 60, icon: "piggy" });
   // buoni pasto accumulati
   const vb = voucherBalance(s);
-  if (vb > 100) out.push({ key: "tip.vouchers", vars: { amt: fmt(vb) }, weight: 30, icon: "🎫" });
+  if (vb > 100) out.push({ key: "tip.vouchers", vars: { amt: fmt(vb) }, weight: 30, icon: "ticket" });
   // offerte luce/gas salvate: risparmio potenziale
   for (const o of live(s.offers)) {
     const up = unitPrice(s, o.kind); if (!up || !o.unitPrice) continue;
     const offerYear = up.yearCons * o.unitPrice + (o.fixedYear || 0), save = up.yearCost - offerYear;
-    if (save > 20) out.push({ key: "tip.offer", vars: { name: o.name || o.kind, save: fmt(save) }, weight: save / 6, icon: "💡" });
+    if (save > 20) out.push({ key: "tip.offer", vars: { name: o.name || o.kind, save: fmt(save) }, weight: save / 6, icon: "usage" });
   }
   // consumi anomali rispetto allo stesso mese dell'anno prima
   for (const mt of live(s.meters)) {
     const u = usage(s, mt.id), now = u.find(x => x.m === m), ly = u.find(x => x.m === String(+m.slice(0, 4) - 1) + m.slice(4));
-    if (now && ly && ly.use > 0 && now.use > ly.use * 1.25) out.push({ key: "tip.meter", vars: { meter: mt.name, pct: Math.round((now.use / ly.use - 1) * 100) }, weight: 20, icon: "⚡" });
+    if (now && ly && ly.use > 0 && now.use > ly.use * 1.25) out.push({ key: "tip.meter", vars: { meter: mt.name, pct: Math.round((now.use / ly.use - 1) * 100) }, weight: 20, icon: "meter" });
   }
-  if (!out.length) out.push({ key: cur.tracked ? "tip.good" : "tip.start", vars: {}, weight: 0, icon: "🌸" });
+  if (!out.length) out.push({ key: cur.tracked ? "tip.good" : "tip.start", vars: {}, weight: 0, icon: "capy" });
   return out.sort((a, b) => b.weight - a.weight).slice(0, 6);
 }
 

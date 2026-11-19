@@ -15,6 +15,9 @@
 | `js/sync/` | Cloud | `index.syncNow`, `dropbox.*`, `gdrive.*` |
 | `js/ai.js` | Lettura avanzata facoltativa | `structureReceipt` |
 | `js/i18n.js` | Lingue | `LANGS`, `t`, `setLang`, `monthLabel` |
+| `tools/icons/icons.mjs` | Disegni delle icone Kapi (griglia 24, tratto 2) | `ICONS` → `npm run icons` |
+| `tools/build-font.mjs` | Icone → font `fonts/kapi-icons.woff2` + `css/icons.css` + `fonts/anteprima.html` | potrace, verso dei contorni (`nonzero`) |
+| `css/style.css` | Temi `[data-theme]`: `joy` (Capibara gioioso), `onsen`, `night`, `auto` | variabili `--c-*`, `--pattern` |
 | `sw.js` | Offline | cache app (rete prima) + moduli pesanti (cache prima) |
 
 Aggiungere un tipo di documento: skill `nuovo-parser`. Aggiungere testi: skill `traduzioni`.

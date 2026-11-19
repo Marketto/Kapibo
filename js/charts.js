@@ -18,7 +18,7 @@ export function donut(slices, { label = "", center = "" } = {}) {
 /** Barre orizzontali. rows: [{label, value, color, note}] */
 export function hbars(rows, fmt) {
   const max = Math.max(1, ...rows.map(r => r.value));
-  return `<ul class="hbars">${rows.map(r => `<li><span class="hb-l">${esc(r.label)}</span><span class="hb-t"><span class="hb-b" style="--w:${(r.value / max) * 100}%;--c:${r.color}"></span></span><span class="hb-v">${esc(fmt(r.value))}${r.note ? ` <small>${esc(r.note)}</small>` : ""}</span></li>`).join("")}</ul>`;
+  return `<ul class="hbars">${rows.map(r => `<li><span class="hb-l">${r.icon || ""}${esc(r.label)}</span><span class="hb-t"><span class="hb-b" style="--w:${(r.value / max) * 100}%;--c:${r.color}"></span></span><span class="hb-v">${esc(fmt(r.value))}${r.note ? ` <small>${esc(r.note)}</small>` : ""}</span></li>`).join("")}</ul>`;
 }
 
 /** Linee/colonne nel tempo. series: [{name, color, values, type:"bar"|"line"}], labels: [] */

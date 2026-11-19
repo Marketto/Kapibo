@@ -1,7 +1,7 @@
 // Kapibo — interfaccia. Sezioni: avvio · utilità · mese · scansione · consumi · grafici · altro · dialoghi · sync.
 import { t, setLang, detect, lang, locale, LANGS, monthLabel, apply } from "./i18n.js";
 import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthOf, today, uid, live, normalize, merge } from "./store.js";
-import { guessCats, catName, norm, isGrocer } from "./categories.js";
+import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
 import { series, catAverages, tips, usage, unitPrice, voucherBalance } from "./stats.js";
@@ -23,6 +23,7 @@ const cats = () => store.cats();
 const catById = id => cats().find(c => c.id === id) || { id, emoji: "✨", color: "#bdbdbd", name: id };
 const cname = c => catName(c, t);
 const num = v => { const n = parseAmount(v); return n == null ? null : n; };
+const ic = n => `<i class="ki ki-${n}" aria-hidden="true"></i>`;
 const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
 
@@ -128,23 +129,23 @@ function viewMonth() {
       <div class="stat"><small>${t("m.end")}</small><b>${s.end == null ? "—" : money(s.end)}</b></div>
     </div>
     ${unt != null && Math.abs(unt) >= 1 ? `<p class="muted" style="margin:.8em 0 0">${t(unt > 0 ? "m.untracked" : "m.overtracked", { amt: money(Math.abs(unt)) })}</p>` : ""}
-    <div class="btns"><button class="btn" data-act="add">＋ ${t("m.addExpense")}</button><button class="btn soft" data-act="meta">💶 ${t("m.editMeta")}</button></div>
+    <div class="btns"><button class="btn" data-act="add">${ic("plus")} ${t("m.addExpense")}</button><button class="btn soft" data-act="meta">${ic("coin")} ${t("m.editMeta")}</button></div>
   </div>
   <div class="card"><h2>${t("m.byCat")}</h2>
     ${rows.length ? `<ul class="list">${rows.map(([id, v]) => { const c = catById(id); return `<li><button class="item" data-act="cat" data-id="${esc(id)}" style="--c:${c.color}">
-      <span class="emo" aria-hidden="true">${c.emoji}</span><span class="name">${esc(cname(c))}<span class="bar"><i style="--w:${(v / max) * 100}%;--c:${c.color}"></i></span></span><span class="amt">${money(v)}</span></button></li>`; }).join("")}</ul>`
+      <span class="emo">${catIcon(c)}</span><span class="name">${esc(cname(c))}<span class="bar"><i style="--w:${(v / max) * 100}%;--c:${c.color}"></i></span></span><span class="amt">${money(v)}</span></button></li>`; }).join("")}</ul>`
     : empty("m.empty")}
   </div>
   ${recent.length ? `<div class="card"><h2>${t("m.recent")}</h2><ul class="list">${recent.map(entryRow).join("")}</ul></div>` : ""}
-  <div class="card"><h3>${t("m.quick")}</h3><div class="chips">${list.filter(c => c.kind === "var").slice(0, 8).map(c => `<button class="chip" data-act="add" data-cat="${c.id}"><span aria-hidden="true">${c.emoji}</span>${esc(cname(c))}</button>`).join("")}</div></div>`;
+  <div class="card"><h3>${t("m.quick")}</h3><div class="chips">${list.filter(c => c.kind === "var").slice(0, 8).map(c => `<button class="chip" data-act="add" data-cat="${c.id}">${catIcon(c)}${esc(cname(c))}</button>`).join("")}</div></div>`;
 }
-const entryRow = e => { const c = catById(e.cat); return `<li><button class="item" data-act="edit" data-id="${e.id}" style="--c:${c.color}"><span class="emo" aria-hidden="true">${c.emoji}</span>
+const entryRow = e => { const c = catById(e.cat); return `<li><button class="item" data-act="edit" data-id="${e.id}" style="--c:${c.color}"><span class="emo">${catIcon(c)}</span>
   <span class="name">${esc(e.note || cname(c))}<br><small class="muted">${esc(new Date(e.d).toLocaleDateString(locale(), { day: "numeric", month: "short" }))} · ${esc(cname(c))}${e.items ? " · " + t("m.items", { n: e.items.length }) : ""}</small></span><span class="amt">${money(e.amt)}</span></button></li>`; };
 const empty = key => `<div class="empty"><div class="hero-kapi">${kapi.KAPI_SVG}</div><p>${t(key)}</p></div>`;
 
 async function catDetail(id) {
   const c = catById(id), es = live(S().entries).filter(e => e.m === cur && e.cat === id).sort((a, b) => (a.d < b.d ? 1 : -1));
-  const r = await dialog(`${c.emoji} ${cname(c)}`, `<ul class="list">${es.map(entryRow).join("")}</ul>`, { ok: t("m.addHere"), cancel: t("ui.close") });
+  const r = await dialog(`${cname(c)}`, `<ul class="list">${es.map(entryRow).join("")}</ul>`, { ok: t("m.addHere"), cancel: t("ui.close") });
   if (r) entryDialog({ cat: id });
 }
 
@@ -152,7 +153,7 @@ async function catDetail(id) {
 /** Apre il dialogo con campi HTML; risolve con i valori del modulo o null. */
 function dialog(title, body, { ok = t("ui.save"), cancel = t("ui.cancel"), extra = "", onOpen } = {}) {
   const d = $("#dlg"), f = $("#dlgForm");
-  f.innerHTML = `<div class="dlg-head"><h2 id="dlgTitle">${esc(title)}</h2><button class="icon-btn" value="cancel" formnovalidate aria-label="${esc(t("ui.close"))}">✕</button></div>
+  f.innerHTML = `<div class="dlg-head"><h2 id="dlgTitle">${esc(title)}</h2><button class="icon-btn" value="cancel" formnovalidate aria-label="${esc(t("ui.close"))}">${ic("close")}</button></div>
     ${body}<div class="btns">${extra}${cancel ? `<button class="btn ghost" value="cancel" formnovalidate>${esc(cancel)}</button>` : ""}${ok ? `<button class="btn" value="ok">${esc(ok)}</button>` : ""}</div>`;
   apply(f);
   return new Promise(res => {
@@ -169,7 +170,7 @@ function dialog(title, body, { ok = t("ui.save"), cancel = t("ui.cancel"), extra
 }
 // chip a scelta singola o multipla dentro un dialogo
 function catChips(name, sel = [], multi = false) {
-  return `<div class="catgrid" data-multi="${name}" data-single="${multi ? "" : 1}" role="group">${cats().map(c => `<button type="button" class="chip" data-v="${c.id}" aria-pressed="${sel.includes(c.id)}"><span aria-hidden="true">${c.emoji}</span>${esc(cname(c))}</button>`).join("")}</div>`;
+  return `<div class="catgrid" data-multi="${name}" data-single="${multi ? "" : 1}" role="group">${cats().map(c => `<button type="button" class="chip" data-v="${c.id}" aria-pressed="${sel.includes(c.id)}">${catIcon(c)}${esc(cname(c))}</button>`).join("")}</div>`;
 }
 document.addEventListener("click", e => {
   const chip = e.target.closest("[data-multi] .chip"); if (!chip) return;
@@ -202,7 +203,7 @@ async function monthDialog() {
   const r = await dialog(t("meta.title", { m: monthLabel(cur) }), `
     <div class="grid2">${f("start", m.start ?? s.start, m.start == null && s.start != null ? t("meta.auto") : "")}${f("end", m.end)}</div>
     <div class="grid2">${f("salary", m.salary)}${f("extra", m.extra)}</div>${f("refunds", m.refunds)}
-    <fieldset><legend>🎫 ${t("meta.vouchers")}</legend><div class="grid2">${f("vIn", m.vIn)}${f("vUsed", m.vUsed)}</div>
+    <fieldset><legend>${ic("ticket")} ${t("meta.vouchers")}</legend><div class="grid2">${f("vIn", m.vIn)}${f("vUsed", m.vUsed)}</div>
     <p class="hint">${t("meta.vhint", { v: money(vv) })}</p></fieldset>`);
   if (!r) return;
   const patch = {};
@@ -227,17 +228,17 @@ async function catDialog(c) {
   if (r._btn === "hide") return store.put("cats", { ...(S().cats.find(x => x.id === c.id) || { id: c.id }), hidden: 1 });
   const base = S().cats.find(x => x.id === c?.id) || { id: c?.id || "c-" + uid() };
   const isDefault = c && !c.id.startsWith("c-") && r.name === t("cat." + c.id);
-  store.put("cats", { ...base, emoji: r.emoji, color: r.color, kind: r.kind, name: isDefault ? undefined : r.name.trim() });
+  store.put("cats", { ...base, emoji: r.emoji, color: r.color, kind: r.kind, name: isDefault ? undefined : r.name.trim(), custom: c && c.icon && r.emoji !== c.emoji ? 1 : base.custom });
 }
 
 // ---------- scansione ----------
-const KINDS = [["receipt", "🧾"], ["payslip", "💼"], ["statement", "🏦"], ["bill", "📄"], ["meter", "🔢"]];
+const KINDS = [["receipt", "receipt"], ["payslip", "payslip"], ["statement", "bank"], ["bill", "bill"], ["meter", "meter"]];
 function viewScan() {
   if (scanState) return scanView();
   return `<div class="card"><h2>${t("s.title")}</h2><p class="muted">${t("s.intro")}</p>
-    <div class="kinds">${KINDS.map(([k, e]) => `<button class="kind" data-act="kind" data-kind="${k}" data-cam="1"><span aria-hidden="true">${e}</span>${t("s.k." + k)}<small>${t("s.kd." + k)}</small></button>`).join("")}
-    <button class="kind" data-act="add"><span aria-hidden="true">✍️</span>${t("s.manual")}<small>${t("s.manuald")}</small></button></div></div>
-    <div class="card"><h3>📁 ${t("s.fromFile")}</h3><div class="chips">${KINDS.map(([k, e]) => `<button class="chip" data-act="kind" data-kind="${k}">${e} ${t("s.k." + k)}</button>`).join("")}</div>
+    <div class="kinds">${KINDS.map(([k, e]) => `<button class="kind" data-act="kind" data-kind="${k}" data-cam="1"><span>${ic(e)}</span>${t("s.k." + k)}<small>${t("s.kd." + k)}</small></button>`).join("")}
+    <button class="kind" data-act="add"><span>${ic("hand")}</span>${t("s.manual")}<small>${t("s.manuald")}</small></button></div></div>
+    <div class="card"><h3>${ic("file")} ${t("s.fromFile")}</h3><div class="chips">${KINDS.map(([k, e]) => `<button class="chip" data-act="kind" data-kind="${k}">${ic(e)} ${t("s.k." + k)}</button>`).join("")}</div>
     <p class="hint">${t("s.privacy")}</p></div>`;
 }
 
@@ -278,7 +279,7 @@ function prepReceipt() {
 }
 
 function scanView() {
-  const st = scanState, back = `<button class="btn ghost small" data-act="scanBack">← ${t("ui.back")}</button>`;
+  const st = scanState, back = `<button class="btn ghost small" data-act="scanBack">${ic("back")} ${t("ui.back")}</button>`;
   if (st.busy) return `<div class="card" aria-busy="true"><h2>${t("s.reading")}</h2><div class="progress" role="progressbar" aria-label="${esc(t("s.reading"))}"><i id="scanBar" style="--w:${st.pct}%"></i></div>
     ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted">${t("s.firstTime")}</p></div>`;
   if (st.error) return `<div class="card"><p class="warn">${t("s.error")}</p><div class="btns">${back}<button class="btn" data-act="kind" data-kind="${st.kind}" data-cam="1">${t("s.retry")}</button></div></div>`;
@@ -290,26 +291,26 @@ function reviewReceipt() {
   const r = scanState.res, on = r.items.filter(i => i.on), sum = round2(on.reduce((a, b) => a + b.amount, 0));
   const diff = r.total != null ? round2(r.total - round2(r.items.reduce((a, b) => a + b.amount, 0))) : null;
   scanState.after = bindReceipt;
-  return `<div class="card"><h2>🧾 ${t("s.k.receipt")}</h2>
+  return `<div class="card"><h2>${ic("receipt")} ${t("s.k.receipt")}</h2>
     ${scanState.url ? `<img class="preview" src="${scanState.url}" alt="${esc(t("s.photoAlt"))}">` : ""}
     <div class="grid2"><label class="f">${t("e.date")}<input type="date" id="rDate" value="${r.date}"></label><label class="f">${t("s.store")}<input id="rStore" value="${esc(r.store || "")}"></label></div>
-    ${r.total != null ? (Math.abs(diff) < 0.02 ? `<p class="okbox">✓ ${t("s.totalOk", { tot: money(r.total) })}</p>` : `<p class="warn">${t("s.totalDiff", { tot: money(r.total), diff: money(diff) })}</p>`) : ""}
+    ${r.total != null ? (Math.abs(diff) < 0.02 ? `<p class="okbox">${ic("check")} ${t("s.totalOk", { tot: money(r.total) })}</p>` : `<p class="warn">${t("s.totalDiff", { tot: money(r.total), diff: money(diff) })}</p>`) : ""}
     <p class="muted">${t("s.tapHint")}</p>
     <div id="rItems">${r.items.map(itemRow).join("")}</div>
-    <button class="btn soft small" id="rAdd" type="button">＋ ${t("s.addLine")}</button>
-    <label class="f">🎫 ${t("s.vouchersPaid")}<input id="rVouch" inputmode="decimal" value="${r.vouchers ? fmtNum(r.vouchers, locale()) : ""}"></label>
+    <button class="btn soft small" id="rAdd" type="button">${ic("plus")} ${t("s.addLine")}</button>
+    <label class="f">${ic("ticket")} ${t("s.vouchersPaid")}<input id="rVouch" inputmode="decimal" value="${r.vouchers ? fmtNum(r.vouchers, locale()) : ""}"></label>
     <div class="card" style="background:var(--c-bg)"><b>${t("s.summary")}</b>${receiptGroups(on)}<p><b>${t("s.selected", { n: on.length, sum: money(sum) })}</b></p></div>
-    <div class="btns"><button class="btn" id="rSave" ${on.length ? "" : "disabled"}>💾 ${t("s.addAll", { n: on.length })}</button></div></div>`;
+    <div class="btns"><button class="btn" id="rSave" ${on.length ? "" : "disabled"}>${ic("check")} ${t("s.addAll", { n: on.length })}</button></div></div>`;
 }
 const itemRow = it => `<div class="ritem ${it.on ? "" : "off"}" data-i="${it.i}">
   <input type="checkbox" class="chk" ${it.on ? "checked" : ""} aria-label="${esc(t("s.include", { name: it.name }))}">
   <input class="inp" data-f="name" value="${esc(it.name)}" aria-label="${esc(t("s.itemName"))}">
   <input class="inp" data-f="amount" inputmode="decimal" value="${fmtNum(it.amount, locale())}" aria-label="${esc(t("e.amount"))}">
-  <div class="chips">${it.cats.map(c => { const k = catById(c); return `<button type="button" class="chip" data-cat-edit aria-pressed="true">${k.emoji} ${esc(cname(k))}</button>`; }).join("")}
-  <button type="button" class="chip add" data-cat-edit aria-label="${esc(t("s.changeCat"))}">✎</button></div></div>`;
+  <div class="chips">${it.cats.map(c => { const k = catById(c); return `<button type="button" class="chip" data-cat-edit aria-pressed="true">${catIcon(k)} ${esc(cname(k))}</button>`; }).join("")}
+  <button type="button" class="chip add" data-cat-edit aria-label="${esc(t("s.changeCat"))}">${ic("edit")}</button></div></div>`;
 function receiptGroups(on) {
   const g = {}; for (const it of on) for (const c of it.cats) g[c] = round2((g[c] || 0) + it.amount / it.cats.length);
-  return `<ul class="legend">${Object.entries(g).map(([c, v]) => { const k = catById(c); return `<li><i style="--c:${k.color}"></i>${k.emoji} ${esc(cname(k))} <b>${money(v)}</b></li>`; }).join("")}</ul>`;
+  return `<ul class="legend">${Object.entries(g).map(([c, v]) => { const k = catById(c); return `<li><i style="--c:${k.color}"></i>${catIcon(k)} ${esc(cname(k))} <b>${money(v)}</b></li>`; }).join("")}</ul>`;
 }
 function bindReceipt() {
   const r = scanState.res, box = $("#rItems"); if (!box) return;
@@ -349,11 +350,11 @@ function reviewPayslip() {
     const patch = { salary: net }; if (v != null) patch.vIn = v;
     store.setMonth(m, patch); scanState = null; cur = m; kapi.confetti(); celebrate("kapi.salary"); go("month");
   });
-  return `<div class="card"><h2>💼 ${t("s.k.payslip")}</h2>
+  return `<div class="card"><h2>${ic("payslip")} ${t("s.k.payslip")}</h2>
     <label class="f">${t("s.month")}<input type="month" id="pMonth" value="${r.month || cur}"></label>
     <label class="f">${t("s.net")}<input id="pNet" class="amt" inputmode="decimal" value="${r.net != null ? fmtNum(r.net, locale()) : ""}"></label>
-    <label class="f">🎫 ${t("s.vouchersIn")} <span class="hint">${r.vCount ? `${r.vCount} × ${money(r.vValue)}` : ""}</span><input id="pV" inputmode="decimal" value="${r.vouchers != null ? fmtNum(r.vouchers, locale()) : ""}"></label>
-    ${r.net == null ? `<p class="warn">${t("s.notFoundField")}</p>` : ""}<div class="btns"><button class="btn" id="pSave">💾 ${t("ui.save")}</button></div></div>`;
+    <label class="f">${ic("ticket")} ${t("s.vouchersIn")} <span class="hint">${r.vCount ? `${r.vCount} × ${money(r.vValue)}` : ""}</span><input id="pV" inputmode="decimal" value="${r.vouchers != null ? fmtNum(r.vouchers, locale()) : ""}"></label>
+    ${r.net == null ? `<p class="warn">${t("s.notFoundField")}</p>` : ""}<div class="btns"><button class="btn" id="pSave">${ic("check")} ${t("ui.save")}</button></div></div>`;
 }
 
 function reviewStatement() {
@@ -375,12 +376,12 @@ function reviewStatement() {
       scanState = null; kapi.confetti(); celebrate(); go("month"); toast(t("s.savedRows", { n: es.length }));
     };
   };
-  const opts = sel => `<option value="_salary" ${sel === "_salary" ? "selected" : ""}>💼 ${t("meta.salary")}</option><option value="_extra" ${sel === "_extra" ? "selected" : ""}>🌟 ${t("meta.extra")}</option>` + cats().map(c => `<option value="${c.id}" ${sel === c.id ? "selected" : ""}>${c.emoji} ${esc(cname(c))}</option>`).join("");
-  return `<div class="card"><h2>🏦 ${t("s.k.statement")}</h2><p class="muted">${t("s.stHint")}</p>
+  const opts = sel => `<option value="_salary" ${sel === "_salary" ? "selected" : ""}>💼 ${t("meta.salary")}</option><option value="_extra" ${sel === "_extra" ? "selected" : ""}>🌟 ${t("meta.extra")}</option>` + cats().map(c => `<option value="${c.id}" ${sel === c.id ? "selected" : ""}>${c.custom || !c.icon ? c.emoji + " " : ""}${esc(cname(c))}</option>`).join("");
+  return `<div class="card"><h2>${ic("bank")} ${t("s.k.statement")}</h2><p class="muted">${t("s.stHint")}</p>
     <div id="stRows">${r.rows.map(x => `<div class="ritem ${x.on ? "" : "off"}" data-i="${x.i}"><input type="checkbox" class="chk" ${x.on ? "checked" : ""} aria-label="${esc(x.desc)}">
       <span>${esc(x.desc)}<br><small class="muted">${esc(x.date)}</small></span><b class="${x.amount < 0 ? "" : "pos"}">${money(x.amount)}</b>
       <select class="inp" style="grid-column:2/4" aria-label="${esc(t("e.cat"))}">${opts(x.cat)}</select></div>`).join("") || `<p class="warn">${t("s.notFoundField")}</p>`}</div>
-    <div class="btns"><button class="btn" id="stSave">💾 ${t("ui.save")}</button></div></div>`;
+    <div class="btns"><button class="btn" id="stSave">${ic("check")} ${t("ui.save")}</button></div></div>`;
 }
 
 const BILL_CAT = { elec: "elec", gas: "gas", water: "water", internet: "internet", waste: "waste", other: "other" };
@@ -393,7 +394,7 @@ function reviewBill() {
     store.put("bills", { kind: f.bKind, amount, cons: num(f.bCons), unit: f.bKind === "elec" ? "kWh" : "m³", m, freq: f.bFreq, from: r.period?.from, to: r.period?.to, entry: entry.id });
     scanState = null; cur = m; kapi.confetti(); celebrate(); go("usage");
   });
-  return `<div class="card"><h2>📄 ${t("s.k.bill")}</h2>${billFields({ ...r, m: r.period?.to ? monthOf(r.period.to) : cur })}<div class="btns"><button class="btn" id="bSave">💾 ${t("ui.save")}</button></div></div>`;
+  return `<div class="card"><h2>${ic("bill")} ${t("s.k.bill")}</h2>${billFields({ ...r, m: r.period?.to ? monthOf(r.period.to) : cur })}<div class="btns"><button class="btn" id="bSave">${ic("check")} ${t("ui.save")}</button></div></div>`;
 }
 const billFields = b => `<div class="grid2"><label class="f">${t("u.kind")}<select id="bKind" name="kind">${["elec", "gas", "water", "internet", "waste", "other"].map(k => `<option value="${k}" ${b.kind === k ? "selected" : ""}>${t("u.k." + k)}</option>`).join("")}</select></label>
   <label class="f">${t("u.freq")}<select id="bFreq" name="freq">${["m", "2m", "q", "6m", "y"].map(k => `<option value="${k}" ${(b.freq || "m") === k ? "selected" : ""}>${t("u.f." + k)}</option>`).join("")}</select></label></div>
@@ -410,11 +411,11 @@ function reviewMeter() {
     const d = $("#mtDate").value; store.put("readings", { meter: id, value: v, d, m: monthOf(d) });
     scanState = null; kapi.confetti(); celebrate(); go("usage");
   });
-  return `<div class="card"><h2>🔢 ${t("s.k.meter")}</h2>${scanState.url ? `<img class="preview" src="${scanState.url}" alt="${esc(t("s.photoAlt"))}">` : ""}
-    <label class="f">${t("u.meter")}<select id="mtMeter">${ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("")}<option value="_new">＋ ${t("u.newMeter")}</option></select></label>
+  return `<div class="card"><h2>${ic("meter")} ${t("s.k.meter")}</h2>${scanState.url ? `<img class="preview" src="${scanState.url}" alt="${esc(t("s.photoAlt"))}">` : ""}
+    <label class="f">${t("u.meter")}<select id="mtMeter">${ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("")}<option value="_new">+ ${t("u.newMeter")}</option></select></label>
     <label class="f">${t("u.reading")} <span class="hint">${t("s.checkDigits")}</span><input id="mtVal" class="amt" inputmode="decimal" value="${r.value != null ? r.value : ""}"></label>
     ${r.options?.length > 1 ? `<div class="chips">${r.options.map(o => `<button type="button" class="chip" onclick="document.getElementById('mtVal').value='${o}'">${o}</button>`).join("")}</div>` : ""}
-    <label class="f">${t("e.date")}<input type="date" id="mtDate" value="${today()}"></label><div class="btns"><button class="btn" id="mtSave">💾 ${t("ui.save")}</button></div></div>`;
+    <label class="f">${t("e.date")}<input type="date" id="mtDate" value="${today()}"></label><div class="btns"><button class="btn" id="mtSave">${ic("check")} ${t("ui.save")}</button></div></div>`;
 }
 
 // ---------- consumi ----------
@@ -423,17 +424,17 @@ function viewUsage() {
   const meterCard = m => {
     const u = usage(s, m.id).slice(-12), last = live(s.readings).filter(r => r.meter === m.id).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
     const col = { elec: "#f7b500", gas: "#ff8a3d", water: "#38a8e8" }[m.kind] || "#a07cf0";
-    return `<div class="card"><div class="row"><h3 class="grow">${{ elec: "⚡", gas: "🔥", water: "💧" }[m.kind] || "🔢"} ${esc(m.name)}</h3><button class="btn small soft" data-act="meter" data-id="${m.id}">✎</button></div>
+    return `<div class="card"><div class="row"><h3 class="grow">$${ic({ elec: "c-elec", gas: "c-gas", water: "c-water" }[m.kind] || "meter")} ${esc(m.name)}</h3><button class="btn small soft" data-act="meter" data-id="${m.id}" aria-label="${esc(t("u.editMeter"))}">${ic("edit")}</button></div>
       <p class="muted">${last ? t("u.last", { v: fmtNum(last.value, locale(), 3), u: m.unit, d: new Date(last.d).toLocaleDateString(locale()) }) : t("u.noReadings")}</p>
       ${u.length ? timeline([{ name: m.name, color: col, values: u.map(x => x.use), type: "bar" }], u.map(x => monthLabel(x.m, { month: "short" })), { label: t("u.chart", { name: m.name }), fmt: v => fmtNum(v, locale()) + " " + m.unit }) : ""}
-      <div class="btns"><button class="btn small" data-act="reading" data-id="${m.id}">＋ ${t("u.addReading")}</button><button class="btn small soft" data-act="kind" data-kind="meter" data-cam="1">📸 ${t("u.photo")}</button></div></div>`;
+      <div class="btns"><button class="btn small" data-act="reading" data-id="${m.id}">${ic("plus")} ${t("u.addReading")}</button><button class="btn small soft" data-act="kind" data-kind="meter" data-cam="1">${ic("scan")} ${t("u.photo")}</button></div></div>`;
   };
   const prices = ["elec", "gas", "water"].map(k => [k, unitPrice(s, k)]).filter(x => x[1]);
-  return `<div class="card"><h2>${t("u.title")}</h2><p class="muted">${t("u.intro")}</p><div class="btns"><button class="btn" data-act="meter">＋ ${t("u.newMeter")}</button><button class="btn soft" data-act="bill">＋ ${t("u.addBill")}</button></div></div>
+  return `<div class="card"><h2>${t("u.title")}</h2><p class="muted">${t("u.intro")}</p><div class="btns"><button class="btn" data-act="meter">${ic("plus")} ${t("u.newMeter")}</button><button class="btn soft" data-act="bill">${ic("plus")} ${t("u.addBill")}</button></div></div>
     ${ms.map(meterCard).join("") || `<div class="card">${empty("u.empty")}</div>`}
-    ${prices.length ? `<div class="card"><h3>💶 ${t("u.prices")}</h3>${prices.map(([k, p]) => `<p>${t("u.k." + k)}: <b>${money(p.price)}</b> / ${k === "elec" ? "kWh" : "m³"} · ${t("u.year", { c: fmtNum(p.yearCons, locale(), 0), y: money(p.yearCost) })}</p>`).join("")}
-      <button class="btn small soft" data-act="offer">🔎 ${t("u.compare")}</button>${live(s.offers).map(o => `<button class="chip" data-act="offer" data-id="${o.id}">💡 ${esc(o.name || t("u.k." + o.kind))}</button>`).join(" ")}</div>` : ""}
-    ${bills.length ? `<div class="card"><h3>📄 ${t("u.bills")}</h3><table class="t"><thead><tr><th>${t("s.month")}</th><th>${t("u.kind")}</th><th class="n">${t("u.cons")}</th><th class="n">${t("e.amount")}</th></tr></thead><tbody>
+    ${prices.length ? `<div class="card"><h3>${ic("coin")} ${t("u.prices")}</h3>${prices.map(([k, p]) => `<p>${t("u.k." + k)}: <b>${money(p.price)}</b> / ${k === "elec" ? "kWh" : "m³"} · ${t("u.year", { c: fmtNum(p.yearCons, locale(), 0), y: money(p.yearCost) })}</p>`).join("")}
+      <button class="btn small soft" data-act="offer">${ic("search")} ${t("u.compare")}</button>${live(s.offers).map(o => `<button class="chip" data-act="offer" data-id="${o.id}">${ic("usage")} ${esc(o.name || t("u.k." + o.kind))}</button>`).join(" ")}</div>` : ""}
+    ${bills.length ? `<div class="card"><h3>${ic("bill")} ${t("u.bills")}</h3><table class="t"><thead><tr><th>${t("s.month")}</th><th>${t("u.kind")}</th><th class="n">${t("u.cons")}</th><th class="n">${t("e.amount")}</th></tr></thead><tbody>
       ${bills.slice(0, 24).map(b => `<tr data-act="bill" data-id="${b.id}" style="cursor:pointer"><td>${esc(monthLabel(b.m, { month: "short", year: "2-digit" }))}</td><td>${esc(b.name || t("u.k." + b.kind))} <small class="muted">${t("u.f." + (b.freq || "m"))}</small></td><td class="n">${b.cons ? fmtNum(b.cons, locale()) + " " + b.unit : "—"}</td><td class="n">${b.amount ? money(b.amount) : "—"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
 }
 
@@ -480,14 +481,14 @@ function viewStats() {
   const labels = list.map(x => monthLabel(x.m, { month: "short" }));
   const slices = Object.entries(m.byCat).sort((a, b) => b[1] - a[1]).map(([id, v]) => { const c = catById(id); return { label: `${cname(c)} ${money(v)}`, value: v, color: c.color, c }; });
   const prev = list.filter(x => x.m < cur), avg = catAverages(prev.length ? prev : list);
-  const avgRows = Object.entries(avg).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([id, v]) => { const c = catById(id); return { label: `${c.emoji} ${cname(c)}`, value: v, color: c.color }; });
+  const avgRows = Object.entries(avg).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([id, v]) => { const c = catById(id); return { label: cname(c), icon: catIcon(c) + " ", value: v, color: c.color }; });
   const tps = tips(s, cur, money);
   const rates = list.filter(x => x.rate != null);
-  return `<div class="card"><h2>💡 ${t("st.tips")}</h2>${tps.map(x => `<div class="tip"><span aria-hidden="true">${x.icon}</span><p style="margin:0">${esc(t(x.key, { ...x.vars, cat: x.vars.cat ? cname(catById(x.vars.cat)) : "" }))}</p></div>`).join("")}</div>
+  return `<div class="card"><h2>${ic("capy")} ${t("st.tips")}</h2>${tps.map(x => `<div class="tip"><span>${ic(x.icon)}</span><p style="margin:0">${esc(t(x.key, { ...x.vars, cat: x.vars.cat ? cname(catById(x.vars.cat)) : "" }))}</p></div>`).join("")}</div>
     <div class="card"><h2>${t("st.trend")}</h2>${timeline([{ name: t("m.spent"), color: "#ff9f6b", values: list.map(x => x.tracked), type: "bar" }, { name: t("m.income"), color: "#4caf7d", values: list.map(x => x.income || null), type: "line" }], labels, { label: t("st.trendLabel"), fmt: money })}
       <ul class="legend"><li><i style="--c:#ff9f6b"></i>${t("m.spent")}</li><li><i style="--c:#4caf7d"></i>${t("m.income")}</li></ul>
       ${rates.length ? `<p class="muted">${t("st.rate", { r: Math.round((rates.reduce((a, b) => a + b.rate, 0) / rates.length) * 100) })}</p>` : ""}</div>
-    ${slices.length ? `<div class="card"><h2>${t("st.month", { m: monthLabel(cur) })}</h2>${donut(slices, { label: t("st.donutLabel"), center: money(m.tracked) })}<ul class="legend">${slices.map(x => `<li><i style="--c:${x.color}"></i>${x.c.emoji} ${esc(x.label)}</li>`).join("")}</ul></div>` : ""}
+    ${slices.length ? `<div class="card"><h2>${t("st.month", { m: monthLabel(cur) })}</h2>${donut(slices, { label: t("st.donutLabel"), center: money(m.tracked) })}<ul class="legend">${slices.map(x => `<li><i style="--c:${x.color}"></i>${catIcon(x.c)} ${esc(x.label)}</li>`).join("")}</ul></div>` : ""}
     <div class="card"><h2>${t("st.avg")}</h2>${hbars(avgRows, money)}</div>
     <div class="card"><details><summary>${t("st.table")}</summary><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("m.income")}</th><th class="n">${t("m.spent")}</th><th class="n">${t("m.saved")}</th></tr></thead>
       <tbody>${list.slice().reverse().map(x => `<tr><td>${esc(monthLabel(x.m, { month: "short", year: "2-digit" }))}</td><td class="n">${money(x.income)}</td><td class="n">${money(x.tracked)}</td><td class="n ${x.savings >= 0 ? "pos" : "neg"}">${x.savings == null ? "—" : money(x.savings)}</td></tr>`).join("")}</tbody></table></details></div>`;
@@ -496,30 +497,40 @@ function viewStats() {
 // ---------- altro ----------
 function viewMore() {
   const st = S().settings, vb = voucherBalance(S());
-  return `<div class="card"><h2>⚙️ ${t("o.title")}</h2>
-    <label class="f">🌍 ${t("o.lang")}<select id="oLang">${Object.entries(LANGS).sort((a, b) => a[1].localeCompare(b[1])).map(([k, v]) => `<option value="${k}" ${k === lang() ? "selected" : ""} lang="${k}">${v}</option>`).join("")}</select></label>
-    <div class="grid2"><label class="f">💱 ${t("o.currency")}<select id="oCur">${["EUR", "CHF", "GBP", "USD", "PLN", "CZK", "HUF", "RON", "SEK", "DKK", "NOK", "BGN", "ISK", "RSD", "MKD", "ALL", "BAM", "UAH", "RUB", "TRY", "CNY", "JPY", "KRW", "AED", "SAR", "EGP", "MAD"].map(c => `<option ${c === st.currency ? "selected" : ""}>${c}</option>`).join("")}</select></label>
-    <label class="f">🎫 ${t("o.voucher")}<input id="oVouch" inputmode="decimal" value="${fmtNum(st.voucher || 8, locale())}"></label></div>
+  return `<div class="card"><h2>${ic("more")} ${t("o.title")}</h2>
+    <label class="f">${ic("globe")} ${t("o.lang")}<select id="oLang">${Object.entries(LANGS).sort((a, b) => a[1].localeCompare(b[1])).map(([k, v]) => `<option value="${k}" ${k === lang() ? "selected" : ""} lang="${k}">${v}</option>`).join("")}</select></label>
+    <fieldset><legend>${ic("palette")} ${t("o.theme")}</legend><div class="theme-pick" role="radiogroup">${THEMES.map(([k, a, b]) => `<button type="button" class="chip" role="radio" data-theme-set="${k}" aria-checked="${theme() === k}"><span class="swatch" style="background:linear-gradient(135deg,${a} 50%,${b} 50%)"></span>${t("theme." + k)}</button>`).join("")}</div></fieldset>
+    <div class="grid2"><label class="f">${ic("coin")} ${t("o.currency")}<select id="oCur">${["EUR", "CHF", "GBP", "USD", "PLN", "CZK", "HUF", "RON", "SEK", "DKK", "NOK", "BGN", "ISK", "RSD", "MKD", "ALL", "BAM", "UAH", "RUB", "TRY", "CNY", "JPY", "KRW", "AED", "SAR", "EGP", "MAD"].map(c => `<option ${c === st.currency ? "selected" : ""}>${c}</option>`).join("")}</select></label>
+    <label class="f">${ic("ticket")} ${t("o.voucher")}<input id="oVouch" inputmode="decimal" value="${fmtNum(st.voucher || 8, locale())}"></label></div>
     ${vb ? `<p class="muted">${t("o.vBalance", { v: money(vb) })}</p>` : ""}</div>
-  <div class="card"><h2>📥 ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><div class="btns"><button class="btn" data-act="import">📊 ${t("o.importBtn")}</button></div></div>
-  <div class="card" id="cloud"><h2>☁️ ${t("o.cloud")}</h2><p class="muted">${t("o.cloudHint")}</p>
-    <h3>Dropbox ${dbx.isConnected() ? "✅" : ""}</h3>${dbx.isConnected() ? `<p class="muted">${esc(dbx.path())}</p><div class="btns"><button class="btn small" data-act="sync">🔄 ${t("o.syncNow")}</button><button class="btn small ghost" data-act="dbxOff">${t("o.disconnect")}</button></div>`
+  <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button></div></div>
+  <div class="card" id="cloud"><h2>${ic("cloud")} ${t("o.cloud")}</h2><p class="muted">${t("o.cloudHint")}</p>
+    <h3>Dropbox ${dbx.isConnected() ? ic("check") : ""}</h3>${dbx.isConnected() ? `<p class="muted">${esc(dbx.path())}</p><div class="btns"><button class="btn small" data-act="sync">${ic("sync")} ${t("o.syncNow")}</button><button class="btn small ghost" data-act="dbxOff">${t("o.disconnect")}</button></div>`
       : `<button class="btn soft" data-act="dbx">${t("o.connect", { p: "Dropbox" })}</button>`}
-    <h3>Google Drive ${gd.isConnected() ? "✅" : ""}</h3>${gd.isConnected() ? `<div class="btns"><button class="btn small" data-act="sync">🔄 ${t("o.syncNow")}</button><button class="btn small ghost" data-act="gdOff">${t("o.disconnect")}</button></div>`
+    <h3>Google Drive ${gd.isConnected() ? ic("check") : ""}</h3>${gd.isConnected() ? `<div class="btns"><button class="btn small" data-act="sync">${ic("sync")} ${t("o.syncNow")}</button><button class="btn small ghost" data-act="gdOff">${t("o.disconnect")}</button></div>`
       : `<button class="btn soft" data-act="gd">${t("o.connect", { p: "Google Drive" })}</button>`}
     <p class="hint">${t("o.cloudPrivacy")}</p></div>
-  <div class="card"><h2>🏷️ ${t("o.cats")}</h2><div class="chips">${cats().map(c => `<button class="chip" data-act="editCat" data-id="${c.id}">${c.emoji} ${esc(cname(c))}</button>`).join("")}<button class="chip add" data-act="newCat">＋ ${t("c.new")}</button></div></div>
-  <div class="card"><h2>🤖 ${t("o.ai")}</h2><p class="muted">${t("o.aiHint")}</p><button class="btn soft small" data-act="aiKey">${ai.ready() ? "✅ " + t("o.aiOn") : t("o.aiSet")}</button></div>
-  <div class="card"><h2>💾 ${t("o.backup")}</h2><div class="btns"><button class="btn soft" data-act="backup">⬇️ ${t("o.export")}</button><button class="btn soft" data-act="restore">⬆️ ${t("o.restore")}</button></div>
+  <div class="card"><h2>${ic("palette")} ${t("o.cats")}</h2><div class="chips">${cats().map(c => `<button class="chip" data-act="editCat" data-id="${c.id}">${catIcon(c)} ${esc(cname(c))}</button>`).join("")}<button class="chip add" data-act="newCat">${ic("plus")} ${t("c.new")}</button></div></div>
+  <div class="card"><h2>${ic("robot")} ${t("o.ai")}</h2><p class="muted">${t("o.aiHint")}</p><button class="btn soft small" data-act="aiKey">${ai.ready() ? ic("check") + " " + t("o.aiOn") : t("o.aiSet")}</button></div>
+  <div class="card"><h2>${ic("check")} ${t("o.backup")}</h2><div class="btns"><button class="btn soft" data-act="backup">${ic("download")} ${t("o.export")}</button><button class="btn soft" data-act="restore">${ic("upload")} ${t("o.restore")}</button></div>
     <details><summary>${t("o.danger")}</summary><button class="btn danger" data-act="wipe">${t("o.wipe")}</button></details></div>
-  <div class="card"><h2>🐹 Kapibo ${APP_VERSION}</h2><p class="muted">${t("o.about")}</p>
-    <div class="btns"><button class="btn small soft" data-act="news">🎉 ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
+  <div class="card"><h2>${ic("capy")} Kapibo ${APP_VERSION}</h2><p class="muted">${t("o.about")}</p>
+    <div class="btns"><button class="btn small soft" data-act="news">${ic("sparkle")} ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
     <a class="btn small ghost" href="https://github.com/Marketto/kapibo" rel="noopener">GitHub</a></div></div>`;
 }
 document.addEventListener("change", async e => {
   if (e.target.id === "oLang") { lsSet("kapibo.lang", e.target.value); await setLang(e.target.value); render(); kapi.say("kapi.hello"); }
   if (e.target.id === "oCur") store.setSettings({ currency: e.target.value });
   if (e.target.id === "oVouch") { const v = num(e.target.value); if (v) store.setSettings({ voucher: v }); }
+});
+
+// temi
+const THEMES = [["joy", "#fff4e3", "#ffb627"], ["onsen", "#eef8f5", "#1c7568"], ["night", "#231c27", "#ffb07a"], ["auto", "#fff4e3", "#231c27"]];
+const theme = () => document.documentElement.dataset.theme || "auto";
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-theme-set]"); if (!b) return;
+  document.documentElement.dataset.theme = b.dataset.themeSet; lsSet("kapibo.theme", b.dataset.themeSet);
+  render(); kapi.mood("happy"); kapi.say("kapi.theme");
 });
 
 // importazione Excel

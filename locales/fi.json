@@ -262,4 +262,10 @@
 "cat.waste":"Jätemaksu",
 "cat.condo":"Hoitovastike",
 "cat.mortgage":"Asuntolaina / vuokra",
-"cat.other":"Muu"}
+"cat.other":"Muu",
+"o.theme":"Teema",
+"theme.joy":"Iloinen kapybara",
+"theme.onsen":"Onsen",
+"theme.night":"Kapybaran yö",
+"theme.auto":"Automaattinen",
+"kapi.theme":"Mikä ihana uusi asu! ✨|Rakastan sitä niin paljon! 🍊"}

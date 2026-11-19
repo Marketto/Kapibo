@@ -1,7 +1,7 @@
 // Blocca il commit/pubblicazione se nel repo finiscono dati sensibili.
 import fs from "node:fs";
 import { execSync } from "node:child_process";
-const files = execSync("git ls-files -co --exclude-standard", { encoding: "utf8" }).split("\n").filter(f => f && !f.startsWith("vendor/") && !/\.(png|jpg|woff2?)$/.test(f));
+const files = execSync("git ls-files -co --exclude-standard", { encoding: "utf8" }).split("\n").filter(f => f && !f.startsWith("vendor/") && f !== "package-lock.json" && !/\.(png|jpg|woff2?)$/.test(f));
 const RULES = [
   [/sk-ant-[A-Za-z0-9_-]{20,}/, "chiave API Anthropic"],
   [/\bIT\d{2}[A-Z]\d{10}[0-9A-Z]{12}\b/, "IBAN"],

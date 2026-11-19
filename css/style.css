@@ -1,21 +1,44 @@
 /* Kapibo — stile kawaii. Palette e misure in :root; animazioni spente con prefers-reduced-motion. */
 :root {
-  --c-bg: #fff6ee; --c-bg2: #ffe8d6; --c-card: #ffffff; --c-text: #3d2a22; --c-soft: #6e5446;
-  --c-pri: #b8531f; --c-pri-t: #fff; --c-pri-soft: #ffd9bf; --c-ok: #2f7d3a; --c-ok-soft: #dcf3d6;
-  --c-bad: #b3261e; --c-bad-soft: #fde0dc; --c-line: #f1dccb; --c-focus: #6a4cd6; --c-yuzu: #ffc34d;
-  --r: 22px; --r-s: 14px; --sh: 0 6px 18px rgba(150, 90, 50, .12); --sh2: 0 2px 6px rgba(150, 90, 50, .14);
+  --r: 22px; --r-s: 14px;
   --font: "M PLUS Rounded 1c", "Baloo Bhaijaan 2", "Jua", "ZCOOL KuaiLe", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: light dark;
+  color-scheme: light;
+}
+/* Tema "Capibara gioioso": crema, cacao, yuzu e matcha, con yuzu e zampette sullo sfondo */
+:root, [data-theme="joy"], [data-theme="auto"] {
+  --c-bg: #fff4e3; --c-bg2: #ffe0b3; --c-card: #fffdf8; --c-text: #3b2a1e; --c-soft: #6b5242;
+  --c-pri: #a34e1a; --c-pri-t: #fff; --c-pri-soft: #ffd9a8; --c-ok: #2f7a3a; --c-ok-soft: #e0f2d2;
+  --c-bad: #b3261e; --c-bad-soft: #fde0dc; --c-line: #f0d9bc; --c-focus: #6a4cd6; --c-yuzu: #ffb627; --c-leaf: #7cbf5a;
+  --c-ico: #a8714a; --sh: 0 6px 0 -2px rgba(163, 78, 26, .10), 0 10px 22px rgba(150, 90, 50, .12); --sh2: 0 3px 0 rgba(163, 78, 26, .14);
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg opacity='.5'%3E%3Ccircle cx='24' cy='28' r='9' fill='%23ffc34d' opacity='.35'/%3E%3Cpath d='M24 19c2-5 7-6 10-4-3 3-6 4-10 4z' fill='%237cbf5a' opacity='.45'/%3E%3Cg fill='%23a8714a' opacity='.10'%3E%3Cellipse cx='100' cy='104' rx='7' ry='5.5'/%3E%3Ccircle cx='91' cy='95' r='3'/%3E%3Ccircle cx='97' cy='90' r='3'/%3E%3Ccircle cx='104' cy='90' r='3'/%3E%3Ccircle cx='110' cy='95' r='3'/%3E%3C/g%3E%3Ccircle cx='112' cy='30' r='3' fill='%23ffb627' opacity='.3'/%3E%3Ccircle cx='40' cy='112' r='4' fill='%237cbf5a' opacity='.18'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Tema "Onsen": acqua termale, menta e vapore */
+[data-theme="onsen"] {
+  --c-bg: #eef8f5; --c-bg2: #cfeee6; --c-card: #ffffff; --c-text: #1d3734; --c-soft: #46625e;
+  --c-pri: #1c7568; --c-pri-t: #fff; --c-pri-soft: #c4ebe2; --c-ok: #2f7a3a; --c-ok-soft: #dcf3d6;
+  --c-bad: #b3261e; --c-bad-soft: #fde0dc; --c-line: #cde5df; --c-focus: #6a4cd6; --c-yuzu: #ffb627; --c-leaf: #5fae8f;
+  --c-ico: #2f8a7c; --sh: 0 6px 0 -2px rgba(28, 117, 104, .10), 0 10px 22px rgba(30, 90, 80, .12); --sh2: 0 3px 0 rgba(28, 117, 104, .14);
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%231c7568' stroke-width='2' stroke-linecap='round' opacity='.08'%3E%3Cpath d='M20 40c-3-4 3-7 0-12M30 40c-3-4 3-7 0-12M80 96c-3-4 3-7 0-12M90 96c-3-4 3-7 0-12'/%3E%3C/g%3E%3Ccircle cx='98' cy='28' r='6' fill='%23ffc34d' opacity='.25'/%3E%3C/svg%3E");
+}
+/* Tema "Notte di capibara": scuro e caldo */
+[data-theme="night"] {
+  --c-bg: #231c27; --c-bg2: #34283a; --c-card: #362b3b; --c-text: #fbeee6; --c-soft: #d9c3b6; --c-pri: #ffb07a; --c-pri-t: #2a1a12;
+  --c-pri-soft: #5a3a2c; --c-ok: #8fe09a; --c-ok-soft: #26402a; --c-bad: #ff9c94; --c-bad-soft: #4a2622; --c-line: #4b3c4f; --c-focus: #b9a6ff; --c-yuzu: #ffc34d; --c-leaf: #8fd17a;
+  --c-ico: #ffcf9e; --sh: 0 6px 18px rgba(0, 0, 0, .35); --sh2: 0 2px 6px rgba(0, 0, 0, .3); color-scheme: dark;
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23fff7c2'%3E%3Ccircle cx='20' cy='30' r='1.2' opacity='.5'/%3E%3Ccircle cx='90' cy='18' r='1' opacity='.4'/%3E%3Ccircle cx='120' cy='80' r='1.4' opacity='.45'/%3E%3Ccircle cx='50' cy='110' r='1' opacity='.35'/%3E%3C/g%3E%3Cpath d='M110 30a10 10 0 1 1-8-12 8 8 0 0 0 8 12z' fill='%23ffc34d' opacity='.25'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark) {
-  :root { --c-bg: #231c27; --c-bg2: #2f2533; --c-card: #362b3b; --c-text: #fbeee6; --c-soft: #d9c3b6; --c-pri: #ffb07a; --c-pri-t: #2a1a12;
-    --c-pri-soft: #5a3a2c; --c-ok: #8fe09a; --c-ok-soft: #26402a; --c-bad: #ff9c94; --c-bad-soft: #4a2622; --c-line: #4b3c4f; --c-focus: #b9a6ff;
-    --sh: 0 6px 18px rgba(0, 0, 0, .35); --sh2: 0 2px 6px rgba(0, 0, 0, .3); }
+  [data-theme="auto"] {
+    --c-bg: #231c27; --c-bg2: #34283a; --c-card: #362b3b; --c-text: #fbeee6; --c-soft: #d9c3b6; --c-pri: #ffb07a; --c-pri-t: #2a1a12;
+    --c-pri-soft: #5a3a2c; --c-ok: #8fe09a; --c-ok-soft: #26402a; --c-bad: #ff9c94; --c-bad-soft: #4a2622; --c-line: #4b3c4f; --c-focus: #b9a6ff; --c-yuzu: #ffc34d; --c-leaf: #8fd17a;
+    --c-ico: #ffcf9e; --sh: 0 6px 18px rgba(0, 0, 0, .35); --sh2: 0 2px 6px rgba(0, 0, 0, .3); color-scheme: dark;
+    --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23fff7c2'%3E%3Ccircle cx='20' cy='30' r='1.2' opacity='.5'/%3E%3Ccircle cx='90' cy='18' r='1' opacity='.4'/%3E%3Ccircle cx='120' cy='80' r='1.4' opacity='.45'/%3E%3C/g%3E%3C/svg%3E");
+  }
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { margin: 0; }
-body { font: 16px/1.45 var(--font); color: var(--c-text); background: var(--c-bg) radial-gradient(circle at 10% 0, var(--c-bg2), transparent 40%) fixed;
+body { font: 16px/1.45 var(--font); color: var(--c-text); background: var(--pattern), radial-gradient(circle at 10% 0, var(--c-bg2), transparent 45%) fixed, var(--c-bg);
   min-height: 100dvh; padding-bottom: calc(84px + env(safe-area-inset-bottom)); -webkit-tap-highlight-color: transparent; }
 h1, h2, h3 { margin: 0 0 .4em; line-height: 1.2; }
 h2 { font-size: 1.25rem; } h3 { font-size: 1.05rem; }
@@ -110,7 +133,7 @@ main { padding: 6px 14px 20px; max-width: 760px; margin: 0 auto; outline: none; 
 .list > li { border-bottom: 1px solid var(--c-line); }
 .list > li:last-child { border-bottom: 0; }
 .item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 2px; min-height: 52px; background: none; border: 0; text-align: start; cursor: pointer; }
-.emo { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 14px; font-size: 1.3rem; background: color-mix(in srgb, var(--c, #ccc) 28%, transparent); }
+.emo { color: color-mix(in srgb, var(--c, #999) 70%, var(--c-text)); width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 14px; font-size: 1.3rem; background: color-mix(in srgb, var(--c, #ccc) 28%, transparent); }
 .item .name { display: block; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .item .amt { font-weight: 800; white-space: nowrap; }
 .bar { display: block; height: 6px; border-radius: 6px; background: var(--c-line); margin-top: 4px; overflow: hidden; }
@@ -120,7 +143,8 @@ main { padding: 6px 14px 20px; max-width: 760px; margin: 0 auto; outline: none; 
 .kinds { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 .kind { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 10px; border: 0; border-radius: var(--r); background: var(--c-card);
   box-shadow: var(--sh); cursor: pointer; min-height: 120px; font-weight: 700; text-align: center; transition: transform .15s; }
-.kind span { font-size: 2.2rem; }
+.kind span { font-size: 2.2rem; color: var(--c-ico); width: 64px; height: 64px; display: grid; place-items: center; border-radius: 22px; background: color-mix(in srgb, var(--c-yuzu) 22%, transparent); transition: transform .25s; }
+.kind:hover span, .kind:focus-visible span { transform: rotate(-8deg) scale(1.08); }
 .kind:hover { transform: translateY(-2px) rotate(-1deg); }
 .kind small { font-weight: 400; color: var(--c-soft); }
 .progress { height: 12px; border-radius: 12px; background: var(--c-line); overflow: hidden; }
@@ -132,11 +156,11 @@ main { padding: 6px 14px 20px; max-width: 760px; margin: 0 auto; outline: none; 
 .chk { width: 26px; height: 26px; accent-color: var(--c-pri); }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 4px 12px; border-radius: 999px; border: 2px solid var(--c-line); background: var(--c-card); cursor: pointer; font-size: .9rem; }
-.chip[aria-pressed="true"] { border-color: var(--c-pri); background: var(--c-pri-soft); font-weight: 700; }
+.chip[aria-pressed="true"], .chip[aria-checked="true"] { border-color: var(--c-pri); background: var(--c-pri-soft); font-weight: 700; }
 .chip.add { border-style: dashed; }
 .catgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(98px, 1fr)); gap: 8px; }
 .catgrid .chip { flex-direction: column; border-radius: 16px; min-height: 72px; justify-content: center; text-align: center; font-size: .82rem; }
-.catgrid .chip span { font-size: 1.5rem; }
+.catgrid .chip .ki, .catgrid .chip span { font-size: 1.5rem; color: var(--c-ico); }
 .warn { background: var(--c-bad-soft); color: var(--c-bad); border-radius: var(--r-s); padding: 8px 12px; }
 .okbox { background: var(--c-ok-soft); color: var(--c-ok); border-radius: var(--r-s); padding: 8px 12px; }
 
@@ -163,11 +187,11 @@ dialog::backdrop { background: rgba(60, 30, 20, .35); backdrop-filter: blur(2px)
 .tabs { position: fixed; bottom: 0; inset-inline: 0; z-index: 10; display: grid; grid-template-columns: repeat(5, 1fr); align-items: end;
   padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: var(--c-card); box-shadow: 0 -4px 18px rgba(150, 90, 50, .12); border-radius: 24px 24px 0 0; }
 .tabs button { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 56px; border: 0; background: none; border-radius: 16px; cursor: pointer; padding: 4px 2px; }
-.tabs button span { font-size: 1.35rem; transition: transform .2s; }
+.tabs button .ki { font-size: 1.5rem; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); color: var(--c-ico); }
 .tabs button b { font-size: .72rem; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tabs button[aria-current="page"] { background: var(--c-pri-soft); }
-.tabs button[aria-current="page"] span { transform: translateY(-2px) scale(1.12); }
-.tabs .fab span { width: 58px; height: 58px; display: grid; place-items: center; margin-top: -26px; border-radius: 50%; background: linear-gradient(140deg, var(--c-yuzu), var(--c-pri));
+.tabs button[aria-current="page"] .ki { transform: translateY(-3px) scale(1.18); color: var(--c-pri); animation: wiggle .5s ease-in-out; }
+.tabs .fab .ki { color: #fff !important; font-size: 1.7rem !important; width: 58px; height: 58px; display: grid; place-items: center; margin-top: -26px; border-radius: 50%; background: linear-gradient(140deg, var(--c-yuzu), var(--c-pri));
   box-shadow: 0 8px 18px rgba(184, 83, 31, .4); font-size: 1.6rem; border: 4px solid var(--c-card); }
 .tabs .fab[aria-current="page"] { background: none; }
 
@@ -193,7 +217,7 @@ dialog::backdrop { background: rgba(60, 30, 20, .35); backdrop-filter: blur(2px)
 [dir="rtl"] .hb-b { transform-origin: right; }
 @keyframes grow { from { transform: scaleX(0); } }
 .tip { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed var(--c-line); }
-.tip:last-child { border: 0; } .tip > span { font-size: 1.6rem; }
+.tip:last-child { border: 0; } .tip > span { font-size: 1.5rem; color: var(--c-pri); width: 44px; height: 44px; flex: none; display: grid; place-items: center; border-radius: 16px; background: var(--c-pri-soft); }
 table.t { width: 100%; border-collapse: collapse; font-size: .88rem; }
 table.t th, table.t td { padding: 6px 4px; text-align: start; border-bottom: 1px solid var(--c-line); }
 table.t td.n, table.t th.n { text-align: end; white-space: nowrap; }
@@ -206,4 +230,20 @@ table.t td.n, table.t th.n { text-align: end; white-space: nowrap; }
   .k-body, .k-eyes, .k-ear-l, .k-ear-r, .k-yuzu { animation: none !important; }
 }
 @media (forced-colors: active) { .btn, .chip, .kind { border: 2px solid ButtonText; } }
-[dir="rtl"] .month-nav .icon-btn { transform: scaleX(-1); }
+
+/* tocchi "gioiosi": pulsanti morbidi che si schiacciano, icone che saltellano, titoli con lo yuzu */
+.btn { box-shadow: 0 4px 0 color-mix(in srgb, var(--c-pri) 65%, #000); }
+.btn.soft { box-shadow: 0 4px 0 color-mix(in srgb, var(--c-pri-soft) 70%, var(--c-pri)); }
+.btn.ghost, .btn.danger { box-shadow: none; }
+.btn:active { transform: translateY(3px) scale(.98); box-shadow: 0 1px 0 color-mix(in srgb, var(--c-pri) 65%, #000); }
+.btn .ki, .chip .ki { font-size: 1.15em; }
+.btn:hover .ki { animation: wiggle .4s ease-in-out; }
+.card { border: 2px solid color-mix(in srgb, var(--c-line) 70%, transparent); }
+.card > h2 .ki, .card > h3 .ki, .row > h3 .ki { color: var(--c-pri); }
+.card > h2:first-child::after { content: ""; display: inline-block; width: 10px; height: 10px; margin-inline-start: 8px; border-radius: 50%; background: var(--c-yuzu); box-shadow: 4px -5px 0 -2px var(--c-leaf); vertical-align: middle; }
+.icon-btn .ki { color: var(--c-ico); }
+.top { border-bottom: 3px dotted color-mix(in srgb, var(--c-yuzu) 45%, transparent); }
+.theme-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.theme-pick .chip { justify-content: flex-start; border-radius: 16px; min-height: 52px; }
+.swatch { width: 26px; height: 26px; border-radius: 50%; flex: none; border: 2px solid var(--c-card); box-shadow: 0 0 0 2px var(--c-line); }
+[dir="rtl"] .ki-back, [dir="rtl"] .ki-prev, [dir="rtl"] .ki-next { transform: scaleX(-1); }

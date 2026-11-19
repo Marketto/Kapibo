@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it" dir="ltr">
+<html lang="it" dir="ltr" data-theme="joy">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -12,7 +12,10 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="css/icons.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="preload" href="fonts/kapi-icons.woff2" as="font" type="font/woff2" crossorigin>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("kapibo.theme")||"auto"}catch(e){}</script>
 <script type="module" src="js/app.js"></script>
 </head>
 <body>
@@ -24,20 +27,20 @@
   </div>
   <div class="brand"><h1>Kapibo</h1>
     <div class="month-nav">
-      <button class="icon-btn" id="mPrev" data-i18n-attr="aria-label:month.prev">‹</button>
+      <button class="icon-btn" id="mPrev" data-i18n-attr="aria-label:month.prev"><i class="ki ki-prev" aria-hidden="true"></i></button>
       <button class="month-lbl" id="mLabel" aria-live="polite"></button>
-      <button class="icon-btn" id="mNext" data-i18n-attr="aria-label:month.next">›</button>
+      <button class="icon-btn" id="mNext" data-i18n-attr="aria-label:month.next"><i class="ki ki-next" aria-hidden="true"></i></button>
     </div>
   </div>
-  <button class="icon-btn sync" id="syncBtn" data-state="off" data-i18n-attr="aria-label:sync.button">☁️</button>
+  <button class="icon-btn sync" id="syncBtn" data-state="off" data-i18n-attr="aria-label:sync.button"><i class="ki ki-cloud" aria-hidden="true"></i></button>
 </header>
 <main id="main" tabindex="-1"></main>
 <nav class="tabs" data-i18n-attr="aria-label:nav.label">
-  <button data-tab="month" aria-current="page"><span aria-hidden="true">🏠</span><b data-i18n="nav.month">Mese</b></button>
-  <button data-tab="usage"><span aria-hidden="true">💡</span><b data-i18n="nav.usage">Consumi</b></button>
-  <button data-tab="scan" class="fab"><span aria-hidden="true">📸</span><b data-i18n="nav.scan">Scansiona</b></button>
-  <button data-tab="stats"><span aria-hidden="true">📊</span><b data-i18n="nav.stats">Grafici</b></button>
-  <button data-tab="more"><span aria-hidden="true">⚙️</span><b data-i18n="nav.more">Altro</b></button>
+  <button data-tab="month" aria-current="page"><i class="ki ki-home" aria-hidden="true"></i><b data-i18n="nav.month">Mese</b></button>
+  <button data-tab="usage"><i class="ki ki-usage" aria-hidden="true"></i><b data-i18n="nav.usage">Consumi</b></button>
+  <button data-tab="scan" class="fab"><i class="ki ki-scan" aria-hidden="true"></i><b data-i18n="nav.scan">Scansiona</b></button>
+  <button data-tab="stats"><i class="ki ki-stats" aria-hidden="true"></i><b data-i18n="nav.stats">Grafici</b></button>
+  <button data-tab="more"><i class="ki ki-more" aria-hidden="true"></i><b data-i18n="nav.more">Altro</b></button>
 </nav>
 <dialog id="dlg" aria-labelledby="dlgTitle"><form method="dialog" id="dlgForm"></form></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>

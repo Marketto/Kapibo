@@ -5,35 +5,35 @@ export const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(
 
 // kind: "var" spese variabili, "fix" fisse/bollette
 export const DEFAULT_CATS = [
-  { id: "food", emoji: "🥕", color: "#7cc576", kind: "var" },
-  { id: "clean", emoji: "🧽", color: "#6cc3d5", kind: "var" },
-  { id: "hygiene", emoji: "🧴", color: "#b59cf0", kind: "var" },
-  { id: "home", emoji: "🏠", color: "#f0a35e", kind: "var" },
-  { id: "gifts", emoji: "🎁", color: "#f27fa5", kind: "var" },
-  { id: "toys", emoji: "🧸", color: "#f5c04a", kind: "var" },
-  { id: "pets", emoji: "🐾", color: "#c8a27a", kind: "var" },
-  { id: "fun", emoji: "🍹", color: "#ff8e72", kind: "var" },
-  { id: "holiday", emoji: "🏖️", color: "#4fb3bf", kind: "var" },
-  { id: "tobacco", emoji: "🚬", color: "#9e9e9e", kind: "var" },
-  { id: "tech", emoji: "💻", color: "#7a8cf0", kind: "var" },
-  { id: "furniture", emoji: "🛋️", color: "#d1a06b", kind: "var" },
-  { id: "renovation", emoji: "🔨", color: "#b0876b", kind: "var" },
-  { id: "clothes", emoji: "👕", color: "#e98bd0", kind: "var" },
-  { id: "health", emoji: "💊", color: "#ef6f6c", kind: "var" },
-  { id: "transport", emoji: "🚌", color: "#5fa8e8", kind: "var" },
-  { id: "school", emoji: "📚", color: "#8fbf5a", kind: "var" },
-  { id: "donations", emoji: "💝", color: "#f49ac1", kind: "var" },
-  { id: "admin", emoji: "📋", color: "#a1a1c8", kind: "var" },
-  { id: "elec", emoji: "⚡", color: "#f7d046", kind: "fix" },
-  { id: "gas", emoji: "🔥", color: "#ff9f43", kind: "fix" },
-  { id: "water", emoji: "💧", color: "#48b6f0", kind: "fix" },
-  { id: "internet", emoji: "📶", color: "#6c9cf0", kind: "fix" },
-  { id: "subs", emoji: "📺", color: "#a07cf0", kind: "fix" },
-  { id: "tvfee", emoji: "📡", color: "#8e9ad6", kind: "fix" },
-  { id: "waste", emoji: "🗑️", color: "#8fb39a", kind: "fix" },
-  { id: "condo", emoji: "🏢", color: "#b8a28e", kind: "fix" },
-  { id: "mortgage", emoji: "🔑", color: "#c97b63", kind: "fix" },
-  { id: "other", emoji: "✨", color: "#bdbdbd", kind: "var" },
+  { id: "food", icon: "c-food", emoji: "🥕", color: "#7cc576", kind: "var" },
+  { id: "clean", icon: "c-clean", emoji: "🧽", color: "#6cc3d5", kind: "var" },
+  { id: "hygiene", icon: "c-hygiene", emoji: "🧴", color: "#b59cf0", kind: "var" },
+  { id: "home", icon: "c-home", emoji: "🏠", color: "#f0a35e", kind: "var" },
+  { id: "gifts", icon: "c-gifts", emoji: "🎁", color: "#f27fa5", kind: "var" },
+  { id: "toys", icon: "c-toys", emoji: "🧸", color: "#f5c04a", kind: "var" },
+  { id: "pets", icon: "c-pets", emoji: "🐾", color: "#c8a27a", kind: "var" },
+  { id: "fun", icon: "c-fun", emoji: "🍹", color: "#ff8e72", kind: "var" },
+  { id: "holiday", icon: "c-holiday", emoji: "🏖️", color: "#4fb3bf", kind: "var" },
+  { id: "tobacco", icon: "c-tobacco", emoji: "🚬", color: "#9e9e9e", kind: "var" },
+  { id: "tech", icon: "c-tech", emoji: "💻", color: "#7a8cf0", kind: "var" },
+  { id: "furniture", icon: "c-furniture", emoji: "🛋️", color: "#d1a06b", kind: "var" },
+  { id: "renovation", icon: "c-renovation", emoji: "🔨", color: "#b0876b", kind: "var" },
+  { id: "clothes", icon: "c-clothes", emoji: "👕", color: "#e98bd0", kind: "var" },
+  { id: "health", icon: "c-health", emoji: "💊", color: "#ef6f6c", kind: "var" },
+  { id: "transport", icon: "c-transport", emoji: "🚌", color: "#5fa8e8", kind: "var" },
+  { id: "school", icon: "c-school", emoji: "📚", color: "#8fbf5a", kind: "var" },
+  { id: "donations", icon: "c-donations", emoji: "💝", color: "#f49ac1", kind: "var" },
+  { id: "admin", icon: "c-admin", emoji: "📋", color: "#a1a1c8", kind: "var" },
+  { id: "elec", icon: "c-elec", emoji: "⚡", color: "#f7d046", kind: "fix" },
+  { id: "gas", icon: "c-gas", emoji: "🔥", color: "#ff9f43", kind: "fix" },
+  { id: "water", icon: "c-water", emoji: "💧", color: "#48b6f0", kind: "fix" },
+  { id: "internet", icon: "c-internet", emoji: "📶", color: "#6c9cf0", kind: "fix" },
+  { id: "subs", icon: "c-subs", emoji: "📺", color: "#a07cf0", kind: "fix" },
+  { id: "tvfee", icon: "c-tvfee", emoji: "📡", color: "#8e9ad6", kind: "fix" },
+  { id: "waste", icon: "c-waste", emoji: "🗑️", color: "#8fb39a", kind: "fix" },
+  { id: "condo", icon: "c-condo", emoji: "🏢", color: "#b8a28e", kind: "fix" },
+  { id: "mortgage", icon: "c-mortgage", emoji: "🔑", color: "#c97b63", kind: "fix" },
+  { id: "other", icon: "c-other", emoji: "✨", color: "#bdbdbd", kind: "var" },
 ];
 
 // Parole chiave (normalizzate). Prima l'italiano, poi termini comuni in altre lingue e nomi di negozi/fornitori.
@@ -100,4 +100,7 @@ export function guessCats(name, rules = {}, fallback = "other") {
 export const isGrocer = s => { const n = norm(s); return GROCERS.some(g => n.includes(g)); };
 
 /** Nome mostrato: personalizzato dall'utente oppure traduzione "cat.<id>". */
+/** Icona: font kapi-icons per le categorie predefinite, emoji per quelle create dall'utente. */
+export const catIcon = c => (c?.icon && !c.custom ? `<i class="ki ki-${c.icon}" aria-hidden="true"></i>` : `<span aria-hidden="true">${c?.emoji || "✨"}</span>`);
+
 export const catName = (c, t) => (c && (c.name || t("cat." + c.id))) || "?";

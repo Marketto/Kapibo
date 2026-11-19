@@ -1,7 +1,7 @@
 // Cache offline. Il nome cambia a ogni versione (APP_VERSION in js/version.js, copiata da pages.yml).
 const VERSION = "dev";
 const CACHE = "kapibo-" + VERSION, MODS = "kapibo-moduli";
-const CORE = ["./", "index.html", "css/style.css", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png",
+const CORE = ["./", "index.html", "css/style.css", "css/icons.css", "fonts/kapi-icons.woff2", "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png",
   "js/app.js", "js/i18n.js", "js/store.js", "js/categories.js", "js/money.js", "js/mascot.js", "js/stats.js", "js/charts.js", "js/version.js", "js/ai.js",
   "js/sync/index.js", "js/sync/dropbox.js", "js/sync/gdrive.js", "locales/en.json"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {})));
