@@ -1,16 +1,18 @@
 // Dropbox dal browser (OAuth PKCE, nessun server). Token solo su questo dispositivo.
 // Ripreso da Mochi Spesa, con la correzione della variabile `t` che nascondeva la funzione di traduzione.
 const LS = "kapibo.dropbox";
+// App key pubblica dell'app Dropbox "Kapibo" (PKCE: non è un segreto). Chi vuole può usare la propria da Altro.
+export const DEFAULT_KEY = "lyksebe50pm4wtq";
 const read = () => { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch { return {}; } };
 const write = v => { try { localStorage.setItem(LS, JSON.stringify(v)); } catch {} };
 const fail = code => Object.assign(new Error(code), { code });
 
 export const redirectUri = () => location.origin + location.pathname;
 export const isConnected = () => !!read().refresh_token;
-export const path = () => read().path || "/Kapibo/kapibo.json";
+export const path = () => read().path || "/kapibo.json"; // app di tipo "App folder": la radice è Applicazioni/Kapibo
 export const setPath = p => write({ ...read(), path: p });
 export const disconnect = () => { const d = read(); write({ path: d.path, appKey: d.appKey }); };
-export const appKey = () => read().appKey || "";
+export const appKey = () => read().appKey || DEFAULT_KEY;
 
 const b64url = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 

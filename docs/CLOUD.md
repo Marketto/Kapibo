@@ -6,7 +6,8 @@ Kapibo non ha server: ogni utente collega il proprio cloud dal browser. Serve un
 1. https://www.dropbox.com/developers/apps → *Create app* → *Scoped access* → *App folder* (oppure *Full Dropbox*).
 2. Permissions: `files.metadata.read`, `files.content.read`, `files.content.write`.
 3. Settings → *Redirect URIs*: `https://marketto.github.io/Kapibo/`.
-4. Copia la *App key* e incollala in Kapibo › Altro › Collega Dropbox. (La app key non è segreta: PKCE, nessun "secret".)
+4. App key configurata: `lyksebe50pm4wtq` (app «Kapibo», tipo App folder), predefinita in `js/sync/dropbox.js` (`DEFAULT_KEY`). Non è segreta (PKCE, nessun "secret"). I dati finiscono in `Applicazioni/Kapibo/kapibo.json`.
+5. Finché l'app Dropbox è in *Development* possono collegarsi fino a 500 utenti; oltre serve *Apply for production* nella console.
 
 ## Google Drive
 1. https://console.cloud.google.com → nuovo progetto → *API e servizi* → abilita **Google Drive API**.
