@@ -12,7 +12,6 @@ export const LANGS = {
 };
 export const RTL = new Set(["ar"]);
 const LOCALE = { zh: "zh-CN", pt: "pt-PT", en: "en-GB", no: "nb-NO", sr: "sr-Cyrl" };
-const FONTS = { ar: "Baloo+Bhaijaan+2:wght@400;600;800", ko: "Jua", zh: "ZCOOL+KuaiLe" };
 
 let cur = "en", dict = {}, fallback = {};
 const cache = {};
@@ -35,10 +34,6 @@ export async function setLang(code) {
   const html = document.documentElement;
   html.lang = LOCALE[code] || code;
   html.dir = RTL.has(code) ? "rtl" : "ltr";
-  if (FONTS[code] && !document.getElementById("font-" + code)) {
-    const l = Object.assign(document.createElement("link"), { id: "font-" + code, rel: "stylesheet", href: `https://fonts.googleapis.com/css2?family=${FONTS[code]}&display=swap` });
-    document.head.appendChild(l);
-  }
   apply(document);
 }
 

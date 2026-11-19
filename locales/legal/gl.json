@@ -1,0 +1,39 @@
+{
+"title": "Privacidade e condicións de uso",
+"updated": "Versión do 19 de novembro de 2026",
+"privacy": [
+["h", "1. Quen somos"],
+["p", "Kapibo é unha aplicación gratuíta e de código aberto publicada por Marketto (github.com/Marketto). Non hai ningunha empresa nin servidor detrás da aplicación: para consultas ou solicitudes, abre unha incidencia en github.com/Marketto/Kapibo."],
+["h", "2. Que datos trata a aplicación"],
+["p", "Os datos que introduces ou que a aplicación le dos teus documentos: gastos, categorías, ingresos, saldos, vales de comida, lecturas de contadores, facturas e o texto lido de tíckets, nóminas, extractos bancarios e facturas. As fotos e os PDF que escolles lense só no teu dispositivo e a aplicación non os conserva."],
+["h", "3. A onde van os datos"],
+["p", "Ao teu dispositivo, no almacenamento do navegador (IndexedDB/localStorage). Se conectas Dropbox ou Google Drive, gárdase unha copia na túa conta da nube: a transferencia vai directamente do teu dispositivo ao provedor escollido, conforme as súas condicións. Ninguén, nin sequera o desenvolvedor, recibe os teus datos."],
+["h", "4. Servizos de terceiros"],
+["p", "Para funcionar, a aplicación descarga algúns ficheiros (motor de lectura de documentos, datos de idioma) desde marketto.github.io e, só se non están dispoñibles, desde cdn.jsdelivr.net: como calquera sitio web, estes servizos poden ver o teu enderezo IP. Opcional: se introduces a túa propia chave de API de Claude, o texto lido dos tíckets (nunca as fotos) envíase a Anthropic conforme as súas condicións. Dropbox e Google Drive só se usan se os conectas."],
+["h", "5. Sen seguimento"],
+["p", "A aplicación non utiliza cookies de perfilado, publicidade, analítica nin ferramentas de seguimento."],
+["h", "6. Os teus dereitos"],
+["p", "Os teus datos son túos e están baixo o teu control: podes exportalos (Máis › Copia de seguranza), eliminalos (Máis › Borrar todos os datos) e desconectar a nube en calquera momento. Os datos da túa nube xestiónalos desde a túa conta de Dropbox ou Google. Tes os dereitos recoñecidos polo Regulamento (UE) 2016/679 (RXPD), incluído o de presentar unha reclamación ante a túa autoridade de protección de datos."],
+["h", "7. Menores"],
+["p", "A aplicación está destinada a persoas adultas que xestionan o orzamento do seu fogar."]
+],
+"terms": [
+["h", "1. Uso gratuíto, tal cal"],
+["p", "Kapibo ofrécese gratuitamente, «tal cal» e «segundo dispoñibilidade», sen garantías de ningún tipo, expresas ou implícitas, incluídas a exactitude, a integridade, a dispoñibilidade e a idoneidade para un fin determinado."],
+["h", "2. Non é asesoramento"],
+["p", "Os cálculos, gráficos, consellos e frases da mascota son meramente orientativos e non constitúen asesoramento financeiro, fiscal, xurídico nin de ningún outro tipo. As decisións que tomes usando a aplicación son exclusivamente túas."],
+["h", "3. Comproba sempre os teus datos"],
+["p", "A lectura automática de fotos e PDF pode equivocarse en importes, datas, categorías e consumos. Debes comprobar cada elemento antes de gardalo e antes de fiarte del."],
+["h", "4. Copias de seguranza"],
+["p", "Os datos poden perderse (borrado dos datos do navegador, avaría do dispositivo, erros de sincronización ou do servizo na nube). Facer copias de seguranza periódicas é responsabilidade túa."],
+["h", "5. Limitación de responsabilidade"],
+["p", "Na máxima medida permitida pola lei aplicable, o desenvolvedor e os colaboradores non responden de danos directos ou indirectos, perda de datos, diñeiro, ingresos ou oportunidades, erros de cálculo ou de lectura, interrupcións ou mal funcionamento, nin dos servizos de terceiros (Dropbox, Google, Anthropic, GitHub, jsDelivr) nin das súas condicións. Mantense a responsabilidade que non poida excluírse por lei."],
+["h", "6. Chaves e contas"],
+["p", "As chaves de API e os inicios de sesión na nube permanecen no teu dispositivo: es responsable de mantelos seguros e dos custos que facturen os provedores."],
+["h", "7. Cambios"],
+["p", "Estas condicións poden cambiar coas actualizacións da aplicación; nese caso amosaránseche de novo e só poderás seguir usando a aplicación se as aceptas."],
+["h", "8. Licenza e lei aplicable"],
+["p", "O código publícase baixo a licenza MIT. Aplícase a lei italiana, sen prexuízo dos dereitos imperativos dos consumidores."]
+],
+"summary": ["Gratuíta, sen anuncios, sen seguimento.", "Os teus datos permanecen no teu dispositivo e, se queres, na túa nube.", "A lectura automática pode equivocarse: comproba sempre.", "Sen asesoramento financeiro nin garantía: usas a aplicación baixo a túa responsabilidade."]
+}

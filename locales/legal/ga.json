@@ -1,0 +1,39 @@
+{
+"title": "Príobháideacht agus coinníollacha úsáide",
+"updated": "Leagan an 19 Samhain 2026",
+"privacy": [
+["h", "1. Cé muid"],
+["p", "Is aip saor in aisce foinse oscailte í Kapibo arna foilsiú ag Marketto (github.com/Marketto). Níl aon chuideachta ná freastalaí taobh thiar den aip: le haghaidh ceisteanna nó iarrataí, oscail issue ag github.com/Marketto/Kapibo."],
+["h", "2. Na sonraí a láimhseálann an aip"],
+["p", "Na sonraí a chuireann tú isteach nó a léann an aip as do dhoiciméid: caiteachas, catagóirí, ioncam, iarmhéideanna, dearbháin béile, léamha méadair, billí, agus an téacs a léitear ó admhálacha, ó dhuillíní pá, ó ráitis bhainc agus ó bhillí. Ní léitear na grianghraif agus na PDFanna a roghnaíonn tú ach ar do ghléas féin agus ní choinníonn an aip iad."],
+["h", "3. Cá dtéann na sonraí"],
+["p", "Chuig do ghléas féin, i stóras an bhrabhsálaí (IndexedDB/localStorage). Má cheanglaíonn tú Dropbox nó Google Drive, sábháltar cóip i do chuntas scamall: téann an aistriú go díreach ó do ghléas chuig an soláthraí a roghnaigh tú, faoina théarmaí féin. Ní fhaigheann aon duine, ná fiú an forbróir, do chuid sonraí."],
+["h", "4. Seirbhísí tríú páirtí"],
+["p", "Chun oibriú, íoslódálann an aip comhaid áirithe (inneall léite doiciméad, sonraí teanga) ó marketto.github.io agus, mura bhfuil sé ar fáil amháin, ó cdn.jsdelivr.net: cosúil le haon suíomh gréasáin, féadfaidh na seirbhísí seo do sheoladh IP a fheiceáil. Roghnach: má chuireann tú d'eochair API Claude féin isteach, seoltar an téacs a léitear ó admhálacha (ní grianghraif choíche) chuig Anthropic faoina théarmaí. Ní úsáidtear Dropbox agus Google Drive ach má cheanglaíonn tú iad."],
+["h", "5. Gan rianú"],
+["p", "Ní úsáideann an aip fianáin próifílithe, fógraí, uirlisí anailíse ná uirlisí rianaithe."],
+["h", "6. Do chearta"],
+["p", "Is leatsa do chuid sonraí agus tá siad faoi do smacht: féadfaidh tú iad a onnmhairiú (Tuilleadh › Cúltaca), iad a scriosadh (Tuilleadh › Scrios na sonraí uile) agus an scamall a dhícheangal am ar bith. Bainistíonn tú na sonraí i do scamall ó do chuntas Dropbox nó Google. Tá na cearta agat a thugtar le Rialachán (AE) 2016/679 (an Rialachán Ginearálta maidir le Cosaint Sonraí, RGCS/GDPR), lena n-áirítear an ceart gearán a dhéanamh le d'údarás cosanta sonraí."],
+["h", "7. Mionaoisigh"],
+["p", "Is d'aosaigh a bhainistíonn buiséad a dtí atá an aip."]
+],
+"terms": [
+["h", "1. Úsáid saor in aisce, mar atá"],
+["p", "Soláthraítear Kapibo saor in aisce, \"mar atá\" agus \"mar atá ar fáil\", gan barántais d'aon chineál, sainráite ná intuigthe, lena n-áirítear cruinneas, iomláine, infhaighteacht agus oiriúnacht chun críche áirithe."],
+["h", "2. Ní comhairle é"],
+["p", "Is táscach amháin iad na ríomhanna, na cairteacha, na leideanna agus frásaí an mhascóta agus ní comhairle airgeadais, chánach, dhlí ná aon chineál eile iad. Is leatsa amháin na cinntí a dhéanann tú agus an aip á húsáid agat."],
+["h", "3. Seiceáil do chuid sonraí i gcónaí"],
+["p", "Is féidir leis an léamh uathoibríoch ar ghrianghraif agus ar PDFanna méideanna, dátaí, catagóirí agus úsáid a léamh go mícheart. Ní mór duit gach mír a sheiceáil sula sábhálfaidh tú í agus sula mbeidh tú ag brath uirthi."],
+["h", "4. Cúltacaí"],
+["p", "Is féidir sonraí a chailleadh (sonraí brabhsálaí a ghlanadh, teip gléis, earráidí sioncronaithe nó seirbhíse scamall). Is é do fhreagracht cúltacaí rialta a dhéanamh."],
+["h", "5. Teorannú dliteanais"],
+["p", "A mhéid is mó a cheadaíonn an dlí is infheidhme, níl an forbróir ná na rannpháirtithe faoi dhliteanas as aon damáiste díreach nó indíreach, sonraí, airgead, ioncam nó deiseanna a chailleadh, earráidí ríomha nó léite, cur isteach nó mífheidhmiú, ná as seirbhísí tríú páirtí (Dropbox, Google, Anthropic, GitHub, jsDelivr) agus a dtéarmaí. Ní théann sé i bhfeidhm ar dhliteanas nach féidir a eisiamh de réir an dlí."],
+["h", "6. Eochracha agus cuntais"],
+["p", "Fanann eochracha API agus logálacha isteach scamall ar do ghléas: tá tú freagrach as iad a choinneáil slán agus as aon chostais a ghearrann na soláthraithe."],
+["h", "7. Athruithe"],
+["p", "D'fhéadfadh na coinníollacha seo athrú le nuashonruithe na haipe; más amhlaidh, taispeánfaimid arís duit iad agus ní féidir leat an aip a úsáid a thuilleadh ach amháin má ghlacann tú leo."],
+["h", "8. Ceadúnas agus dlí rialaithe"],
+["p", "Eisítear an cód faoin gceadúnas MIT. Is infheidhme dlí na hIodáile, gan dochar do chearta éigeantacha tomhaltóirí."]
+],
+"summary": ["Saor in aisce, gan fógraí, gan rianú.", "Fanann do chuid sonraí ar do ghléas agus, más mian leat, i do scamall.", "Is féidir leis an léamh uathoibríoch botúin a dhéanamh: seiceáil i gcónaí.", "Gan comhairle airgeadais agus gan barántas: úsáideann tú an aip ar do phriacal féin."]
+}

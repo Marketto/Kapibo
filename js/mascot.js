@@ -34,12 +34,12 @@ export const KAPI_SVG = `
 </svg>`;
 
 let el = null, bubble = null, timer = 0;
-export function mount(host, bubbleEl) {
+export function mount(host, bubbleEl, onTap) {
   host.innerHTML = KAPI_SVG; el = host; bubble = bubbleEl;
-  host.addEventListener("click", () => { mood("happy"); say("kapi.tap"); });
+  host.addEventListener("click", () => (onTap ? onTap() : (mood("happy"), say("kapi.tap"))));
   host.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); host.click(); } });
 }
-/** Stato d'animo: happy, think, sleep, wow, idle. Torna a idle da solo. */
+/** Stato d'animo: happy, think, sleep, wow, love (cuoricini), eat (yuzu saltellante), idle. Torna a idle da solo. */
 export function mood(m, ms = 1800) {
   if (!el) return;
   el.dataset.mood = m;
@@ -59,4 +59,12 @@ export function confetti(n = 24) {
   const e = ["🌸", "💖", "⭐", "🍊", "✨", "💰"];
   for (let i = 0; i < n; i++) { const s = document.createElement("span"); s.textContent = e[i % e.length]; s.style.left = Math.random() * 100 + "%"; s.style.animationDelay = Math.random() * 0.4 + "s"; s.style.setProperty("--dx", (Math.random() * 80 - 40) + "px"); box.appendChild(s); }
   document.body.appendChild(box); setTimeout(() => box.remove(), 2200);
+}
+
+/** Scintille al punto di pressione (si spengono con prefers-reduced-motion). */
+export function sparkle(x, y, n = 7, parent = document.body) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const box = document.createElement("div"); box.className = "sparkles"; box.setAttribute("aria-hidden", "true"); box.style.cssText = `left:${x}px;top:${y}px`;
+  for (let i = 0; i < n; i++) { const s = document.createElement("i"), a = (i / n) * 6.283 + Math.random() * 0.6, d = 26 + Math.random() * 22; s.style.setProperty("--dx", Math.cos(a) * d + "px"); s.style.setProperty("--dy", Math.sin(a) * d + "px"); s.style.setProperty("--h", i % 2 ? "var(--c-yuzu)" : "var(--c-pri)"); box.appendChild(s); }
+  parent.appendChild(box); setTimeout(() => box.remove(), 600);
 }

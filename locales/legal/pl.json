@@ -1,0 +1,39 @@
+{
+"title": "Prywatność i regulamin",
+"updated": "Wersja z 19 listopada 2026 r.",
+"privacy": [
+["h", "1. Kim jesteśmy"],
+["p", "Kapibo to bezpłatna aplikacja open source publikowana przez Marketto (github.com/Marketto). Za aplikacją nie stoi firma ani serwer: w razie pytań lub próśb zgłoś sprawę na github.com/Marketto/Kapibo."],
+["h", "2. Jakie dane przetwarza aplikacja"],
+["p", "Dane, które wprowadzasz lub które aplikacja odczytuje z twoich dokumentów: wydatki, kategorie, przychody, salda, bony żywieniowe, odczyty liczników, rachunki oraz tekst odczytany z paragonów, pasków wypłat, wyciągów bankowych i rachunków. Wybrane przez ciebie zdjęcia i pliki PDF są odczytywane wyłącznie na twoim urządzeniu i nie są przez aplikację przechowywane."],
+["h", "3. Dokąd trafiają dane"],
+["p", "Na twoje urządzenie, do pamięci przeglądarki (IndexedDB/localStorage). Jeśli połączysz Dropbox lub Google Drive, kopia zostanie zapisana na twoim koncie w chmurze: dane trafiają bezpośrednio z twojego urządzenia do wybranego przez ciebie dostawcy, na jego warunkach. Nikt, nawet twórca, nie otrzymuje twoich danych."],
+["h", "4. Usługi stron trzecich"],
+["p", "Do działania aplikacja pobiera niektóre pliki (silnik odczytu dokumentów, dane językowe) z marketto.github.io, a tylko gdy jest niedostępny, z cdn.jsdelivr.net: jak każda strona internetowa, usługi te mogą widzieć twój adres IP. Opcjonalnie: jeśli wprowadzisz własny klucz Claude API, tekst odczytany z paragonów (nigdy zdjęcia) jest wysyłany do Anthropic na jego warunkach. Dropbox i Google Drive są używane tylko wtedy, gdy je połączysz."],
+["h", "5. Brak śledzenia"],
+["p", "Aplikacja nie używa plików cookie profilujących, reklam, analityki ani narzędzi śledzących."],
+["h", "6. Twoje prawa"],
+["p", "Twoje dane należą do ciebie i są pod twoją kontrolą: w każdej chwili możesz je wyeksportować (Więcej › Kopia zapasowa), usunąć (Więcej › Usuń wszystkie dane) i odłączyć chmurę. Dane w chmurze zarządzasz ze swojego konta Dropbox lub Google. Przysługują ci prawa wynikające z rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO), w tym prawo wniesienia skargi do organu ochrony danych."],
+["h", "7. Małoletni"],
+["p", "Aplikacja jest przeznaczona dla osób dorosłych zarządzających domowym budżetem."]
+],
+"terms": [
+["h", "1. Bezpłatne użytkowanie, w stanie takim, jakim jest"],
+["p", "Kapibo jest udostępniane bezpłatnie, w stanie „takim, jakim jest” i „w miarę dostępności”, bez jakichkolwiek gwarancji, wyraźnych ani dorozumianych, w tym dotyczących dokładności, kompletności, dostępności i przydatności do określonego celu."],
+["h", "2. To nie jest porada"],
+["p", "Obliczenia, wykresy, wskazówki i frazy maskotki mają charakter wyłącznie orientacyjny i nie stanowią porady finansowej, podatkowej, prawnej ani żadnej innej. Decyzje podejmowane z użyciem aplikacji należą wyłącznie do ciebie."],
+["h", "3. Zawsze sprawdzaj swoje dane"],
+["p", "Automatyczny odczyt zdjęć i plików PDF może błędnie rozpoznać kwoty, daty, kategorie i zużycie. Jesteś zobowiązany sprawdzić każdą pozycję przed zapisaniem i przed poleganiem na niej."],
+["h", "4. Kopie zapasowe"],
+["p", "Dane mogą zostać utracone (wyczyszczenie danych przeglądarki, awaria urządzenia, błędy synchronizacji lub usługi chmurowej). Regularne tworzenie kopii zapasowych jest twoim obowiązkiem."],
+["h", "5. Ograniczenie odpowiedzialności"],
+["p", "W maksymalnym zakresie dozwolonym przez obowiązujące prawo twórca i współtwórcy nie ponoszą odpowiedzialności za jakiekolwiek szkody bezpośrednie lub pośrednie, utratę danych, pieniędzy, zarobków lub szans, błędy obliczeń lub odczytu, przerwy lub nieprawidłowe działanie, ani za usługi stron trzecich (Dropbox, Google, Anthropic, GitHub, jsDelivr) i ich warunki. Odpowiedzialność, której nie można wyłączyć z mocy prawa, pozostaje nienaruszona."],
+["h", "6. Klucze i konta"],
+["p", "Klucze API i dane logowania do chmury pozostają na twoim urządzeniu: odpowiadasz za ich bezpieczne przechowywanie oraz za wszelkie koszty naliczane przez dostawców."],
+["h", "7. Zmiany"],
+["p", "Niniejszy regulamin może ulegać zmianom wraz z aktualizacjami aplikacji; w takim przypadku wyświetlimy go ponownie, a dalsze korzystanie z aplikacji będzie możliwe wyłącznie po jego zaakceptowaniu."],
+["h", "8. Licencja i prawo właściwe"],
+["p", "Kod jest udostępniany na licencji MIT. Stosuje się prawo włoskie, z zastrzeżeniem obowiązkowych praw konsumentów."]
+],
+"summary": ["Za darmo, bez reklam, bez śledzenia.", "Twoje dane zostają na twoim urządzeniu i, jeśli chcesz, w twojej chmurze.", "Automatyczny odczyt może się mylić: zawsze sprawdzaj.", "Brak porad finansowych i gwarancji: korzystasz z aplikacji na własne ryzyko."]
+}

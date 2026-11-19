@@ -1,0 +1,39 @@
+{
+"title": "Dateschutz an Notzungsbedingungen",
+"updated": "Versioun vum 19. November 2026",
+"privacy": [
+["h", "1. Wien mir sinn"],
+["p", "Kapibo ass eng gratis Open-Source-App, publizéiert vum Marketto (github.com/Marketto). Hannert der App steet keng Firma a kee Server: fir Froen oder Ufroen kënnt Dir en Issue op github.com/Marketto/Kapibo opmaachen."],
+["h", "2. Wéi eng Daten d'App verschafft"],
+["p", "D'Daten, déi Dir aginn oder déi d'App aus Äre Dokumenter liest: Ausgaben, Kategorien, Akommes, Salden, Iessbongen, Compteurstänn, Rechnungen an Text, deen aus Bonen, Pai-Zettelen, Kontoauszich a Rechnunge gelies gëtt. D'Fotoen a PDFe, déi Dir auswielt, ginn nëmmen op Ärem Apparat gelies an net vun der App gespäichert."],
+["h", "3. Wouhin d'Daten goen"],
+["p", "An de Späicher vum Browser op Ärem Apparat (IndexedDB/localStorage). Wann Dir Dropbox oder Google Drive verbannt, gëtt eng Kopie an Ärem Cloud-Kont gespäichert: d'Iwwerdroung geet direkt vun Ärem Apparat bei de gewielten Ubidder, ënner dem seng Bedingungen. Keen, och net den Entwéckler, kritt Är Daten."],
+["h", "4. Dénge vun Drëtter"],
+["p", "Fir ze funktionéieren luet d'App e puer Dateien erof (Liesmotor fir Dokumenter, Sproochdaten) vu marketto.github.io an, nëmmen wann dat net erreechbar ass, vu cdn.jsdelivr.net: wéi bei all Websäit kënnen dës Déngschter Är IP-Adress gesinn. Optional: wann Dir Ären eegene Claude-API-Schlëssel aginn, gëtt den Text, deen aus Bonen gelies gouf (ni d'Fotoen), ënner de Bedingunge vun Anthropic un Anthropic geschéckt. Dropbox a Google Drive ginn nëmme benotzt, wann Dir se verbannt."],
+["h", "5. Keen Tracking"],
+["p", "D'App benotzt keng Profiling-Cookien, keng Reklamm, keng Analysen an och keng Tracking-Tools."],
+["h", "6. Är Rechter"],
+["p", "Är Daten gehéieren Iech a bleiwe ënner Ärer Kontroll: Dir kënnt se zu all Moment exportéieren (Méi › Sécherung), läschen (Méi › All Daten läschen) an d'Cloud trennen. D'Daten an Ärer Cloud verwalt Dir iwwer Äert Dropbox- oder Google-Kont. Dir hutt d'Rechter vun der Verordnung (EU) 2016/679 (Datenschutz-Grondverordnung, DSGVO), dorënner d'Recht, bei Ärer Dateschutzautoritéit eng Beschwerd anzereechen."],
+["h", "7. Minderjäreger"],
+["p", "D'App ass fir Erwuessener geduecht, déi hiren Haushaltsbudget verwalten."]
+],
+"terms": [
+["h", "1. Gratis Notzung, wéi se ass"],
+["p", "Kapibo gëtt gratis ugebueden, „as is“ an „as available“, ouni Garantie vun iergendenger Aart, ausdrécklech oder stillschweigend, dorënner Richtegkeet, Vollstännegkeet, Disponibilitéit an Eegnung fir e bestëmmten Zweck."],
+["h", "2. Keng Beratung"],
+["p", "Berechnungen, Grafiken, Tipps an d'Sätz vum Maskottchen sinn nëmmen Orientéierungshëllefen a sinn keng Finanz-, Steier-, Rechts- oder aner Beratung. Entscheedungen, déi Dir mat Hëllef vun der App triff, sinn eleng Är."],
+["h", "3. Kontrolléiert Är Daten ëmmer"],
+["p", "Dat automatescht Liese vu Fotoen a PDFe kann Beträg, Datumen, Kategorien a Verbrauch falsch erkennen. Dir sidd verflicht, all Posten ze kontrolléieren, ier Dir en späichert an ier Dir Iech drop verlooss."],
+["h", "4. Sécherungen"],
+["p", "Daten kënne verluer goen (geläschte Browserdaten, Defekt um Apparat, Feeler bei der Synchronisatioun oder am Cloud-Service). Regelméisseg Sécherunge ze maache läit an Ärer Verantwortung."],
+["h", "5. Haftungsbeschränkung"],
+["p", "Am héchste vum anwendbare Gesetz erlaabte Mooss haften den Entwéckler an d'Matwierkender net fir direkt oder indirekt Schied, Verloscht vun Daten, Geld, Akommes oder Méiglechkeeten, Rechen- oder Liesfeeler, Ënnerbriechungen oder Stéierungen, och net fir Déngschter vun Drëtter (Dropbox, Google, Anthropic, GitHub, jsDelivr) an hir Bedingungen. Eng Haftung, déi gesetzlech net ausgeschloss ka ginn, bleift onberéiert."],
+["h", "6. Schlësselen a Kontoen"],
+["p", "API-Schlësselen a Cloud-Umeldunge bleiwen op Ärem Apparat: Dir sidd responsabel fir se sécher opzebewueren a fir all Käschten, déi d'Ubidder berechnen."],
+["h", "7. Ännerungen"],
+["p", "Dës Bedingunge kënne mat App-Aktualiséierunge geännert ginn; an deem Fall weise mir se Iech nees a Dir kënnt d'App nëmme weider notzen, wann Dir se akzeptéiert."],
+["h", "8. Lizenz a ulafendt Recht"],
+["p", "De Code gëtt ënner der MIT-Lizenz verëffentlecht. Et gëllt italieenescht Recht, ouni Prejudiz fir zwéngend Verbraucherrechter."]
+],
+"summary": ["Gratis, ouni Reklamm an ouni Tracking.", "Är Daten bleiwen op Ärem Apparat an, wann Dir wëllt, an Ärer Cloud.", "Automatescht Liese kann Feeler maachen: ëmmer kontrolléieren.", "Keng Finanzberatung a keng Garantie: Dir benotzt d'App op eegent Risiko."]
+}

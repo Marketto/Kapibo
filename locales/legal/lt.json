@@ -1,0 +1,39 @@
+{
+"title": "Privatumas ir naudojimo sąlygos",
+"updated": "2026 m. lapkričio 19 d. versija",
+"privacy": [
+["h", "1. Kas esame"],
+["p", "Kapibo yra nemokama atvirojo kodo programėlė, kurią skelbia Marketto (github.com/Marketto). Už programėlės nestovi nei įmonė, nei serveris: kilus klausimų ar turint prašymų, sukurkite pranešimą adresu github.com/Marketto/Kapibo."],
+["h", "2. Kokius duomenis programėlė tvarko"],
+["p", "Duomenis, kuriuos įvedate jūs arba kuriuos programėlė nuskaito iš jūsų dokumentų: išlaidas, kategorijas, pajamas, likučius, maisto talonus, skaitiklių rodmenis, sąskaitas ir tekstą, nuskaitytą iš čekių, atlyginimo lapelių, banko išrašų ir sąskaitų. Jūsų pasirinktos nuotraukos ir PDF failai skaitomi tik jūsų įrenginyje, ir programėlė jų neišsaugo."],
+["h", "3. Kur keliauja duomenys"],
+["p", "Į jūsų įrenginį, naršyklės saugyklą (IndexedDB/localStorage). Jei prijungiate Dropbox arba Google Drive, kopija išsaugoma jūsų debesies paskyroje: duomenys perduodami tiesiogiai iš jūsų įrenginio jūsų pasirinktam paslaugų teikėjui pagal jo sąlygas. Niekas, net ir kūrėjas, jūsų duomenų negauna."],
+["h", "4. Trečiųjų šalių paslaugos"],
+["p", "Kad veiktų, programėlė atsisiunčia kai kuriuos failus (dokumentų skaitymo variklį, kalbos duomenis) iš marketto.github.io, o tik jei jis nepasiekiamas, iš cdn.jsdelivr.net: kaip ir bet kuri svetainė, šios paslaugos gali matyti jūsų IP adresą. Pasirinktinai: jei įvedate savo Claude API raktą, iš čekių nuskaitytas tekstas (niekada nuotraukos) siunčiamas Anthropic pagal jos sąlygas. Dropbox ir Google Drive naudojami tik tada, kai juos prijungiate."],
+["h", "5. Jokio sekimo"],
+["p", "Programėlė nenaudoja profiliavimo slapukų, reklamų, analitikos ar sekimo priemonių."],
+["h", "6. Jūsų teisės"],
+["p", "Jūsų duomenys priklauso jums ir yra jūsų kontroliuojami: bet kada galite juos eksportuoti (Daugiau › Atsarginė kopija), ištrinti (Daugiau › Ištrinti visus duomenis) ir atjungti debesį. Duomenis savo debesyje valdote per savo Dropbox arba Google paskyrą. Turite teises, suteikiamas Europos Sąjungos Bendrojo duomenų apsaugos reglamento (ES) 2016/679 (BDAR/GDPR), įskaitant teisę pateikti skundą savo duomenų apsaugos priežiūros institucijai."],
+["h", "7. Nepilnamečiai"],
+["p", "Programėlė skirta suaugusiesiems, tvarkantiems savo namų biudžetą."]
+],
+"terms": [
+["h", "1. Nemokamas naudojimas, tokia, kokia yra"],
+["p", "Kapibo teikiama nemokamai, „tokia, kokia yra“ ir „kaip prieinama“, be jokių aiškių ar numanomų garantijų, įskaitant tikslumą, išsamumą, prieinamumą ir tinkamumą konkrečiam tikslui."],
+["h", "2. Tai nėra patarimas"],
+["p", "Skaičiavimai, diagramos, patarimai ir talismano frazės yra tik orientacinės ir nėra finansinis, mokestinis, teisinis ar kitoks patarimas. Sprendimus, priimtus naudojantis programėle, priimate tik jūs."],
+["h", "3. Visada tikrinkite savo duomenis"],
+["p", "Automatinis nuotraukų ir PDF failų skaitymas gali klysti dėl sumų, datų, kategorijų ir suvartojimo. Turite patikrinti kiekvieną įrašą prieš jį išsaugodami ir prieš juo pasikliaudami."],
+["h", "4. Atsarginės kopijos"],
+["p", "Duomenys gali būti prarasti (išvalyti naršyklės duomenys, įrenginio gedimas, sinchronizavimo ar debesijos paslaugos klaidos). Reguliarių atsarginių kopijų darymas yra jūsų atsakomybė."],
+["h", "5. Atsakomybės apribojimas"],
+["p", "Kiek tai leidžia taikytini teisės aktai, kūrėjas ir bendraautoriai neatsako už jokią tiesioginę ar netiesioginę žalą, duomenų, pinigų, pajamų ar galimybių praradimą, skaičiavimo ar skaitymo klaidas, sutrikimus ar veikimo defektus, taip pat už trečiųjų šalių paslaugas (Dropbox, Google, Anthropic, GitHub, jsDelivr) ir jų sąlygas. Atsakomybė, kurios pagal įstatymą negalima atmesti, išlieka nepakitusi."],
+["h", "6. Raktai ir paskyros"],
+["p", "API raktai ir debesijos prisijungimai lieka jūsų įrenginyje: esate atsakingi už jų saugų laikymą ir už paslaugų teikėjų taikomus mokesčius."],
+["h", "7. Pakeitimai"],
+["p", "Šios sąlygos gali keistis su programėlės atnaujinimais; tokiu atveju jas parodysime iš naujo, o programėle galėsite toliau naudotis tik joms pritarę."],
+["h", "8. Licencija ir taikytina teisė"],
+["p", "Kodas skelbiamas pagal MIT licenciją. Taikoma Italijos teisė, neribojant privalomų vartotojų teisių."]
+],
+"summary": ["Nemokama, be reklamų, be sekimo.", "Jūsų duomenys lieka jūsų įrenginyje ir, jei norite, jūsų debesyje.", "Automatinis skaitymas gali klysti: visada tikrinkite.", "Jokių finansinių patarimų ir garantijų: programėle naudojatės savo rizika."]
+}

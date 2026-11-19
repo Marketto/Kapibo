@@ -11,6 +11,12 @@ import * as sync from "./sync/index.js";
 import * as dbx from "./sync/dropbox.js";
 import * as gd from "./sync/gdrive.js";
 import * as ai from "./ai.js";
+import * as legal from "./legal.js";
+import * as tour from "./tour.js";
+import * as inst from "./install.js";
+import * as ch from "./cheer.js";
+import { STICKERS, earned } from "./stickers.js";
+import { jarSVG } from "./jar.js";
 
 // ---------- utilità ----------
 const $ = s => document.querySelector(s);
@@ -32,20 +38,56 @@ function toast(msg, action) {
   if (action) { const b = document.createElement("button"); b.textContent = action.label; b.onclick = () => { el.hidden = true; action.run(); }; el.appendChild(b); }
   clearTimeout(el._t); el._t = setTimeout(() => (el.hidden = true), action ? 9000 : 3200);
 }
-const celebrate = (key = "kapi.added") => { kapi.mood("happy"); kapi.say(key); };
+const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ssGet = k => { try { return sessionStorage.getItem(k); } catch { return null; } };
+const ssSet = k => { try { sessionStorage.setItem(k, "1"); } catch {} };
+const nLive = () => live(S().entries).length;
+
+// ---------- Kapi commenta, adesivi ----------
+/** Sblocca gli adesivi meritati (più quelli segnalati da un evento) con coriandoli e Kapi amica. */
+function unlock(...ev) {
+  const have = S().settings.stickers || {}, ids = new Set(STICKERS.map(x => x.id));
+  const fresh = [...new Set([...earned(S(), today()), ...ev])].filter(id => ids.has(id) && !have[id]);
+  if (!fresh.length) return;
+  const at = Date.now(); store.setSettings({ stickers: { ...have, ...Object.fromEntries(fresh.map(id => [id, at])) } });
+  kapi.confetti(30); fresh.forEach(id => ch.cheer("sticker", { name: t("st.k." + id) }, { big: true }));
+}
+/** Categoria del mese ancora sotto la sua media a 6 mesi (una volta per categoria e mese, per sessione). */
+function underAvg(c, m) {
+  const key = "ua" + m + c; if (ssGet(key)) return false;
+  const a = catAverages(series(S(), 7, prevMonth(m)).filter(x => x.m < m).slice(-6))[c], v = monthSummary(S(), m).byCat[c];
+  if (!(a > 20 && v > 0 && v < a)) return false;
+  ssSet(key); return true;
+}
+/** Dopo un salvataggio: un commento in più (traguardo, serie di giorni, sotto la media), poi gli adesivi. */
+function afterSave({ say, before = nLive(), cats = [], m = cur, ev = [] }) {
+  const mile = ch.milestoneCrossed(before, nLive()), days = ch.streakOf(live(S().entries).map(e => e.d), today()), sk = "st" + today();
+  let extra = null;
+  if (mile) extra = ["milestone", { n: mile }, 1];
+  else if (days >= 3 && !ssGet(sk)) { ssSet(sk); extra = ["streak", { n: days }, 1]; }
+  else { const c = cats.find(x => underAvg(x, m)); if (c) extra = ["underAvg", { cat: cname(catById(c)) }, 0]; }
+  const run = a => a && ch.cheer(a[0], a[1] || {}, { big: !!a[2] });
+  if (!say || say[2]) { run(say); if (extra?.[2]) run(extra); } else run(extra || say);
+  unlock(...ev);
+}
+const buzz = () => { if (S().settings.buzz) navigator.vibrate?.(12); };
+const addSay = c => [ch.addEvent(c), {}, 0];
 
 // ---------- avvio ----------
 async function boot() {
   const saved = await idbGet("state");
   store.set(normalize(saved), { silent: true });
   await setLang(detect(lsGet("kapibo.lang")));
-  kapi.mount($("#kapi"), $("#bubble"));
+  kapi.mount($("#kapi"), $("#bubble"), ch.tap);
+  ch.friend.mount(); ch.watchIdle();
   store.on(persist);
   bindChrome();
   try { if (await dbx.handleRedirect()) { toast(t("sync.connected", { p: "Dropbox" })); doSync(); } } catch (e) { toast(t(e.code || "sync.retry")); }
   const h = location.hash.slice(1); if (["month", "usage", "scan", "stats", "more"].includes(h)) tab = h;
   render();
-  setTimeout(() => kapi.say(S().entries.length ? "kapi.hello" : "kapi.welcome", { ms: 6000 }), 600);
+  await legal.gate(kapi.KAPI_SVG);
+  startTour(false);
+  inst.onChange(() => tab === "more" && render());
   if (sync.connected().length) doSync();
   if ("serviceWorker" in navigator && location.protocol === "https:") registerSW();
 }
@@ -72,10 +114,22 @@ function bindChrome() {
 function go(next, focusSel) {
   tab = next; history.replaceState(null, "", "#" + next);
   if (next !== "scan") scanState = scanState?.busy ? scanState : null;
-  render(); window.scrollTo({ top: 0, behavior: "smooth" });
+  render(); ch.cheerTab(next); window.scrollTo({ top: 0, behavior: "smooth" });
   if (focusSel) setTimeout(() => $(focusSel)?.scrollIntoView({ behavior: "smooth" }), 80); else $("#main").focus({ preventScroll: true });
 }
 
+let lastView = "";
+const counts = {};
+/** Numeri grandi che salgono in 600 ms (dal valore mostrato prima); niente con prefers-reduced-motion. */
+function countUp(root) {
+  root.querySelectorAll("[data-count]").forEach(el => {
+    const k = el.dataset.count, to = +el.dataset.v, from = counts[k] ?? 0; counts[k] = to;
+    if (calm() || from === to) return;
+    const t0 = performance.now();
+    const step = now => { const p = Math.min(1, (now - t0) / 600); el.textContent = money(from + (to - from) * (1 - Math.pow(1 - p, 3))); if (p < 1 && el.isConnected) requestAnimationFrame(step); else if (el.isConnected) el.textContent = money(to); };
+    requestAnimationFrame(step);
+  });
+}
 function render() {
   $("#mLabel").textContent = monthLabel(cur);
   document.querySelectorAll(".tabs button").forEach(b => (b.dataset.tab === tab ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
@@ -83,6 +137,10 @@ function render() {
   const main = $("#main"), y = window.scrollY;
   main.innerHTML = `<section>${v()}</section>`;
   apply(main);
+  if (tab === "month") countUp(main);
+  const vk = tab + cur;
+  if (vk !== lastView && !calm()) main.querySelectorAll(".card, .list > li").forEach((el, i) => { if (i < 20) { el.classList.add("stg"); el.style.setProperty("--i", i); } });
+  lastView = vk;
   if (tab === "scan" && scanState?.after) scanState.after();
   window.scrollTo(0, y);
 }
@@ -94,7 +152,7 @@ async function onAction(e) {
   const acts = {
     add: () => entryDialog({ cat: b.dataset.cat }),
     edit: () => entryDialog(S().entries.find(x => x.id === id)),
-    meta: monthDialog,
+    meta: monthDialog, album: () => go("more", "#stickers"),
     cat: () => catDetail(id),
     kind: () => startScan(b.dataset.kind, b.dataset.cam === "1"),
     scanBack: () => { scanState = null; render(); },
@@ -107,6 +165,8 @@ async function onAction(e) {
     dbx: dropboxConnect, dbxOff: () => { dbx.disconnect(); render(); }, gd: gdriveConnect, gdOff: () => { gd.disconnect(); render(); },
     sync: () => doSync(true), newCat: () => catDialog(), editCat: () => catDialog(catById(id)),
     aiKey: aiDialog, news: newsDialog, wipe: wipeAll,
+    install: async () => { if (await inst.install()) { toast(t("inst.done")); kapi.confetti(30); kapi.mood("love"); } render(); },
+    legal: () => legal.show(), tour: () => startTour(true),
   };
   acts[a]?.();
 }
@@ -118,11 +178,15 @@ function viewMonth() {
   const max = Math.max(1, ...rows.map(r => r[1]));
   const recent = live(S().entries).filter(e => e.m === cur).sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : (b.u || 0) - (a.u || 0))).slice(0, 8);
   const sv = s.savings, unt = s.untracked;
+  const got = Object.keys(S().settings.stickers || {}).length, pct = Math.round(Math.max(0, Math.min(100, (s.rate ?? 0) * 100)));
+  const jar = `<div class="card jar-card"><div class="jar" role="img" aria-label="${esc(s.rate == null ? t("jar.ariaEmpty") : t("jar.aria", { pct }))}">${jarSVG(s.rate)}</div>
+    <div><h3>${t("jar.title")}</h3><p class="muted">${s.rate == null ? t("jar.empty") : t("jar.label", { pct })}</p>
+    <button class="chip stk-chip" data-act="album" aria-label="${esc(t("st.chip", { n: got, tot: STICKERS.length }))}">${ic("star")} ${got}/${STICKERS.length}</button></div></div>`;
   return `
   <div class="card">
     <div class="grid2">
-      <div class="stat big"><small>${t("m.spent")}</small><b>${money(s.tracked)}</b></div>
-      <div class="stat big"><small>${t("m.saved")}</small><b class="${sv == null ? "" : sv >= 0 ? "pos" : "neg"}">${sv == null ? "—" : money(sv)}</b></div>
+      <div class="stat big"><small>${t("m.spent")}</small><b data-count="spent" data-v="${s.tracked}">${money(s.tracked)}</b></div>
+      <div class="stat big"><small>${t("m.saved")}</small><b class="${sv == null ? "" : sv >= 0 ? "pos" : "neg"}" ${sv == null ? "" : `data-count="saved" data-v="${sv}"`}>${sv == null ? "—" : money(sv)}</b></div>
       <div class="stat"><small>${t("m.income")}</small><b>${money(s.income)}</b></div>
       <div class="stat"><small>${t("m.vouchers")}</small><b>${money(s.vUsed)} <span class="muted">/ ${money(s.vIn)}</span></b></div>
       <div class="stat"><small>${t("m.start")}</small><b>${s.start == null ? "—" : money(s.start)}</b></div>
@@ -131,6 +195,7 @@ function viewMonth() {
     ${unt != null && Math.abs(unt) >= 1 ? `<p class="muted" style="margin:.8em 0 0">${t(unt > 0 ? "m.untracked" : "m.overtracked", { amt: money(Math.abs(unt)) })}</p>` : ""}
     <div class="btns"><button class="btn" data-act="add">${ic("plus")} ${t("m.addExpense")}</button><button class="btn soft" data-act="meta">${ic("coin")} ${t("m.editMeta")}</button></div>
   </div>
+  ${jar}
   <div class="card"><h2>${t("m.byCat")}</h2>
     ${rows.length ? `<ul class="list">${rows.map(([id, v]) => { const c = catById(id); return `<li><button class="item" data-act="cat" data-id="${esc(id)}" style="--c:${c.color}">
       <span class="emo">${catIcon(c)}</span><span class="name">${esc(cname(c))}<span class="bar"><i style="--w:${(v / max) * 100}%;--c:${c.color}"></i></span></span><span class="amt">${money(v)}</span></button></li>`; }).join("")}</ul>`
@@ -190,11 +255,13 @@ async function entryDialog(e = {}) {
     ${e.items ? `<details><summary>${t("m.items", { n: e.items.length })}</summary><ul>${e.items.map(i => `<li>${esc(i.n)} — ${money(i.a)}</li>`).join("")}</ul></details>` : ""}`,
     { extra: isNew ? "" : `<button class="btn danger" value="del" formnovalidate>${t("ui.delete")}</button>` });
   if (!r) return;
-  if (r._btn === "del") { store.remove("entries", e.id); toast(t("e.deleted"), { label: t("ui.undo"), run: () => store.put("entries", { ...e, del: 0 }) }); return; }
+  if (r._btn === "del") { store.remove("entries", e.id); ch.cheer("delete"); toast(t("e.deleted"), { label: t("ui.undo"), run: () => store.put("entries", { ...e, del: 0 }) }); return; }
   const amt = num(r.amt); if (amt == null) return toast(t("e.badAmount"));
-  store.put("entries", { ...e, amt: round2(amt), cat: r.cat?.[0] || "other", d: r.d, m: monthOf(r.d), note: r.note.trim(), src: e.src || "manual" });
+  const before = nLive(), cat = r.cat?.[0] || "other";
+  store.put("entries", { ...e, amt: round2(amt), cat, d: r.d, m: monthOf(r.d), note: r.note.trim(), src: e.src || "manual" });
   if (r.note.trim()) store.learn(r.note, [r.cat?.[0]]);
-  celebrate(); if (isNew && monthOf(r.d) !== cur) { cur = monthOf(r.d); render(); }
+  if (isNew && monthOf(r.d) !== cur) { cur = monthOf(r.d); render(); }
+  if (isNew) afterSave({ say: addSay(cat), before, cats: [cat], m: monthOf(r.d) }); else { ch.cheer("edit"); unlock(); }
 }
 
 async function monthDialog() {
@@ -214,7 +281,8 @@ async function monthDialog() {
     patch[k] = raw === "" ? null : cnt ? round2(+cnt[1] * vv) : num(raw);
   }
   store.setMonth(cur, patch);
-  celebrate(patch.end != null && patch.start != null && patch.end > patch.start ? "kapi.saving" : "kapi.saved");
+  const sv = monthSummary(S(), cur).savings;
+  afterSave({ say: sv == null ? ["meta"] : sv > 0 ? ["saveUp", { amt: money(sv) }, 1] : sv < 0 ? ["saveDown"] : ["meta"] });
 }
 
 async function catDialog(c) {
@@ -264,7 +332,12 @@ async function startScan(kind, cam) {
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
-    kapi.mood("wow"); kapi.say(hasResult() ? "kapi.found" : "kapi.notFound");
+    kapi.mood("wow");
+    if (hasResult()) {
+      const n = (S().settings.scans || 0) + 1; store.setSettings({ scans: n });
+      if (n === 1) ch.cheer("firstScan", {}, { big: true }); else kapi.say("kapi.found");
+      unlock();
+    } else kapi.say("kapi.notFound");
   } catch (err) {
     console.error(err); scanState = { ...scanState, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops");
   }
@@ -334,12 +407,14 @@ function bindReceipt() {
   $("#rSave").onclick = saveReceipt;
 }
 function saveReceipt() {
-  const r = scanState.res, on = r.items.filter(i => i.on && i.amount), d = r.date || today(), m = monthOf(d), doc = uid();
+  const r = scanState.res, on = r.items.filter(i => i.on && i.amount), d = r.date || today(), m = monthOf(d), doc = uid(), before = nLive();
   const g = {};
   for (const it of on) { for (const c of it.cats) { g[c] ||= { amt: 0, items: [] }; g[c].amt += it.amount / it.cats.length; g[c].items.push({ n: it.name, a: round2(it.amount / it.cats.length) }); } store.learn(it.name, it.cats); }
   store.putMany("entries", Object.entries(g).map(([cat, x]) => ({ d, m, cat, amt: round2(x.amt), items: x.items, note: r.store || t("s.k.receipt"), src: "receipt", doc })));
   if (r.vouchers) { const mm = S().months[m] || {}; store.setMonth(m, { vUsed: round2((mm.vUsed || 0) + r.vouchers) }); }
-  scanState = null; cur = m; tab = "month"; kapi.confetti(); celebrate("kapi.receiptSaved"); go("month");
+  const sum = round2(on.reduce((a, i) => a + i.amount, 0));
+  scanState = null; cur = m; tab = "month"; kapi.confetti(); go("month");
+  afterSave({ say: [sum > 100 ? "receiptBig" : "receipt", { n: on.length, sum: money(sum) }, 1], before, cats: Object.keys(g), m });
   toast(t("s.saved", { n: Object.keys(g).length }));
 }
 
@@ -348,7 +423,8 @@ function reviewPayslip() {
     const m = $("#pMonth").value, net = num($("#pNet").value), v = num($("#pV").value);
     if (!m || net == null) return toast(t("e.badAmount"));
     const patch = { salary: net }; if (v != null) patch.vIn = v;
-    store.setMonth(m, patch); scanState = null; cur = m; kapi.confetti(); celebrate("kapi.salary"); go("month");
+    store.setMonth(m, patch); scanState = null; cur = m; kapi.confetti(); go("month");
+    afterSave({ say: ["payslip", { net: money(net) }, 1], ev: ["payslip"] });
   });
   return `<div class="card"><h2>${ic("payslip")} ${t("s.k.payslip")}</h2>
     <label class="f">${t("s.month")}<input type="month" id="pMonth" value="${r.month || cur}"></label>
@@ -371,9 +447,10 @@ function reviewStatement() {
         es.push({ id: "st-" + x.date + "-" + norm(x.desc).replace(/\s/g, "").slice(0, 20) + "-" + Math.round(Math.abs(x.amount) * 100), d: x.date, m, cat: x.cat, amt: round2(Math.abs(x.amount)), note: x.desc, src: "statement" });
         store.learn(x.desc, [x.cat]);
       }
-      if (es.length) store.putMany("entries", es);
+      const before = nLive(); if (es.length) store.putMany("entries", es);
       for (const [m, p] of Object.entries(months)) { const old = S().months[m] || {}; store.setMonth(m, { salary: p.salary != null ? p.salary : old.salary, extra: p.extra != null ? round2((old.extra || 0) + p.extra) : old.extra }); }
-      scanState = null; kapi.confetti(); celebrate(); go("month"); toast(t("s.savedRows", { n: es.length }));
+      scanState = null; kapi.confetti(); go("month"); toast(t("s.savedRows", { n: es.length }));
+      afterSave({ say: ["statement", { n: es.length }], before, cats: [...new Set(es.map(x => x.cat))], m: cur });
     };
   };
   const opts = sel => `<option value="_salary" ${sel === "_salary" ? "selected" : ""}>💼 ${t("meta.salary")}</option><option value="_extra" ${sel === "_extra" ? "selected" : ""}>🌟 ${t("meta.extra")}</option>` + cats().map(c => `<option value="${c.id}" ${sel === c.id ? "selected" : ""}>${c.custom || !c.icon ? c.emoji + " " : ""}${esc(cname(c))}</option>`).join("");
@@ -390,9 +467,10 @@ function reviewBill() {
   scanState.after = () => ($("#bSave").onclick = () => {
     const f = Object.fromEntries(["bKind", "bAmt", "bCons", "bMonth", "bFreq"].map(k => [k, $("#" + k).value]));
     const amount = num(f.bAmt); if (amount == null) return toast(t("e.badAmount"));
-    const m = f.bMonth, entry = store.put("entries", { d: m + "-" + (m === monthOf(today()) ? today().slice(8) : "01"), m, cat: BILL_CAT[f.bKind] || "other", amt: amount, note: t("u.k." + f.bKind), src: "bill" });
+    const before = nLive(), m = f.bMonth, entry = store.put("entries", { d: m + "-" + (m === monthOf(today()) ? today().slice(8) : "01"), m, cat: BILL_CAT[f.bKind] || "other", amt: amount, note: t("u.k." + f.bKind), src: "bill" });
     store.put("bills", { kind: f.bKind, amount, cons: num(f.bCons), unit: f.bKind === "elec" ? "kWh" : "m³", m, freq: f.bFreq, from: r.period?.from, to: r.period?.to, entry: entry.id });
-    scanState = null; cur = m; kapi.confetti(); celebrate(); go("usage");
+    scanState = null; cur = m; kapi.confetti(); go("usage");
+    afterSave({ say: ["bill"], before, cats: [BILL_CAT[f.bKind] || "other"], m });
   });
   return `<div class="card"><h2>${ic("bill")} ${t("s.k.bill")}</h2>${billFields({ ...r, m: r.period?.to ? monthOf(r.period.to) : cur })}<div class="btns"><button class="btn" id="bSave">${ic("check")} ${t("ui.save")}</button></div></div>`;
 }
@@ -409,7 +487,7 @@ function reviewMeter() {
     let id = $("#mtMeter").value; const v = num($("#mtVal").value.replace(/\s/g, "")); if (v == null) return toast(t("e.badAmount"));
     if (id === "_new") { const m = await meterDialog(); if (!m) return; id = m.id; }
     const d = $("#mtDate").value; store.put("readings", { meter: id, value: v, d, m: monthOf(d) });
-    scanState = null; kapi.confetti(); celebrate(); go("usage");
+    scanState = null; kapi.confetti(); go("usage"); afterSave({ say: ["reading"] });
   });
   return `<div class="card"><h2>${ic("meter")} ${t("s.k.meter")}</h2>${scanState.url ? `<img class="preview" src="${scanState.url}" alt="${esc(t("s.photoAlt"))}">` : ""}
     <label class="f">${t("u.meter")}<select id="mtMeter">${ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("")}<option value="_new">+ ${t("u.newMeter")}</option></select></label>
@@ -450,16 +528,16 @@ async function readingDialog(meterId) {
   const m = S().meters.find(x => x.id === meterId);
   const r = await dialog(t("u.addReading") + " · " + (m?.name || ""), `<label class="f">${t("u.reading")} (${esc(m?.unit || "")})<input name="v" class="amt" inputmode="decimal" required></label><label class="f">${t("e.date")}<input type="date" name="d" value="${today()}" required></label>`);
   const v = r && num(r.v); if (v == null) return;
-  store.put("readings", { meter: meterId, value: v, d: r.d, m: monthOf(r.d) }); celebrate();
+  store.put("readings", { meter: meterId, value: v, d: r.d, m: monthOf(r.d) }); afterSave({ say: ["reading"] });
 }
 async function billDialog(b) {
   const r = await dialog(b ? t("u.editBill") : t("u.addBill"), billFields(b || { m: cur }), { extra: b ? `<button class="btn danger" value="del" formnovalidate>${t("ui.delete")}</button>` : "" });
   if (!r) return;
   if (r._btn === "del") { store.remove("bills", b.id); if (b.entry) store.remove("entries", b.entry); return; }
   const amount = num(r.amount); if (amount == null) return toast(t("e.badAmount"));
-  let entry = b?.entry;
+  let entry = b?.entry; const before = nLive();
   if (!b || b.entry) { const e = store.put("entries", { ...(S().entries.find(x => x.id === b?.entry) || {}), d: r.m + "-01", m: r.m, cat: BILL_CAT[r.kind], amt: amount, note: t("u.k." + r.kind), src: "bill" }); entry = e.id; }
-  store.put("bills", { ...(b || {}), kind: r.kind, freq: r.freq, amount, cons: num(r.cons), unit: r.kind === "elec" ? "kWh" : "m³", m: r.m, entry }); celebrate();
+  store.put("bills", { ...(b || {}), kind: r.kind, freq: r.freq, amount, cons: num(r.cons), unit: r.kind === "elec" ? "kWh" : "m³", m: r.m, entry }); afterSave({ say: ["bill"], before, cats: [BILL_CAT[r.kind]], m: r.m });
 }
 async function offerDialog(o) {
   const r = await dialog(t("u.compare"), `<p class="hint">${t("u.offerHint")}</p><label class="f">${t("c.name")}<input name="name" value="${esc(o?.name || "")}" maxlength="40"></label>
@@ -502,8 +580,11 @@ function viewMore() {
     <fieldset><legend>${ic("palette")} ${t("o.theme")}</legend><div class="theme-pick" role="radiogroup">${THEMES.map(([k, a, b]) => `<button type="button" class="chip" role="radio" data-theme-set="${k}" aria-checked="${theme() === k}"><span class="swatch" style="background:linear-gradient(135deg,${a} 50%,${b} 50%)"></span>${t("theme." + k)}</button>`).join("")}</div></fieldset>
     <div class="grid2"><label class="f">${ic("coin")} ${t("o.currency")}<select id="oCur">${["EUR", "CHF", "GBP", "USD", "PLN", "CZK", "HUF", "RON", "SEK", "DKK", "NOK", "BGN", "ISK", "RSD", "MKD", "ALL", "BAM", "UAH", "RUB", "TRY", "CNY", "JPY", "KRW", "AED", "SAR", "EGP", "MAD"].map(c => `<option ${c === st.currency ? "selected" : ""}>${c}</option>`).join("")}</select></label>
     <label class="f">${ic("ticket")} ${t("o.voucher")}<input id="oVouch" inputmode="decimal" value="${fmtNum(st.voucher || 8, locale())}"></label></div>
+    <label class="f sw"><input type="checkbox" class="chk" id="oBuzz" ${st.buzz ? "checked" : ""}> ${t("o.buzz")}</label>
     ${vb ? `<p class="muted">${t("o.vBalance", { v: money(vb) })}</p>` : ""}</div>
+  ${albumCard()}
   <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button></div></div>
+  ${installCard()}
   <div class="card" id="cloud"><h2>${ic("cloud")} ${t("o.cloud")}</h2><p class="muted">${t("o.cloudHint")}</p>
     <h3>Dropbox ${dbx.isConnected() ? ic("check") : ""}</h3>${dbx.isConnected() ? `<p class="muted">${esc(dbx.path())}</p><div class="btns"><button class="btn small" data-act="sync">${ic("sync")} ${t("o.syncNow")}</button><button class="btn small ghost" data-act="dbxOff">${t("o.disconnect")}</button></div>`
       : `<button class="btn soft" data-act="dbx">${t("o.connect", { p: "Dropbox" })}</button>`}
@@ -515,14 +596,25 @@ function viewMore() {
   <div class="card"><h2>${ic("check")} ${t("o.backup")}</h2><div class="btns"><button class="btn soft" data-act="backup">${ic("download")} ${t("o.export")}</button><button class="btn soft" data-act="restore">${ic("upload")} ${t("o.restore")}</button></div>
     <details><summary>${t("o.danger")}</summary><button class="btn danger" data-act="wipe">${t("o.wipe")}</button></details></div>
   <div class="card"><h2>${ic("capy")} Kapibo ${APP_VERSION}</h2><p class="muted">${t("o.about")}</p>
-    <div class="btns"><button class="btn small soft" data-act="news">${ic("sparkle")} ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
+    <div class="btns"><button class="btn small soft" data-act="tour">${ic("capy")} ${t("o.tour")}</button><button class="btn small soft" data-act="legal">${ic("lock")} ${t("o.legal")}</button><button class="btn small soft" data-act="news">${ic("sparkle")} ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
     <a class="btn small ghost" href="https://github.com/Marketto/kapibo" rel="noopener">GitHub</a></div></div>`;
 }
+function albumCard() {
+  const have = S().settings.stickers || {}, n = STICKERS.filter(x => have[x.id]).length;
+  return `<div class="card" id="stickers"><h2>${ic("star")} ${t("st.title")}</h2><p class="muted">${t("st.hint")} · ${t("st.count", { n, tot: STICKERS.length })}</p>
+    <ul class="stk-grid">${STICKERS.map((x, i) => { const on = !!have[x.id]; return `<li class="stk ${on ? "on" : "off"}" style="--tilt:${((i % 5) - 2) * 2.5}deg"><span class="stk-ic">${ic(on ? x.icon : "lock")}</span><b>${t("st.k." + x.id)}</b><small>${t("st.kd." + x.id)}</small><span class="sr">${t(on ? "st.got" : "st.locked")}</span></li>`; }).join("")}</ul></div>`;
+}
 document.addEventListener("change", async e => {
-  if (e.target.id === "oLang") { lsSet("kapibo.lang", e.target.value); await setLang(e.target.value); render(); kapi.say("kapi.hello"); }
+  if (e.target.id === "oLang") { lsSet("kapibo.lang", e.target.value); await setLang(e.target.value); render(); ch.friend.label(); ch.greet(); }
+  if (e.target.id === "oBuzz") { store.setSettings({ buzz: e.target.checked }); if (e.target.checked) navigator.vibrate?.(12); }
   if (e.target.id === "oCur") store.setSettings({ currency: e.target.value });
   if (e.target.id === "oVouch") { const v = num(e.target.value); if (v) store.setSettings({ voucher: v }); }
 });
+
+// scintille e vibrazione sui pulsanti che salvano o aggiungono
+const SAVE_BTN = '.btn[value="ok"], #pSave, #stSave, #bSave, #mtSave';
+document.addEventListener("pointerdown", e => { const b = e.target.closest?.(".btn"); if (b && (b.matches(SAVE_BTN) || b.dataset.act === "add")) kapi.sparkle(e.clientX, e.clientY, 7, b.closest("dialog") || document.body); });
+document.addEventListener("click", e => { if (e.target.closest?.(SAVE_BTN)) buzz(); });
 
 // temi
 const THEMES = [["joy", "#fff4e3", "#ffb627"], ["onsen", "#eef8f5", "#1c7568"], ["night", "#231c27", "#ffb07a"], ["auto", "#fff4e3", "#231c27"]];
@@ -530,7 +622,7 @@ const theme = () => document.documentElement.dataset.theme || "auto";
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-theme-set]"); if (!b) return;
   document.documentElement.dataset.theme = b.dataset.themeSet; lsSet("kapibo.theme", b.dataset.themeSet);
-  render(); kapi.mood("happy"); kapi.say("kapi.theme");
+  render(); ch.cheer("theme"); unlock("theme");
 });
 
 // importazione Excel
@@ -547,9 +639,10 @@ $("#fileXls").addEventListener("change", async e => {
     if (!r || !res.entries.length && !res.readings.length) return;
     const tm = Date.now(), stamp = arr => arr.map((x, i) => ({ ...x, u: tm + i }));
     const months = {}; for (const [k, v] of Object.entries(res.months)) months[k] = { ...(S().months[k] || {}), ...v, u: tm };
+    const before = nLive();
     store.set(merge(S(), { cats: stamp(res.cats), entries: stamp(res.entries), meters: stamp(res.meters), readings: stamp(res.readings), bills: stamp(res.bills), months }));
     const last = Object.keys(res.months).sort().pop(); if (last) cur = last;
-    kapi.confetti(40); celebrate("kapi.imported"); go("stats");
+    kapi.confetti(40); go("stats"); afterSave({ say: ["import", { m: Object.keys(res.months).length }, 1], before, ev: ["import"] });
   } catch (err) { console.error(err); toast(t("o.impError")); kapi.say("kapi.oops"); }
 });
 
@@ -560,7 +653,7 @@ function exportBackup() {
 }
 $("#fileJson").addEventListener("change", async e => {
   const f = e.target.files[0]; if (!f) return; e.target.value = "";
-  try { const data = JSON.parse(await f.text()); store.set(merge(S(), data)); toast(t("o.restored")); celebrate(); } catch { toast(t("o.impError")); }
+  try { const data = JSON.parse(await f.text()); store.set(merge(S(), data)); toast(t("o.restored")); ch.cheer("import", { m: Object.keys(S().months).length }, { big: true }); unlock(); } catch { toast(t("o.impError")); }
 });
 async function wipeAll() {
   const r = await dialog(t("o.wipe"), `<p>${t("o.wipeSure")}</p>`, { ok: t("o.wipe") });
@@ -592,18 +685,43 @@ async function doSync(manual) {
   btn.dataset.state = !Object.keys(res).length ? "off" : bad ? "err" : "on";
   btn.setAttribute("aria-label", t(bad ? "sync.err" : "sync.ok"));
   if (manual) toast(t(bad || "sync.ok"));
+  if (!bad && Object.keys(res).length) { if (manual) ch.cheer("sync"); unlock("sync"); }
+}
+
+// ---------- wizard delle funzioni ----------
+/** Primo avvio: tutto il tour; dopo un aggiornamento: solo le novità (o niente). all=true lo ripete per intero. */
+function startTour(all) {
+  const seen = all ? "" : tour.seen(), steps = tour.pick(seen, APP_VERSION), back = tab;
+  const greet = () => setTimeout(() => (S().entries.length ? ch.greet() : kapi.say("kapi.welcome", { ms: 6000 })), 400);
+  if (!steps.length) { if (seen && tour.cmp(seen, APP_VERSION) < 0) toast(t("upd.done", { v: APP_VERSION })); tour.markSeen(APP_VERSION); return greet(); }
+  tour.run(steps, { go: n => { if (n !== tab) go(n); }, kapiSvg: kapi.KAPI_SVG, onEnd: () => { tour.markSeen(APP_VERSION); if (tab !== back) go(back); kapi.mood("happy"); greet(); } });
+}
+
+// ---------- installazione ----------
+function installCard() {
+  const m = inst.mode();
+  if (inst.installed()) return "";
+  return `<div class="card" id="install"><h2>${ic("download")} ${t("inst.title")}</h2><p class="muted">${t("inst.hint")}</p>
+    ${m === "prompt" ? `<div class="btns"><button class="btn" data-act="install">${ic("download")} ${t("inst.btn")}</button></div>`
+      : m === "ios" ? `<p><b>${t("inst.ios")}</b></p><ol class="install-steps"><li>${ic("upload")} ${t("inst.ios1")}</li><li>${ic("plus")} ${t("inst.ios2")}</li><li>${ic("capy")} ${t("inst.ios3")}</li></ol>`
+      : `<p class="hint">${t("inst.none")}</p>`}</div>`;
 }
 
 // ---------- service worker e aggiornamenti ----------
 function registerSW() {
+  // Aggiornamento automatico: la nuova versione si attiva subito e la pagina si ricarica appena l'utente non sta facendo nulla.
   navigator.serviceWorker.register("sw.js").then(reg => {
-    reg.addEventListener("updatefound", () => {
-      const nw = reg.installing;
-      nw?.addEventListener("statechange", () => { if (nw.state === "installed" && navigator.serviceWorker.controller) toast(t("o.update"), { label: t("o.updateBtn"), run: () => nw.postMessage("skip") }); });
-    });
+    const activate = nw => nw?.addEventListener("statechange", () => { if (nw.state === "installed" && navigator.serviceWorker.controller) nw.postMessage("skip"); });
+    if (reg.waiting && navigator.serviceWorker.controller) reg.waiting.postMessage("skip");
+    reg.addEventListener("updatefound", () => activate(reg.installing));
+    const check = () => reg.update().catch(() => {});
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(); });
+    setInterval(check, 30 * 60 * 1000);
   }).catch(() => {});
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!reloaded) { reloaded = true; location.reload(); } });
+  let pending = false;
+  const safe = () => !document.querySelector("dialog[open], .tour") && !scanState && !document.activeElement?.matches?.("input, textarea, select");
+  const reloadWhenSafe = () => { if (safe()) location.reload(); else setTimeout(reloadWhenSafe, 2000); };
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!pending) { pending = true; reloadWhenSafe(); } });
 }
 
 boot();

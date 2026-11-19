@@ -1,0 +1,39 @@
+{
+"title": "Personvern og bruksvilkår",
+"updated": "Versjon av 19. november 2026",
+"privacy": [
+["h", "1. Hvem vi er"],
+["p", "Kapibo er en gratis åpen kildekode-app utgitt av Marketto (github.com/Marketto). Det finnes ikke noe selskap eller noen server bak appen: for spørsmål eller henvendelser kan du opprette en issue på github.com/Marketto/Kapibo."],
+["h", "2. Hvilke data appen behandler"],
+["p", "Dataene du legger inn, eller som appen leser fra dokumentene dine: utgifter, kategorier, inntekt, saldoer, matkuponger, måleravlesninger, regninger samt tekst lest fra kvitteringer, lønnsslipper, kontoutskrifter og regninger. Bildene og pdf-filene du velger leses bare på enheten din og lagres ikke av appen."],
+["h", "3. Hvor dataene havner"],
+["p", "På enheten din, i nettleserens lagring (IndexedDB/localStorage). Hvis du kobler til Dropbox eller Google Drive, lagres en kopi i skykontoen din: overføringen skjer direkte fra enheten din til leverandøren du har valgt, i henhold til dennes vilkår. Ingen, heller ikke utvikleren, mottar dataene dine."],
+["h", "4. Tredjepartstjenester"],
+["p", "For å fungere laster appen ned noen filer (dokumentlesemotor, språkdata) fra marketto.github.io og, bare hvis den ikke er tilgjengelig, fra cdn.jsdelivr.net: som ved alle nettsteder kan disse tjenestene se IP-adressen din. Valgfritt: hvis du legger inn din egen Claude API-nøkkel, sendes teksten lest fra kvitteringer (aldri bildene) til Anthropic i henhold til Anthropics vilkår. Dropbox og Google Drive brukes bare hvis du kobler dem til."],
+["h", "5. Ingen sporing"],
+["p", "Appen bruker ingen profileringsinformasjonskapsler, reklame, analyseverktøy eller sporingsverktøy."],
+["h", "6. Dine rettigheter"],
+["p", "Dataene dine er dine og under din kontroll: du kan når som helst eksportere dem (Mer › Sikkerhetskopi), slette dem (Mer › Slett alle data) og koble fra skyen. Dataene i skyen din administrerer du fra Dropbox- eller Google-kontoen din. Du har rettighetene som følger av forordning (EU) 2016/679 (personvernforordningen, GDPR), blant annet retten til å klage til tilsynsmyndigheten for personvern."],
+["h", "7. Mindreårige"],
+["p", "Appen er ment for voksne som styrer husholdningsbudsjettet sitt."]
+],
+"terms": [
+["h", "1. Gratis bruk, som den er"],
+["p", "Kapibo leveres gratis, «som den er» og «som tilgjengelig», uten garantier av noe slag, verken uttrykkelige eller underforståtte, herunder for nøyaktighet, fullstendighet, tilgjengelighet og egnethet for et bestemt formål."],
+["h", "2. Ikke rådgivning"],
+["p", "Beregninger, diagrammer, tips og maskotens setninger er kun veiledende og utgjør ikke finansiell, skattemessig, juridisk eller annen rådgivning. Beslutninger du tar ved hjelp av appen, er utelukkende dine egne."],
+["h", "3. Kontroller alltid dataene dine"],
+["p", "Automatisk lesing av bilder og pdf-filer kan gi feil i beløp, datoer, kategorier og forbruk. Du må kontrollere hver post før du lagrer den og før du stoler på den."],
+["h", "4. Sikkerhetskopier"],
+["p", "Data kan gå tapt (slettede nettleserdata, enhetsfeil, feil ved synkronisering eller i skytjenesten). Det er ditt ansvar å ta regelmessige sikkerhetskopier."],
+["h", "5. Ansvarsbegrensning"],
+["p", "I den grad gjeldende lov tillater det, er utvikleren og bidragsyterne ikke ansvarlige for direkte eller indirekte skade, tap av data, penger, inntekt eller muligheter, regne- eller lesefeil, avbrudd eller funksjonsfeil, og heller ikke for tredjepartstjenester (Dropbox, Google, Anthropic, GitHub, jsDelivr) og deres vilkår. Ansvar som ikke kan utelukkes ved lov, forblir upåvirket."],
+["h", "6. Nøkler og kontoer"],
+["p", "API-nøkler og skypåloggninger blir på enheten din: du er ansvarlig for å oppbevare dem trygt og for eventuelle kostnader leverandørene belaster."],
+["h", "7. Endringer"],
+["p", "Disse vilkårene kan endres med appoppdateringer; i så fall viser vi dem til deg på nytt, og du kan bare fortsette å bruke appen hvis du godtar dem."],
+["h", "8. Lisens og lovvalg"],
+["p", "Koden utgis under MIT-lisensen. Italiensk rett gjelder, uten at det berører ufravikelige forbrukerrettigheter."]
+],
+"summary": ["Gratis, uten reklame og uten sporing.", "Dataene dine blir på enheten din og, hvis du vil, i skyen din.", "Automatisk lesing kan gjøre feil: kontroller alltid.", "Ingen finansiell rådgivning og ingen garanti: du bruker appen på eget ansvar."]
+}

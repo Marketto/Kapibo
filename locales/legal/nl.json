@@ -1,0 +1,39 @@
+{
+"title": "Privacy en gebruiksvoorwaarden",
+"updated": "Versie van 19 november 2026",
+"privacy": [
+["h", "1. Wie wij zijn"],
+["p", "Kapibo is een gratis open-sourceapp, gepubliceerd door Marketto (github.com/Marketto). Achter de app staat geen bedrijf of server: voor vragen of verzoeken kunt u een issue openen op github.com/Marketto/Kapibo."],
+["h", "2. Welke gegevens de app verwerkt"],
+["p", "De gegevens die u invoert of die de app uit uw documenten leest: uitgaven, categorieën, inkomsten, saldo's, maaltijdcheques, meterstanden, rekeningen en tekst die is gelezen van bonnetjes, loonstroken, bankafschriften en rekeningen. De foto's en pdf's die u kiest worden alleen op uw apparaat gelezen en niet door de app bewaard."],
+["h", "3. Waar de gegevens naartoe gaan"],
+["p", "Naar de opslag van de browser op uw apparaat (IndexedDB/localStorage). Als u Dropbox of Google Drive koppelt, wordt een kopie opgeslagen in uw cloudaccount: de overdracht verloopt rechtstreeks van uw apparaat naar de door u gekozen aanbieder, onder diens voorwaarden. Niemand, ook de ontwikkelaar niet, ontvangt uw gegevens."],
+["h", "4. Diensten van derden"],
+["p", "Om te werken downloadt de app enkele bestanden (leesengine voor documenten, taalgegevens) van marketto.github.io en, alleen als die niet beschikbaar is, van cdn.jsdelivr.net: zoals bij elke website kunnen deze diensten uw IP-adres zien. Optioneel: als u uw eigen Claude API-sleutel invoert, wordt de uit bonnetjes gelezen tekst (nooit de foto's) onder de voorwaarden van Anthropic naar Anthropic gestuurd. Dropbox en Google Drive worden alleen gebruikt als u ze koppelt."],
+["h", "5. Geen tracking"],
+["p", "De app gebruikt geen profileringscookies, advertenties, analysetools of trackingtools."],
+["h", "6. Uw rechten"],
+["p", "Uw gegevens zijn van u en blijven onder uw controle: u kunt ze op elk moment exporteren (Meer › Back-up), verwijderen (Meer › Alle gegevens wissen) en de cloud ontkoppelen. De gegevens in uw cloud beheert u via uw Dropbox- of Google-account. U heeft de rechten die zijn toegekend door Verordening (EU) 2016/679 (Algemene verordening gegevensbescherming, AVG), waaronder het recht om een klacht in te dienen bij uw toezichthoudende autoriteit voor gegevensbescherming."],
+["h", "7. Minderjarigen"],
+["p", "De app is bedoeld voor volwassenen die hun huishoudbudget beheren."]
+],
+"terms": [
+["h", "1. Gratis gebruik, in de staat waarin het verkeert"],
+["p", "Kapibo wordt gratis aangeboden, \"as is\" en \"as available\", zonder enige garantie, uitdrukkelijk of impliciet, met inbegrip van juistheid, volledigheid, beschikbaarheid en geschiktheid voor een bepaald doel."],
+["h", "2. Geen advies"],
+["p", "Berekeningen, grafieken, tips en de zinnen van de mascotte zijn slechts indicatief en vormen geen financieel, fiscaal, juridisch of enig ander advies. Beslissingen die u met behulp van de app neemt, zijn uitsluitend de uwe."],
+["h", "3. Controleer uw gegevens altijd"],
+["p", "Het automatisch lezen van foto's en pdf's kan fouten maken in bedragen, datums, categorieën en verbruik. U bent verplicht elk item te controleren voordat u het opslaat en voordat u erop vertrouwt."],
+["h", "4. Back-ups"],
+["p", "Gegevens kunnen verloren gaan (gewiste browsergegevens, defect apparaat, fouten bij synchronisatie of in de cloudservice). Het regelmatig maken van back-ups is uw eigen verantwoordelijkheid."],
+["h", "5. Beperking van aansprakelijkheid"],
+["p", "Voor zover wettelijk maximaal toegestaan zijn de ontwikkelaar en bijdragers niet aansprakelijk voor directe of indirecte schade, verlies van gegevens, geld, inkomsten of kansen, reken- of leesfouten, onderbrekingen of storingen, noch voor diensten van derden (Dropbox, Google, Anthropic, GitHub, jsDelivr) en hun voorwaarden. Aansprakelijkheid die wettelijk niet kan worden uitgesloten, blijft onverlet."],
+["h", "6. Sleutels en accounts"],
+["p", "API-sleutels en cloudaanmeldingen blijven op uw apparaat: u bent verantwoordelijk voor het veilig bewaren ervan en voor eventuele kosten die de aanbieders in rekening brengen."],
+["h", "7. Wijzigingen"],
+["p", "Deze voorwaarden kunnen met app-updates worden gewijzigd; in dat geval tonen wij ze u opnieuw en kunt u de app alleen blijven gebruiken als u ze accepteert."],
+["h", "8. Licentie en toepasselijk recht"],
+["p", "De code wordt uitgebracht onder de MIT-licentie. Het Italiaanse recht is van toepassing, onverminderd de dwingende consumentenrechten."]
+],
+"summary": ["Gratis, zonder advertenties en zonder tracking.", "Uw gegevens blijven op uw apparaat en, als u dat wilt, in uw cloud.", "Automatisch lezen kan fouten maken: controleer altijd.", "Geen financieel advies en geen garantie: u gebruikt de app op eigen risico."]
+}

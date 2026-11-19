@@ -1,0 +1,39 @@
+{
+"title": "Súkromie a podmienky používania",
+"updated": "Verzia z 19. novembra 2026",
+"privacy": [
+["h", "1. Kto sme"],
+["p", "Kapibo je bezplatná aplikácia s otvoreným zdrojovým kódom, ktorú zverejňuje Marketto (github.com/Marketto). Za aplikáciou nestojí žiadna spoločnosť ani server: v prípade otázok alebo žiadostí založte podnet na github.com/Marketto/Kapibo."],
+["h", "2. Aké údaje aplikácia spracúva"],
+["p", "Údaje, ktoré zadáte vy alebo ktoré aplikácia prečíta z vašich dokladov: výdavky, kategórie, príjmy, zostatky, stravné lístky, odpočty meračov, účty a text prečítaný z bločkov, výplatných pások, bankových výpisov a účtov. Fotografie a súbory PDF, ktoré vyberiete, sa čítajú iba vo vašom zariadení a aplikácia ich neukladá."],
+["h", "3. Kam údaje putujú"],
+["p", "Do vášho zariadenia, do úložiska prehliadača (IndexedDB/localStorage). Ak pripojíte Dropbox alebo Google Drive, kópia sa uloží na váš cloudový účet: prenos prebieha priamo z vášho zariadenia k poskytovateľovi, ktorého ste zvolili, podľa jeho podmienok. Nikto, ani vývojár, vaše údaje nezískava."],
+["h", "4. Služby tretích strán"],
+["p", "Aby aplikácia fungovala, sťahuje niektoré súbory (modul na čítanie dokumentov, jazykové údaje) z marketto.github.io a iba ak je nedostupný, z cdn.jsdelivr.net: ako každý web, aj tieto služby môžu vidieť vašu IP adresu. Voliteľne: ak zadáte vlastný kľúč Claude API, text prečítaný z bločkov (nikdy fotografie) sa odošle spoločnosti Anthropic podľa jej podmienok. Dropbox a Google Drive sa používajú, len ak ich pripojíte."],
+["h", "5. Žiadne sledovanie"],
+["p", "Aplikácia nepoužíva profilovacie cookies, reklamy, analytiku ani sledovacie nástroje."],
+["h", "6. Vaše práva"],
+["p", "Vaše údaje patria vám a máte ich pod kontrolou: môžete ich kedykoľvek exportovať (Viac › Záloha), vymazať (Viac › Vymazať všetky údaje) a odpojiť cloud. Údaje vo svojom cloude spravujete zo svojho účtu Dropbox alebo Google. Máte práva vyplývajúce z nariadenia Európskeho parlamentu a Rady (EÚ) 2016/679 (všeobecné nariadenie o ochrane údajov, GDPR), vrátane práva podať sťažnosť na dozornom orgáne pre ochranu osobných údajov."],
+["h", "7. Maloletí"],
+["p", "Aplikácia je určená dospelým, ktorí spravujú svoj domáci rozpočet."]
+],
+"terms": [
+["h", "1. Bezplatné použitie, tak ako je"],
+["p", "Kapibo sa poskytuje zadarmo, „tak ako je“ a „ako je dostupné“, bez akýchkoľvek záruk, výslovných či predpokladaných, vrátane záruk presnosti, úplnosti, dostupnosti a vhodnosti na určitý účel."],
+["h", "2. Nie je to poradenstvo"],
+["p", "Výpočty, grafy, tipy a vety maskota majú iba orientačný charakter a nie sú finančným, daňovým, právnym ani iným poradenstvom. Rozhodnutia prijaté na základe aplikácie sú výlučne vaše."],
+["h", "3. Svoje údaje vždy kontrolujte"],
+["p", "Automatické čítanie fotografií a súborov PDF sa môže v sumách, dátumoch, kategóriách a spotrebe mýliť. Ste povinní každú položku skontrolovať pred uložením aj predtým, ako sa na ňu spoľahnete."],
+["h", "4. Zálohy"],
+["p", "Údaje sa môžu stratiť (vymazanie údajov prehliadača, porucha zariadenia, chyby synchronizácie alebo cloudovej služby). Pravidelné zálohovanie je vašou zodpovednosťou."],
+["h", "5. Obmedzenie zodpovednosti"],
+["p", "V najvyššom rozsahu povolenom platnými právnymi predpismi vývojár a prispievatelia nezodpovedajú za žiadne priame ani nepriame škody, stratu údajov, peňazí, zárobku či príležitostí, chyby vo výpočtoch alebo čítaní, prerušenia či poruchy, ani za služby tretích strán (Dropbox, Google, Anthropic, GitHub, jsDelivr) a ich podmienky. Zodpovednosť, ktorú nemožno zo zákona vylúčiť, zostáva nedotknutá."],
+["h", "6. Kľúče a účty"],
+["p", "Kľúče API a prihlásenia do cloudu zostávajú vo vašom zariadení: zodpovedáte za ich bezpečné uloženie aj za všetky poplatky účtované poskytovateľmi."],
+["h", "7. Zmeny"],
+["p", "Tieto podmienky sa môžu meniť s aktualizáciami aplikácie; v takom prípade vám ich zobrazíme znova a aplikáciu budete môcť naďalej používať iba po ich prijatí."],
+["h", "8. Licencia a rozhodné právo"],
+["p", "Kód je vydaný pod licenciou MIT. Uplatňuje sa talianske právo bez dotknutia záväzných práv spotrebiteľov."]
+],
+"summary": ["Zadarmo, bez reklám, bez sledovania.", "Vaše údaje zostávajú vo vašom zariadení a, ak chcete, vo vašom cloude.", "Automatické čítanie sa môže mýliť: vždy kontrolujte.", "Žiadne finančné poradenstvo ani záruky: aplikáciu používate na vlastné riziko."]
+}

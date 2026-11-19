@@ -1,0 +1,39 @@
+{
+"title": "Privatnost i uvjeti korištenja",
+"updated": "Verzija od 19. studenoga 2026.",
+"privacy": [
+["h", "1. Tko smo"],
+["p", "Kapibo je besplatna aplikacija otvorenog koda koju objavljuje Marketto (github.com/Marketto). Iza aplikacije ne stoji tvrtka ni poslužitelj: za pitanja ili zahtjeve otvorite zahtjev (issue) na github.com/Marketto/Kapibo."],
+["h", "2. Koje podatke aplikacija obrađuje"],
+["p", "Podatke koje unesete ili koje aplikacija pročita iz vaših dokumenata: troškove, kategorije, prihode, stanja, bonove za obroke, očitanja brojila, račune te tekst pročitan iz računa, platnih lista, bankovnih izvoda i računa za režije. Fotografije i PDF-ovi koje odaberete čitaju se isključivo na vašem uređaju i aplikacija ih ne pohranjuje."],
+["h", "3. Kamo podaci odlaze"],
+["p", "Na vaš uređaj, u pohranu preglednika (IndexedDB/localStorage). Ako povežete Dropbox ili Google Drive, kopija se sprema u vaš oblačni račun: prijenos ide izravno s vašeg uređaja na odabranog pružatelja usluge, prema njegovim uvjetima. Nitko, pa ni programer, ne prima vaše podatke."],
+["h", "4. Usluge trećih strana"],
+["p", "Za rad aplikacija preuzima neke datoteke (mehanizam za čitanje dokumenata, jezične podatke) s marketto.github.io i, samo ako nisu dostupne, s cdn.jsdelivr.net: kao i svaka web-stranica, te usluge mogu vidjeti vašu IP adresu. Neobavezno: ako unesete vlastiti Claude API ključ, tekst pročitan iz računa (nikada fotografije) šalje se društvu Anthropic prema njegovim uvjetima. Dropbox i Google Drive koriste se samo ako ih povežete."],
+["h", "5. Bez praćenja"],
+["p", "Aplikacija ne koristi kolačiće za profiliranje, oglase, analitiku ni alate za praćenje."],
+["h", "6. Vaša prava"],
+["p", "Vaši su podaci vaši i pod vašom kontrolom: u svakom trenutku možete ih izvesti (Više › Sigurnosna kopija), izbrisati (Više › Izbriši sve podatke) i odspojiti oblak. Podacima u oblaku upravljate putem svog Dropbox ili Google računa. Imate prava zajamčena Uredbom (EU) 2016/679 (Opća uredba o zaštiti podataka, GDPR), uključujući pravo na podnošenje pritužbe tijelu nadležnom za zaštitu podataka."],
+["h", "7. Maloljetnici"],
+["p", "Aplikacija je namijenjena odraslim osobama koje upravljaju kućnim proračunom."]
+],
+"terms": [
+["h", "1. Besplatno korištenje, u stanju \"kakvo jest\""],
+["p", "Kapibo se pruža besplatno, \"kakav jest\" i \"kako je dostupan\", bez jamstava bilo koje vrste, izričitih ili implicitnih, uključujući točnost, potpunost, dostupnost i prikladnost za određenu svrhu."],
+["h", "2. Nije savjet"],
+["p", "Izračuni, grafikoni, savjeti i rečenice maskote samo su orijentacijski i ne predstavljaju financijski, porezni, pravni niti bilo koji drugi savjet. Odluke koje donosite uz pomoć aplikacije isključivo su vaše."],
+["h", "3. Uvijek provjerite svoje podatke"],
+["p", "Automatsko čitanje fotografija i PDF-ova može pogrešno prepoznati iznose, datume, kategorije i potrošnju. Dužni ste provjeriti svaku stavku prije spremanja i prije nego što se na nju oslonite."],
+["h", "4. Sigurnosne kopije"],
+["p", "Podaci se mogu izgubiti (brisanje podataka preglednika, kvar uređaja, pogreške sinkronizacije ili oblačne usluge). Redovito izrađivanje sigurnosnih kopija vaša je odgovornost."],
+["h", "5. Ograničenje odgovornosti"],
+["p", "U najvećoj mjeri dopuštenoj mjerodavnim pravom, programer i suradnici ne odgovaraju za izravnu ili neizravnu štetu, gubitak podataka, novca, zarade ili prilika, pogreške u izračunu ili čitanju, prekide ili kvarove, niti za usluge trećih strana (Dropbox, Google, Anthropic, GitHub, jsDelivr) i njihove uvjete. Odgovornost koja se ne može isključiti zakonom ostaje nepromijenjena."],
+["h", "6. Ključevi i računi"],
+["p", "API ključevi i prijave u oblak ostaju na vašem uređaju: odgovorni ste za njihovu zaštitu i za sve troškove koje naplaćuju pružatelji usluga."],
+["h", "7. Izmjene"],
+["p", "Ovi se uvjeti mogu mijenjati uz ažuriranja aplikacije; u tom ćemo vam ih slučaju ponovno prikazati, a aplikaciju ćete moći nastaviti koristiti samo ako ih prihvatite."],
+["h", "8. Licenca i mjerodavno pravo"],
+["p", "Kôd je objavljen pod licencom MIT. Primjenjuje se talijansko pravo, ne dovodeći u pitanje obvezna prava potrošača."]
+],
+"summary": ["Besplatno, bez oglasa, bez praćenja.", "Vaši podaci ostaju na vašem uređaju i, ako želite, u vašem oblaku.", "Automatsko čitanje može pogriješiti: uvijek provjerite.", "Nema financijskog savjetovanja ni jamstva: aplikaciju koristite na vlastitu odgovornost."]
+}

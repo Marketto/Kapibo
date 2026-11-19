@@ -1,0 +1,39 @@
+{
+"title": "Confidențialitate și termeni de utilizare",
+"updated": "Versiunea din 19 noiembrie 2026",
+"privacy": [
+["h", "1. Cine suntem"],
+["p", "Kapibo este o aplicație gratuită, open source, publicată de Marketto (github.com/Marketto). În spatele aplicației nu există nicio societate și niciun server: pentru întrebări sau solicitări, deschideți un issue la github.com/Marketto/Kapibo."],
+["h", "2. Ce date prelucrează aplicația"],
+["p", "Datele pe care le introduceți sau pe care aplicația le citește din documentele dumneavoastră: cheltuieli, categorii, venituri, solduri, tichete de masă, citiri de contoare, facturi și textul citit din bonuri, fluturași de salariu, extrase de cont și facturi. Fotografiile și fișierele PDF alese de dumneavoastră sunt citite exclusiv pe dispozitivul dumneavoastră și nu sunt păstrate de aplicație."],
+["h", "3. Unde ajung datele"],
+["p", "Pe dispozitivul dumneavoastră, în spațiul de stocare al browserului (IndexedDB/localStorage). Dacă conectați Dropbox sau Google Drive, o copie este salvată în contul dumneavoastră de cloud: transferul se face direct de la dispozitivul dumneavoastră către furnizorul ales, în conformitate cu termenii acestuia. Nimeni, nici măcar dezvoltatorul, nu primește datele dumneavoastră."],
+["h", "4. Servicii terțe"],
+["p", "Pentru a funcționa, aplicația descarcă anumite fișiere (motorul de citire a documentelor, datele lingvistice) de la marketto.github.io și, numai dacă acesta nu este disponibil, de la cdn.jsdelivr.net: ca orice site web, aceste servicii pot vedea adresa dumneavoastră IP. Opțional: dacă introduceți propria cheie API Claude, textul citit din bonuri (niciodată fotografiile) este trimis către Anthropic, în conformitate cu termenii acesteia. Dropbox și Google Drive sunt utilizate numai dacă le conectați."],
+["h", "5. Fără urmărire"],
+["p", "Aplicația nu folosește cookie-uri de profilare, reclame, instrumente de analiză sau de urmărire."],
+["h", "6. Drepturile dumneavoastră"],
+["p", "Datele dumneavoastră sunt ale dumneavoastră și se află sub controlul dumneavoastră: le puteți exporta (Mai mult › Copie de rezervă), le puteți șterge (Mai mult › Șterge toate datele) și puteți deconecta oricând cloud-ul. Datele din cloud le gestionați din contul dumneavoastră Dropbox sau Google. Beneficiați de drepturile prevăzute de Regulamentul (UE) 2016/679 (Regulamentul general privind protecția datelor, RGPD), inclusiv dreptul de a depune o plângere la autoritatea dumneavoastră de protecție a datelor."],
+["h", "7. Minori"],
+["p", "Aplicația este destinată adulților care își gestionează bugetul gospodăriei."]
+],
+"terms": [
+["h", "1. Utilizare gratuită, în starea în care se află"],
+["p", "Kapibo este oferită gratuit, „în starea în care se află” și „în funcție de disponibilitate”, fără garanții de niciun fel, exprese sau implicite, inclusiv în ceea ce privește exactitatea, caracterul complet, disponibilitatea și adecvarea pentru un anumit scop."],
+["h", "2. Nu constituie consultanță"],
+["p", "Calculele, graficele, sfaturile și frazele mascotei au caracter exclusiv orientativ și nu constituie consultanță financiară, fiscală, juridică sau de orice alt fel. Deciziile pe care le luați folosind aplicația vă aparțin în exclusivitate."],
+["h", "3. Verificați întotdeauna datele"],
+["p", "Citirea automată a fotografiilor și a fișierelor PDF poate greși sumele, datele, categoriile și consumurile. Aveți obligația de a verifica fiecare element înainte de a-l salva și înainte de a vă baza pe el."],
+["h", "4. Copii de rezervă"],
+["p", "Datele se pot pierde (ștergerea datelor din browser, defectarea dispozitivului, erori de sincronizare sau ale serviciilor de cloud). Realizarea periodică a copiilor de rezervă este responsabilitatea dumneavoastră."],
+["h", "5. Limitarea răspunderii"],
+["p", "În măsura maximă permisă de legea aplicabilă, dezvoltatorul și contribuitorii nu răspund pentru daune directe sau indirecte, pierderea de date, de bani, de venituri sau de oportunități, erori de calcul sau de citire, întreruperi sau defecțiuni, și nici pentru serviciile terțe (Dropbox, Google, Anthropic, GitHub, jsDelivr) și termenii acestora. Răspunderea care nu poate fi exclusă prin lege rămâne neafectată."],
+["h", "6. Chei și conturi"],
+["p", "Cheile API și autentificările în cloud rămân pe dispozitivul dumneavoastră: sunteți responsabil pentru păstrarea lor în siguranță și pentru eventualele costuri percepute de furnizori."],
+["h", "7. Modificări"],
+["p", "Acești termeni pot fi modificați odată cu actualizările aplicației; în acest caz vi-i vom afișa din nou, iar puteți continua să utilizați aplicația numai dacă îi acceptați."],
+["h", "8. Licență și legea aplicabilă"],
+["p", "Codul este publicat sub licența MIT. Se aplică legea italiană, fără a aduce atingere drepturilor imperative ale consumatorilor."]
+],
+"summary": ["Gratuită, fără reclame, fără urmărire.", "Datele dumneavoastră rămân pe dispozitivul dumneavoastră și, dacă doriți, în cloud-ul dumneavoastră.", "Citirea automată poate greși: verificați întotdeauna.", "Fără consultanță financiară și fără garanție: utilizați aplicația pe propria răspundere."]
+}

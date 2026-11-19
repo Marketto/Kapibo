@@ -13,11 +13,18 @@
 | `js/charts.js` | SVG | `donut`, `hbars`, `timeline` |
 | `js/mascot.js` | Kapi | `KAPI_SVG`, `mount`, `mood`, `say`, `confetti` |
 | `js/sync/` | Cloud | `index.syncNow`, `dropbox.*`, `gdrive.*` |
+| `js/cheer.js` | Frasi di Kapi per ogni azione, Kapi amica, serie e traguardi | `cheer`, `cheerTab`, `greet`, `streak`, `milestone`, `friend` |
+| `js/stickers.js` | Adesivi da collezionare | `STICKERS`, controllo sblocchi |
+| `js/jar.js` | Barattolo dello yuzu (risparmio del mese) | `jarSVG` |
+| `js/legal.js` | Privacy e condizioni da accettare (`POLICY_VERSION`), testi in `locales/legal/` | `gate`, `show`, `accepted` |
+| `js/tour.js` | Wizard: tutto al primo avvio, solo novità dopo un aggiornamento | `STEPS` (campo `v`), `pick`, `run` |
+| `js/install.js` | Installazione (prompt nativo, istruzioni iOS) | `mode`, `install`, `installed` |
 | `js/ai.js` | Lettura avanzata facoltativa | `structureReceipt` |
 | `js/i18n.js` | Lingue | `LANGS`, `t`, `setLang`, `monthLabel` |
 | `tools/icons/icons.mjs` | Disegni delle icone Kapi (griglia 24, tratto 2) | `ICONS` → `npm run icons` |
 | `tools/build-font.mjs` | Icone → font `fonts/kapi-icons.woff2` + `css/icons.css` + `fonts/anteprima.html` | potrace, verso dei contorni (`nonzero`) |
 | `css/style.css` | Temi `[data-theme]`: `joy` (Capibara gioioso), `onsen`, `night`, `auto` | variabili `--c-*`, `--pattern` |
-| `sw.js` | Offline | cache app (rete prima) + moduli pesanti (cache prima) |
+| `sw.js` | Offline + aggiornamento automatico (`skip` immediato, ricarica quando l'utente è inattivo: `registerSW` in app.js) | cache app (rete prima) + moduli pesanti (cache prima) |
+| `css/fonts.css`, `fonts/` | Caratteri ospitati (niente Google Fonts) | `unicode-range`: si scarica solo l'alfabeto usato |
 
 Aggiungere un tipo di documento: skill `nuovo-parser`. Aggiungere testi: skill `traduzioni`.

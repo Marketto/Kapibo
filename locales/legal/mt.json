@@ -1,0 +1,39 @@
+{
+"title": "Privatezza u termini tal-użu",
+"updated": "Verżjoni tad-19 ta' Novembru 2026",
+"privacy": [
+["h", "1. Min aħna"],
+["p", "Kapibo hija app b'xejn u open-source ippubblikata minn Marketto (github.com/Marketto). Wara l-app m'hemm l-ebda kumpanija jew server: għal mistoqsijiet jew talbiet, iftaħ issue fuq github.com/Marketto/Kapibo."],
+["h", "2. Liema data timmaniġġja l-app"],
+["p", "Id-data li tdaħħal int jew li l-app taqra mid-dokumenti tiegħek: nefqiet, kategoriji, dħul, bilanċi, vouchers tal-ikel, qari tal-miters, kontijiet, u t-test li jinqara mill-irċevuti, mill-payslips, mid-dikjarazzjonijiet tal-bank u mill-kontijiet. Ir-ritratti u l-PDFs li tagħżel jinqraw biss fuq l-apparat tiegħek u ma jinżammux mill-app."],
+["h", "3. Fejn tmur id-data"],
+["p", "Fuq l-apparat tiegħek, fil-ħażna tal-browser (IndexedDB/localStorage). Jekk tqabbad Dropbox jew Google Drive, kopja tiġi salvata fil-kont tal-cloud tiegħek: it-trasferiment imur direttament mill-apparat tiegħek lill-fornitur li tkun għażilt, skont it-termini tiegħu. Ħadd, anke l-iżviluppatur, ma jirċievi d-data tiegħek."],
+["h", "4. Servizzi ta' partijiet terzi"],
+["p", "Biex taħdem, l-app tniżżel ċerti fajls (magna tal-qari tad-dokumenti, data tal-lingwa) minn marketto.github.io u, biss jekk ma jkunx disponibbli, minn cdn.jsdelivr.net: bħal kwalunkwe websajt, dawn is-servizzi jistgħu jaraw l-indirizz IP tiegħek. Fakultattiv: jekk tidħol is-sinsla API Claude tiegħek stess, it-test li jinqara mill-irċevuti (qatt ir-ritratti) jintbagħat lil Anthropic skont it-termini tagħha. Dropbox u Google Drive jintużaw biss jekk tqabbadhom int."],
+["h", "5. Ebda traċċar"],
+["p", "L-app ma tuża l-ebda cookies ta' profilazzjoni, reklami, għodod analitiċi jew ta' traċċar."],
+["h", "6. Id-drittijiet tiegħek"],
+["p", "Id-data tiegħek hija tiegħek u taħt il-kontroll tiegħek: tista' tesportaha (Aktar › Backup), tħassarha (Aktar › Neħħi d-data kollha) u tiddiskonnettja l-cloud fi kwalunkwe ħin. Id-data fil-cloud tiegħek timmaniġġjaha mill-kont tiegħek ta' Dropbox jew ta' Google. Għandek id-drittijiet mogħtija mir-Regolament (UE) 2016/679 (Regolament Ġenerali dwar il-Protezzjoni tad-Data, GDPR), inkluż id-dritt li tressaq ilment quddiem l-awtorità tiegħek tal-protezzjoni tad-data."],
+["h", "7. Minorenni"],
+["p", "L-app hija maħsuba għall-adulti li jmexxu l-baġit tal-familja tagħhom."]
+],
+"terms": [
+["h", "1. Użu b'xejn, kif inhi"],
+["p", "Kapibo hija pprovduta mingħajr ħlas, \"kif inhi\" u \"kif disponibbli\", mingħajr garanziji ta' xi tip, espressi jew impliċiti, inkluża l-eżattezza, il-kompletezza, id-disponibbiltà u l-idoneità għal skop partikolari."],
+["h", "2. Mhux pariri"],
+["p", "Il-kalkoli, il-grafiki, il-pariri u l-frażijiet tal-maskot huma biss indikattivi u ma jikkostitwixxux parir finanzjarju, fiskali, legali jew ta' xi tip ieħor. Id-deċiżjonijiet li tieħu bl-użu tal-app huma tiegħek biss."],
+["h", "3. Dejjem iċċekkja d-data tiegħek"],
+["p", "Il-qari awtomatiku tar-ritratti u tal-PDFs jista' jiżbalja l-ammonti, id-dati, il-kategoriji u l-konsum. Int obbligat tivverifika kull element qabel ma tissalvah u qabel ma tserraħ fuqu."],
+["h", "4. Backups"],
+["p", "Id-data tista' tintilef (data tal-browser imneħħija, ħsara fl-apparat, żbalji tas-sinkronizzazzjoni jew tas-servizzi tal-cloud). Li tagħmel backups regolari huwa r-responsabbiltà tiegħek."],
+["h", "5. Limitazzjoni tar-responsabbiltà"],
+["p", "Safejn permess mil-liġi applikabbli, l-iżviluppatur u l-kontributuri mhumiex responsabbli għal ebda dannu dirett jew indirett, telf ta' data, flus, qligħ jew opportunitajiet, żbalji ta' kalkolu jew ta' qari, interruzzjonijiet jew tħaddim difettuż, u lanqas għal servizzi ta' partijiet terzi (Dropbox, Google, Anthropic, GitHub, jsDelivr) u t-termini tagħhom. Ir-responsabbiltà li ma tistax tiġi eskluża bil-liġi tibqa' mhux affettwata."],
+["h", "6. Sinsliet u kontijiet"],
+["p", "Is-sinsliet API u s-sign-ins tal-cloud jibqgħu fuq l-apparat tiegħek: int responsabbli li żżommhom sikuri u għal kwalunkwe spiża mitluba mill-fornituri."],
+["h", "7. Bidliet"],
+["p", "Dawn it-termini jistgħu jinbidlu mal-aġġornamenti tal-app; jekk jinbidlu, nerġgħu nuruhom lilek u tkun tista' tkompli tuża l-app biss jekk taċċettahom."],
+["h", "8. Liċenzja u liġi applikabbli"],
+["p", "Il-kodiċi huwa rilaxxat taħt il-liċenzja MIT. Tapplika l-liġi Taljana, mingħajr preġudizzju għad-drittijiet obbligatorji tal-konsumaturi."]
+],
+"summary": ["B'xejn, bla reklami, bla traċċar.", "Id-data tiegħek tibqa' fuq l-apparat tiegħek u, jekk trid, fil-cloud tiegħek.", "Il-qari awtomatiku jista' jagħmel żbalji: dejjem iċċekkja.", "Ebda parir finanzjarju u ebda garanzija: tuża l-app għall-riskju tiegħek."]
+}

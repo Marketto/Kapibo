@@ -1,0 +1,39 @@
+{
+"title": "Soukromí a podmínky použití",
+"updated": "Verze z 19. listopadu 2026",
+"privacy": [
+["h", "1. Kdo jsme"],
+["p", "Kapibo je bezplatná aplikace s otevřeným zdrojovým kódem, kterou zveřejňuje Marketto (github.com/Marketto). Za aplikací nestojí žádná společnost ani server: v případě dotazů či žádostí založte podnět na github.com/Marketto/Kapibo."],
+["h", "2. Jaké údaje aplikace zpracovává"],
+["p", "Údaje, které zadáte vy nebo které aplikace přečte z vašich dokladů: výdaje, kategorie, příjmy, zůstatky, stravenky, odečty měřičů, účty a text přečtený z účtenek, výplatních pásek, bankovních výpisů a účtů. Fotografie a soubory PDF, které vyberete, se čtou pouze ve vašem zařízení a aplikace je neukládá."],
+["h", "3. Kam údaje putují"],
+["p", "Do vašeho zařízení, do úložiště prohlížeče (IndexedDB/localStorage). Pokud připojíte Dropbox nebo Google Drive, uloží se kopie na váš cloudový účet: přenos probíhá přímo z vašeho zařízení k poskytovateli, kterého jste zvolili, podle jeho podmínek. Nikdo, ani vývojář, vaše údaje nezískává."],
+["h", "4. Služby třetích stran"],
+["p", "Aby aplikace fungovala, stahuje některé soubory (modul pro čtení dokumentů, jazyková data) z marketto.github.io a pouze pokud je nedostupný, z cdn.jsdelivr.net: jako každý web mohou tyto služby vidět vaši IP adresu. Volitelně: pokud zadáte vlastní klíč Claude API, je text přečtený z účtenek (nikdy fotografie) odeslán společnosti Anthropic podle jejích podmínek. Dropbox a Google Drive se používají, jen pokud je připojíte."],
+["h", "5. Žádné sledování"],
+["p", "Aplikace nepoužívá profilovací cookies, reklamy, analytiku ani sledovací nástroje."],
+["h", "6. Vaše práva"],
+["p", "Vaše údaje patří vám a máte je pod kontrolou: můžete je kdykoli exportovat (Více › Záloha), smazat (Více › Smazat všechna data) a odpojit cloud. Údaje ve svém cloudu spravujete ze svého účtu Dropbox nebo Google. Máte práva vyplývající z nařízení Evropského parlamentu a Rady (EU) 2016/679 (obecné nařízení o ochraně osobních údajů, GDPR), včetně práva podat stížnost u dozorového úřadu pro ochranu osobních údajů."],
+["h", "7. Nezletilí"],
+["p", "Aplikace je určena dospělým, kteří spravují svůj domácí rozpočet."]
+],
+"terms": [
+["h", "1. Bezplatné použití, tak jak je"],
+["p", "Kapibo je poskytováno zdarma, „tak jak je“ a „jak je dostupné“, bez jakýchkoli záruk, výslovných či předpokládaných, včetně záruk přesnosti, úplnosti, dostupnosti a vhodnosti pro určitý účel."],
+["h", "2. Není to poradenství"],
+["p", "Výpočty, grafy, tipy a věty maskota mají pouze orientační charakter a nejsou finančním, daňovým, právním ani jiným poradenstvím. Rozhodnutí učiněná na základě aplikace jsou výhradně vaše."],
+["h", "3. Své údaje vždy kontrolujte"],
+["p", "Automatické čtení fotografií a souborů PDF se může v částkách, datech, kategoriích a spotřebě mýlit. Jste povinni každou položku zkontrolovat před uložením i před tím, než se na ni spolehnete."],
+["h", "4. Zálohy"],
+["p", "Údaje mohou být ztraceny (smazání dat prohlížeče, porucha zařízení, chyby synchronizace nebo cloudové služby). Pravidelné zálohování je vaší odpovědností."],
+["h", "5. Omezení odpovědnosti"],
+["p", "V nejvyšším rozsahu povoleném platnými právními předpisy vývojář a přispěvatelé neodpovídají za žádné přímé ani nepřímé škody, ztrátu dat, peněz, výdělku či příležitostí, chyby ve výpočtech nebo čtení, přerušení či poruchy, ani za služby třetích stran (Dropbox, Google, Anthropic, GitHub, jsDelivr) a jejich podmínky. Odpovědnost, kterou nelze ze zákona vyloučit, zůstává nedotčena."],
+["h", "6. Klíče a účty"],
+["p", "Klíče API a přihlášení ke cloudu zůstávají ve vašem zařízení: odpovídáte za jejich bezpečné uložení i za veškeré poplatky účtované poskytovateli."],
+["h", "7. Změny"],
+["p", "Tyto podmínky se mohou měnit s aktualizacemi aplikace; v takovém případě vám je zobrazíme znovu a aplikaci budete moci dále používat pouze po jejich přijetí."],
+["h", "8. Licence a rozhodné právo"],
+["p", "Kód je vydán pod licencí MIT. Použije se italské právo, aniž jsou dotčena závazná práva spotřebitelů."]
+],
+"summary": ["Zdarma, bez reklam, bez sledování.", "Vaše údaje zůstávají ve vašem zařízení a, pokud chcete, ve vašem cloudu.", "Automatické čtení se může mýlit: vždy kontrolujte.", "Žádné finanční poradenství ani záruky: aplikaci používáte na vlastní riziko."]
+}

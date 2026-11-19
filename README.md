@@ -12,6 +12,9 @@
 - 📥 **Importa il vecchio foglio** (Excel/ODS/CSV, anche da Google Fogli → File › Scarica › xlsx): mesi, categorie, entrate, letture e bollette su intestazioni a più righe.
 - ☁️ **Dropbox e/o Google Drive** per sincronizzare tra dispositivi (unione per record, vince la modifica più recente).
 - 🌍 **42 lingue**: tutte le europee + russo, cinese, giapponese, coreano, arabo (RTL).
+- 🐹 **Kapi ti incoraggia**: commenta ogni azione con frasi motivazionali, saluta in base all'ora, festeggia serie e traguardi; **adesivi** da collezionare e **barattolo dello yuzu** che si riempie col risparmio.
+- 📲 **Installabile** (Android, desktop, iPhone/iPad), **si aggiorna da sola** e mostra un **tour**: tutto al primo avvio, solo le novità dopo un aggiornamento.
+- 📜 **Privacy e condizioni** da accettare al primo avvio (in tutte le lingue).
 - 🎨 **Set di icone capibara in formato font** (`kapi-icons`, 76 icone) e **temi**: Capibara gioioso, Onsen, Notte di capibara, automatico.
 - ♿ Accessibile (contrasto AA, tastiera, lettori di schermo, `prefers-reduced-motion`), tema scuro automatico.
 
@@ -30,6 +33,6 @@ npm i && npm run icons         # font di icone + icone dell'app
 Documentazione: `docs/MAPPA.md` (dove sta cosa), `docs/DATI.md` (formato), `docs/CLOUD.md` (Dropbox/Drive), `CLAUDE.md` (router per gli agenti).
 
 ## Privacy
-Nessun server, nessun tracciamento. Dati in IndexedDB sul dispositivo e, se vuoi, nel tuo cloud.
+Nessun server, nessun tracciamento, caratteri ospitati sul sito (niente Google Fonts). Dati in IndexedDB sul dispositivo e, se vuoi, nel tuo cloud. Testi completi: `locales/legal/`.
 
 Licenza MIT · [Marketto](https://github.com/Marketto)

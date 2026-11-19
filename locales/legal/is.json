@@ -1,0 +1,39 @@
+{
+"title": "Persónuvernd og notkunarskilmálar",
+"updated": "Útgáfa frá 19. nóvember 2026",
+"privacy": [
+["h", "1. Hverjir við erum"],
+["p", "Kapibo er ókeypis opið forrit sem Marketto (github.com/Marketto) gefur út. Ekkert fyrirtæki eða netþjónn stendur að baki forritinu: ef þú hefur spurningar eða beiðnir geturðu stofnað issue á github.com/Marketto/Kapibo."],
+["h", "2. Hvaða gögn forritið meðhöndlar"],
+["p", "Gögnin sem þú slærð inn eða forritið les úr skjölunum þínum: útgjöld, flokka, tekjur, stöður, matarmiða, mælaálestur, reikninga og texta sem lesinn er úr kvittunum, launaseðlum, bankayfirlitum og reikningum. Myndirnar og PDF-skjölin sem þú velur eru aðeins lesin í tækinu þínu og forritið vistar þau ekki."],
+["h", "3. Hvert gögnin fara"],
+["p", "Í geymslu vafrans í tækinu þínu (IndexedDB/localStorage). Ef þú tengir Dropbox eða Google Drive er afrit vistað á skýjareikningnum þínum: flutningurinn fer beint úr tækinu þínu til þjónustuaðilans sem þú valdir, samkvæmt skilmálum hans. Enginn, ekki heldur þróunaraðilinn, fær gögnin þín."],
+["h", "4. Þjónusta þriðju aðila"],
+["p", "Til að virka sækir forritið nokkrar skrár (lestrarvél fyrir skjöl, tungumálagögn) frá marketto.github.io og, aðeins ef sú síða er ekki tiltæk, frá cdn.jsdelivr.net: eins og á öllum vefsíðum geta þessar þjónustur séð IP-tölu þína. Valfrjálst: ef þú slærð inn þinn eigin Claude API-lykil er textinn sem lesinn er úr kvittunum (aldrei myndirnar) sendur til Anthropic samkvæmt skilmálum þess. Dropbox og Google Drive eru aðeins notuð ef þú tengir þau."],
+["h", "5. Engin rakning"],
+["p", "Forritið notar engar kökur til sniðgreiningar, auglýsingar, greiningartól eða rakningartól."],
+["h", "6. Réttindi þín"],
+["p", "Gögnin eru þín og undir þinni stjórn: þú getur hvenær sem er flutt þau út (Meira › Afrit), eytt þeim (Meira › Eyða öllum gögnum) og aftengt skýið. Gögnunum í skýinu stjórnar þú í gegnum Dropbox- eða Google-reikninginn þinn. Þú átt þau réttindi sem reglugerð (ESB) 2016/679 (almenna persónuverndarreglugerðin, GDPR) veitir, þar á meðal rétt til að leggja fram kvörtun til persónuverndarstofnunar."],
+["h", "7. Ólögráða einstaklingar"],
+["p", "Forritið er ætlað fullorðnum sem halda utan um heimilisbókhald sitt."]
+],
+"terms": [
+["h", "1. Ókeypis notkun, eins og það er"],
+["p", "Kapibo er veitt ókeypis, „eins og það er“ og „eins og það er tiltækt“, án nokkurrar ábyrgðar, hvorki beinnar né óbeinnar, þar á meðal um nákvæmni, heilleika, aðgengi og hæfni til tiltekinna nota."],
+["h", "2. Ekki ráðgjöf"],
+["p", "Útreikningar, línurit, ráð og setningar lukkudýrsins eru aðeins til viðmiðunar og teljast hvorki fjármála-, skatta-, lögfræðileg né nokkur önnur ráðgjöf. Ákvarðanir sem þú tekur með hjálp forritsins eru alfarið þínar."],
+["h", "3. Athugaðu gögnin alltaf"],
+["p", "Sjálfvirkur lestur mynda og PDF-skjala getur skilað röngum upphæðum, dagsetningum, flokkum og notkun. Þér ber að yfirfara hverja færslu áður en þú vistar hana og áður en þú reiðir þig á hana."],
+["h", "4. Afrit"],
+["p", "Gögn geta glatast (vafragögnum eytt, bilun í tæki, villur í samstillingu eða skýjaþjónustu). Það er á þína ábyrgð að taka afrit reglulega."],
+["h", "5. Takmörkun ábyrgðar"],
+["p", "Að því marki sem gildandi lög leyfa bera þróunaraðilinn og framlagsaðilar ekki ábyrgð á beinu eða óbeinu tjóni, tapi gagna, fjár, tekna eða tækifæra, reikni- eða lestrarvillum, truflunum eða bilunum, né á þjónustu þriðju aðila (Dropbox, Google, Anthropic, GitHub, jsDelivr) og skilmálum þeirra. Ábyrgð sem ekki er unnt að útiloka samkvæmt lögum helst óbreytt."],
+["h", "6. Lyklar og reikningar"],
+["p", "API-lyklar og innskráningar í ský eru áfram í tækinu þínu: þú berð ábyrgð á að geyma þá á öruggan hátt og á öllum kostnaði sem þjónustuaðilar innheimta."],
+["h", "7. Breytingar"],
+["p", "Þessum skilmálum kann að vera breytt með uppfærslum forritsins; í slíku tilviki sýnum við þér þá aftur og þú getur aðeins haldið áfram að nota forritið með því að samþykkja þá."],
+["h", "8. Leyfi og lög sem gilda"],
+["p", "Kóðinn er gefinn út með MIT-leyfi. Ítölsk lög gilda, með fyrirvara um ófrávíkjanleg neytendaréttindi."]
+],
+"summary": ["Ókeypis, án auglýsinga og án rakningar.", "Gögnin þín haldast í tækinu þínu og, ef þú vilt, í skýinu þínu.", "Sjálfvirkur lestur getur gert mistök: athugaðu alltaf.", "Engin fjármálaráðgjöf og engin ábyrgð: þú notar forritið á eigin ábyrgð."]
+}

@@ -1,0 +1,39 @@
+{
+"title": "Privātums un lietošanas noteikumi",
+"updated": "Versija: 2026. gada 19. novembris",
+"privacy": [
+["h", "1. Kas mēs esam"],
+["p", "Kapibo ir bezmaksas atvērtā koda lietotne, ko publicē Marketto (github.com/Marketto). Aiz lietotnes nav ne uzņēmuma, ne servera: jautājumu vai pieprasījumu gadījumā izveidojiet pieteikumu vietnē github.com/Marketto/Kapibo."],
+["h", "2. Kādus datus lietotne apstrādā"],
+["p", "Datus, ko jūs ievadāt vai ko lietotne nolasa no jūsu dokumentiem: izdevumus, kategorijas, ienākumus, atlikumus, ēdināšanas talonus, skaitītāju rādījumus, rēķinus un tekstu, kas nolasīts no čekiem, algas lapām, bankas izrakstiem un rēķiniem. Jūsu izvēlētās fotogrāfijas un PDF faili tiek lasīti tikai jūsu ierīcē, un lietotne tos neuzglabā."],
+["h", "3. Kur dati nonāk"],
+["p", "Jūsu ierīcē, pārlūka krātuvē (IndexedDB/localStorage). Ja pieslēdzat Dropbox vai Google Drive, kopija tiek saglabāta jūsu mākoņa kontā: pārsūtīšana notiek tieši no jūsu ierīces uz jūsu izvēlēto pakalpojuma sniedzēju saskaņā ar tā noteikumiem. Neviens, arī izstrādātājs, jūsu datus nesaņem."],
+["h", "4. Trešo pušu pakalpojumi"],
+["p", "Lai lietotne darbotos, tā lejupielādē dažus failus (dokumentu lasīšanas dzinēju, valodas datus) no marketto.github.io un tikai tad, ja tas nav pieejams, no cdn.jsdelivr.net: tāpat kā jebkura tīmekļa vietne, šie pakalpojumi var redzēt jūsu IP adresi. Pēc izvēles: ja ievadāt savu Claude API atslēgu, no čekiem nolasītais teksts (nekad fotogrāfijas) tiek nosūtīts Anthropic saskaņā ar tā noteikumiem. Dropbox un Google Drive tiek izmantoti tikai tad, ja tos pieslēdzat."],
+["h", "5. Nekādas izsekošanas"],
+["p", "Lietotne neizmanto profilēšanas sīkdatnes, reklāmas, analītiku vai izsekošanas rīkus."],
+["h", "6. Jūsu tiesības"],
+["p", "Jūsu dati pieder jums un ir jūsu kontrolē: jūs jebkurā laikā varat tos eksportēt (Vairāk › Dublējums), dzēst (Vairāk › Dzēst visus datus) un atvienot mākoni. Datus savā mākonī pārvaldāt no sava Dropbox vai Google konta. Jums ir tiesības, ko nodrošina Eiropas Savienības Vispārīgā datu aizsardzības regula (ES) 2016/679 (VDAR/GDPR), tostarp tiesības iesniegt sūdzību savā datu aizsardzības uzraudzības iestādē."],
+["h", "7. Nepilngadīgie"],
+["p", "Lietotne paredzēta pieaugušajiem, kas pārvalda savu mājsaimniecības budžetu."]
+],
+"terms": [
+["h", "1. Bezmaksas lietošana, tāda, kāda tā ir"],
+["p", "Kapibo tiek nodrošināta bez maksas, \"tāda, kāda tā ir\" un \"kā pieejama\", bez jebkādām tiešām vai netiešām garantijām, tostarp attiecībā uz precizitāti, pilnīgumu, pieejamību un piemērotību konkrētam mērķim."],
+["h", "2. Nav padoms"],
+["p", "Aprēķini, diagrammas, padomi un talismana frāzes ir tikai orientējoši un nav finanšu, nodokļu, juridisks vai cita veida padoms. Lēmumus, ko pieņemat, izmantojot lietotni, pieņemat tikai jūs paši."],
+["h", "3. Vienmēr pārbaudiet savus datus"],
+["p", "Automātiska fotogrāfiju un PDF failu nolasīšana var kļūdīties summās, datumos, kategorijās un patēriņā. Jums ir jāpārbauda katrs ieraksts pirms saglabāšanas un pirms uz to paļaujaties."],
+["h", "4. Dublējumi"],
+["p", "Dati var tikt zaudēti (pārlūka datu dzēšana, ierīces bojājums, sinhronizācijas vai mākoņpakalpojuma kļūdas). Regulāru dublējumu veikšana ir jūsu atbildība."],
+["h", "5. Atbildības ierobežojums"],
+["p", "Ciktāl to pieļauj piemērojamie tiesību akti, izstrādātājs un līdzautori nav atbildīgi par tiešiem vai netiešiem zaudējumiem, datu, naudas, ienākumu vai iespēju zaudējumu, aprēķinu vai nolasīšanas kļūdām, pārtraukumiem vai darbības traucējumiem, kā arī par trešo pušu pakalpojumiem (Dropbox, Google, Anthropic, GitHub, jsDelivr) un to noteikumiem. Atbildība, ko likums neļauj izslēgt, paliek spēkā."],
+["h", "6. Atslēgas un konti"],
+["p", "API atslēgas un mākoņa pieteikšanās dati paliek jūsu ierīcē: jūs esat atbildīgi par to drošu glabāšanu un par izmaksām, ko iekasē pakalpojumu sniedzēji."],
+["h", "7. Izmaiņas"],
+["p", "Šie noteikumi var mainīties ar lietotnes atjauninājumiem; šādā gadījumā mēs tos parādīsim jums vēlreiz, un lietotni varēsiet turpināt izmantot, tikai tiem piekrītot."],
+["h", "8. Licence un piemērojamie tiesību akti"],
+["p", "Kods tiek izplatīts saskaņā ar MIT licenci. Tiek piemērotas Itālijas tiesības, neskarot patērētāju obligātās tiesības."]
+],
+"summary": ["Bez maksas, bez reklāmām, bez izsekošanas.", "Jūsu dati paliek jūsu ierīcē un, ja vēlaties, jūsu mākonī.", "Automātiskā nolasīšana var kļūdīties: vienmēr pārbaudiet.", "Nav finanšu padomu un garantiju: lietotni izmantojat uz savu atbildību."]
+}

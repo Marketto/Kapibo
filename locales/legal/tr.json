@@ -1,0 +1,39 @@
+{
+"title": "Gizlilik ve kullanım koşulları",
+"updated": "19 Kasım 2026 tarihli sürüm",
+"privacy": [
+["h", "1. Biz kimiz"],
+["p", "Kapibo, Marketto (github.com/Marketto) tarafından yayımlanan ücretsiz ve açık kaynaklı bir uygulamadır. Uygulamanın arkasında herhangi bir şirket veya sunucu bulunmamaktadır: sorularınız veya talepleriniz için github.com/Marketto/Kapibo adresinde bir issue açın."],
+["h", "2. Uygulama hangi verileri işler"],
+["p", "Sizin girdiğiniz veya uygulamanın belgelerinizden okuduğu veriler: harcamalar, kategoriler, gelirler, bakiyeler, yemek çekleri, sayaç okumaları, faturalar ve fişlerden, maaş bordrolarından, banka ekstrelerinden ve faturalardan okunan metin. Seçtiğiniz fotoğraflar ve PDF'ler yalnızca cihazınızda okunur ve uygulama tarafından saklanmaz."],
+["h", "3. Veriler nereye gider"],
+["p", "Cihazınızda, tarayıcının depolama alanında (IndexedDB/localStorage). Dropbox veya Google Drive'ı bağlarsanız, bir kopya bulut hesabınıza kaydedilir: aktarım doğrudan cihazınızdan seçtiğiniz sağlayıcıya, onun koşulları çerçevesinde yapılır. Hiç kimse, geliştirici dahil, verilerinizi almaz."],
+["h", "4. Üçüncü taraf hizmetler"],
+["p", "Çalışabilmek için uygulama bazı dosyaları (belge okuma motoru, dil verileri) marketto.github.io adresinden, yalnızca erişilemezse cdn.jsdelivr.net adresinden indirir: her web sitesinde olduğu gibi bu hizmetler IP adresinizi görebilir. İsteğe bağlı: kendi Claude API anahtarınızı girerseniz, fişlerden okunan metin (fotoğraflar asla) Anthropic'in koşulları çerçevesinde ona gönderilir. Dropbox ve Google Drive yalnızca siz bağlarsanız kullanılır."],
+["h", "5. İzleme yok"],
+["p", "Uygulama profilleme çerezleri, reklamlar, analiz veya izleme araçları kullanmaz."],
+["h", "6. Haklarınız"],
+["p", "Verileriniz size aittir ve sizin kontrolünüz altındadır: bunları dışa aktarabilir (Daha fazla › Yedekleme), silebilir (Daha fazla › Tüm verileri sil) ve bulutun bağlantısını istediğiniz zaman kesebilirsiniz. Bulutunuzdaki verileri Dropbox veya Google hesabınızdan yönetirsiniz. 2016/679 sayılı AB Tüzüğü (Genel Veri Koruma Tüzüğü, GDPR) ile tanınan haklara sahipsiniz; bu haklar arasında veri koruma otoritenize şikâyette bulunma hakkı da yer alır."],
+["h", "7. Reşit olmayanlar"],
+["p", "Uygulama, hane bütçesini yöneten yetişkinler için tasarlanmıştır."]
+],
+"terms": [
+["h", "1. Ücretsiz kullanım, olduğu gibi"],
+["p", "Kapibo ücretsiz olarak, \"olduğu gibi\" ve \"mevcut olduğu şekliyle\" sunulur; doğruluk, eksiksizlik, erişilebilirlik ve belirli bir amaca uygunluk dahil olmak üzere açık veya zımni hiçbir garanti verilmez."],
+["h", "2. Tavsiye değildir"],
+["p", "Hesaplamalar, grafikler, ipuçları ve maskotun cümleleri yalnızca yol göstericidir; mali, vergisel, hukuki veya başka türde bir tavsiye teşkil etmez. Uygulamayı kullanarak verdiğiniz kararlar yalnızca size aittir."],
+["h", "3. Verilerinizi her zaman kontrol edin"],
+["p", "Fotoğrafların ve PDF'lerin otomatik okunması tutarları, tarihleri, kategorileri ve tüketimi yanlış okuyabilir. Her kalemi kaydetmeden önce ve ona güvenmeden önce kontrol etmekle yükümlüsünüz."],
+["h", "4. Yedekleme"],
+["p", "Veriler kaybolabilir (tarayıcı verilerinin silinmesi, cihaz arızası, eşitleme veya bulut hizmeti hataları). Düzenli yedek almak sizin sorumluluğunuzdadır."],
+["h", "5. Sorumluluğun sınırlandırılması"],
+["p", "Geçerli hukukun izin verdiği azami ölçüde, geliştirici ve katkıda bulunanlar; doğrudan veya dolaylı zararlardan, veri, para, kazanç veya fırsat kaybından, hesaplama veya okuma hatalarından, kesintilerden veya arızalardan ve ayrıca üçüncü taraf hizmetlerinden (Dropbox, Google, Anthropic, GitHub, jsDelivr) ve bunların koşullarından sorumlu değildir. Kanunen hariç tutulamayacak sorumluluk saklıdır."],
+["h", "6. Anahtarlar ve hesaplar"],
+["p", "API anahtarları ve bulut oturumları cihazınızda kalır: bunları güvende tutmaktan ve sağlayıcıların talep edebileceği her türlü ücretten siz sorumlusunuz."],
+["h", "7. Değişiklikler"],
+["p", "Bu koşullar uygulama güncellemeleriyle değişebilir; değişmesi hâlinde bunları size yeniden göstereceğiz ve uygulamayı kullanmaya yalnızca bunları kabul ederek devam edebilirsiniz."],
+["h", "8. Lisans ve uygulanacak hukuk"],
+["p", "Kod MIT lisansı altında yayımlanmıştır. İtalyan hukuku uygulanır; tüketicilerin emredici haklarına halel gelmez."]
+],
+"summary": ["Ücretsiz, reklamsız, izlemesiz.", "Verileriniz cihazınızda ve isterseniz bulutunuzda kalır.", "Otomatik okuma hata yapabilir: her zaman kontrol edin.", "Mali tavsiye ve garanti yoktur: uygulamayı kendi sorumluluğunuzda kullanırsınız."]
+}

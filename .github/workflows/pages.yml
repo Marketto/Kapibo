@@ -14,10 +14,11 @@ jobs:
       - run: node --test tests/*.test.mjs
       - run: node tools/privacy-check.mjs
       - run: node tools/i18n-check.mjs || echo "::warning::traduzioni incomplete"
+      - run: node tools/legal-check.mjs
       - name: Prepara il sito
         run: |
           V=$(grep -oP 'APP_VERSION = "\K[^"]+' js/version.js)
-          mkdir _site && cp -r index.html manifest.webmanifest sw.js css js locales icons fonts vendor _site/
+          mkdir _site && cp -r index.html manifest.webmanifest sw.js css js locales icons fonts vendor _site/ && rm -f _site/fonts/anteprima.html
           sed -i "s/const VERSION = \"dev\"/const VERSION = \"$V\"/" _site/sw.js
       - uses: actions/upload-pages-artifact@v3
   deploy:

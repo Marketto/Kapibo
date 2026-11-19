@@ -1,0 +1,39 @@
+{
+"title": "Privacy and terms of use",
+"updated": "Version of 19 November 2026",
+"privacy": [
+["h", "1. Who we are"],
+["p", "Kapibo is a free, open-source app published by Marketto (github.com/Marketto). There is no company or server behind the app: for questions or requests, open an issue at github.com/Marketto/Kapibo."],
+["h", "2. What data the app handles"],
+["p", "The data you enter or that the app reads from your documents: expenses, categories, income, balances, meal vouchers, meter readings, bills, and text read from receipts, payslips, bank statements and bills. The photos and PDFs you choose are read only on your device and are not stored by the app."],
+["h", "3. Where the data goes"],
+["p", "On your device, in the browser's storage (IndexedDB/localStorage). If you connect Dropbox or Google Drive, a copy is saved in your cloud account: the transfer goes directly from your device to the provider you chose, under its terms. Nobody, not even the developer, receives your data."],
+["h", "4. Third-party services"],
+["p", "To work, the app downloads some files (document reading engine, language data) from marketto.github.io and, only if unavailable, from cdn.jsdelivr.net: like any website, these services may see your IP address. Optional: if you enter your own Claude API key, the text read from receipts (never the photos) is sent to Anthropic under its terms. Dropbox and Google Drive are used only if you connect them."],
+["h", "5. No tracking"],
+["p", "The app uses no profiling cookies, ads, analytics or tracking tools."],
+["h", "6. Your rights"],
+["p", "Your data is yours and under your control: you can export it (More › Backup), delete it (More › Delete all data) and disconnect the cloud at any time. You manage the data in your cloud from your Dropbox or Google account. You have the rights granted by EU Regulation 2016/679 (GDPR), including lodging a complaint with your data protection authority."],
+["h", "7. Minors"],
+["p", "The app is intended for adults managing their household budget."]
+],
+"terms": [
+["h", "1. Free use, as is"],
+["p", "Kapibo is provided free of charge, \"as is\" and \"as available\", without warranties of any kind, express or implied, including accuracy, completeness, availability and fitness for a particular purpose."],
+["h", "2. Not advice"],
+["p", "Calculations, charts, tips and the mascot's phrases are only indicative and are not financial, tax, legal or any other kind of advice. Decisions you make using the app are yours alone."],
+["h", "3. Always check your data"],
+["p", "Automatic reading of photos and PDFs can get amounts, dates, categories and usage wrong. You must check every item before saving and before relying on it."],
+["h", "4. Backups"],
+["p", "Data can be lost (browser data cleared, device failure, sync or cloud service errors). Making regular backups is your responsibility."],
+["h", "5. Limitation of liability"],
+["p", "To the maximum extent permitted by applicable law, the developer and contributors are not liable for any direct or indirect damage, loss of data, money, earnings or opportunities, calculation or reading errors, interruptions or malfunctions, nor for third-party services (Dropbox, Google, Anthropic, GitHub, jsDelivr) and their terms. Liability that cannot be excluded by law remains unaffected."],
+["h", "6. Keys and accounts"],
+["p", "API keys and cloud sign-ins stay on your device: you are responsible for keeping them safe and for any costs charged by the providers."],
+["h", "7. Changes"],
+["p", "These terms may change with app updates; if so, we will show them to you again and you can keep using the app only by accepting them."],
+["h", "8. Licence and governing law"],
+["p", "The code is released under the MIT licence. Italian law applies, without prejudice to mandatory consumer rights."]
+],
+"summary": ["Free, no ads, no tracking.", "Your data stays on your device and, if you want, in your cloud.", "Automatic reading can make mistakes: always check.", "No financial advice and no warranty: you use the app at your own risk."]
+}

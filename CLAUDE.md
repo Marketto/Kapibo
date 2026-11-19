@@ -26,4 +26,7 @@ Skill (`.claude/skills/`): `nuovo-parser`, `traduzioni`, `ui-kawaii`, `rilascio`
 - Accessibilità: contrasto AA, target ≥ 44 px, `aria-*` corretti, `prefers-reduced-motion` rispettato, RTL per `ar`.
 - Motore OCR/PDF: quello di Schiaccia PDF (`/pdf-tiny-tools/vendor/` sullo stesso dominio), con riserva CDN. Vedi `js/ocr.js`.
 - Test: `node --test tests/*.test.mjs` deve passare prima di ogni commit.
-- Versione: `js/version.js` (semver) + voce in `CHANGELOG`.
+- Versione: `js/version.js` (semver) + voce in `CHANGELOG` (chiave `news.<versione>`).
+- Ogni funzione nuova e visibile ha un passo in `js/tour.js` (`STEPS`) con `v` = nuova versione: gli utenti aggiornati vedono solo quei passi.
+- Cambio di privacy/condizioni: aggiorna `locales/legal/*.json` e `POLICY_VERSION` in `js/legal.js` (tutti dovranno riaccettare).
+- Kapi commenta le azioni con `cheer(evento)` di `js/cheer.js`: frasi in `kapi.ev.<evento>` (più varianti separate da `|`), tono incoraggiante, mai giudicante.

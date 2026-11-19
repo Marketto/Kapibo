@@ -1,0 +1,39 @@
+{
+"title": "Privatësia dhe kushtet e përdorimit",
+"updated": "Versioni i 19 nëntorit 2026",
+"privacy": [
+["h", "1. Kush jemi"],
+["p", "Kapibo është një aplikacion falas me kod të hapur, i publikuar nga Marketto (github.com/Marketto). Pas aplikacionit nuk qëndron asnjë kompani apo server: për pyetje ose kërkesa, hapni një kërkesë (issue) te github.com/Marketto/Kapibo."],
+["h", "2. Çfarë të dhënash përpunon aplikacioni"],
+["p", "Të dhënat që shkruani ose që aplikacioni i lexon nga dokumentet tuaja: shpenzime, kategori, të ardhura, bilance, bono ushqimi, lexime njehsorësh, fatura dhe tekst i lexuar nga kuponë fiskalë, fletëpagesa, pasqyra bankare dhe fatura shërbimesh. Fotot dhe skedarët PDF që zgjidhni lexohen vetëm në pajisjen tuaj dhe nuk ruhen nga aplikacioni."],
+["h", "3. Ku shkojnë të dhënat"],
+["p", "Në pajisjen tuaj, në hapësirën ruajtëse të shfletuesit (IndexedDB/localStorage). Nëse lidhni Dropbox ose Google Drive, një kopje ruhet në llogarinë tuaj cloud: transferimi bëhet drejtpërdrejt nga pajisja juaj te ofruesi që keni zgjedhur, sipas kushteve të tij. Askush, as zhvilluesi, nuk i merr të dhënat tuaja."],
+["h", "4. Shërbime të palëve të treta"],
+["p", "Për të funksionuar, aplikacioni shkarkon disa skedarë (motorin e leximit të dokumenteve, të dhëna gjuhësore) nga marketto.github.io dhe, vetëm nëse nuk janë të disponueshëm, nga cdn.jsdelivr.net: si çdo faqe interneti, këto shërbime mund të shohin adresën tuaj IP. Opsionale: nëse futni çelësin tuaj API të Claude, teksti i lexuar nga kuponët (kurrë fotot) dërgohet te Anthropic sipas kushteve të tij. Dropbox dhe Google Drive përdoren vetëm nëse i lidhni."],
+["h", "5. Pa gjurmim"],
+["p", "Aplikacioni nuk përdor cookie profilizimi, reklama, analitikë apo mjete gjurmimi."],
+["h", "6. Të drejtat tuaja"],
+["p", "Të dhënat tuaja janë tuajat dhe nën kontrollin tuaj: mund t'i eksportoni (Më shumë › Kopje rezervë), t'i fshini (Më shumë › Fshi të gjitha të dhënat) dhe ta shkëputni cloud-in në çdo kohë. Të dhënat në cloud i menaxhoni nga llogaria juaj Dropbox ose Google. Keni të drejtat e garantuara nga Rregullorja (BE) 2016/679 (Rregullorja e Përgjithshme për Mbrojtjen e të Dhënave, GDPR), përfshirë të drejtën për të paraqitur ankesë pranë autoritetit për mbrojtjen e të dhënave."],
+["h", "7. Të miturit"],
+["p", "Aplikacioni është menduar për të rritur që administrojnë buxhetin e familjes."]
+],
+"terms": [
+["h", "1. Përdorim falas, \"siç është\""],
+["p", "Kapibo ofrohet falas, \"siç është\" dhe \"siç disponohet\", pa garanci të çfarëdo lloji, të shprehura ose të nënkuptuara, përfshirë saktësinë, plotësinë, disponueshmërinë dhe përshtatshmërinë për një qëllim të caktuar."],
+["h", "2. Nuk është këshillë"],
+["p", "Llogaritjet, grafikët, këshillat dhe frazat e mascotës janë vetëm orientuese dhe nuk përbëjnë këshillë financiare, tatimore, juridike apo të çfarëdo lloji tjetër. Vendimet që merrni me ndihmën e aplikacionit janë vetëm tuajat."],
+["h", "3. Kontrolloni gjithmonë të dhënat tuaja"],
+["p", "Leximi automatik i fotove dhe skedarëve PDF mund të gabojë në shuma, data, kategori dhe konsum. Jeni i detyruar të kontrolloni çdo zë para se ta ruani dhe para se të mbështeteni tek ai."],
+["h", "4. Kopjet rezervë"],
+["p", "Të dhënat mund të humbasin (pastrimi i të dhënave të shfletuesit, prishja e pajisjes, gabime sinkronizimi ose të shërbimit cloud). Bërja e rregullt e kopjeve rezervë është përgjegjësia juaj."],
+["h", "5. Kufizimi i përgjegjësisë"],
+["p", "Në masën maksimale që lejon legjislacioni në fuqi, zhvilluesi dhe kontribuuesit nuk mbajnë përgjegjësi për dëme të drejtpërdrejta ose të tërthorta, humbje të dhënash, parash, fitimesh apo mundësish, gabime llogaritjeje ose leximi, ndërprerje apo defekte, as për shërbimet e palëve të treta (Dropbox, Google, Anthropic, GitHub, jsDelivr) dhe kushtet e tyre. Përgjegjësia që nuk mund të përjashtohet me ligj mbetet e pandryshuar."],
+["h", "6. Çelësat dhe llogaritë"],
+["p", "Çelësat API dhe hyrjet në cloud qëndrojnë në pajisjen tuaj: ju jeni përgjegjës për ruajtjen e tyre të sigurt dhe për çdo kosto që faturojnë ofruesit."],
+["h", "7. Ndryshimet"],
+["p", "Këto kushte mund të ndryshojnë me përditësimet e aplikacionit; në këtë rast do t'jua shfaqim sërish dhe do të mund ta vazhdoni përdorimin e aplikacionit vetëm nëse i pranoni."],
+["h", "8. Licenca dhe ligji në fuqi"],
+["p", "Kodi është publikuar nën licencën MIT. Zbatohet e drejta italiane, pa cenuar të drejtat e detyrueshme të konsumatorëve."]
+],
+"summary": ["Falas, pa reklama, pa gjurmim.", "Të dhënat tuaja qëndrojnë në pajisjen tuaj dhe, nëse dëshironi, në cloud-in tuaj.", "Leximi automatik mund të gabojë: kontrolloni gjithmonë.", "Pa këshillë financiare e pa garanci: e përdorni aplikacionin me përgjegjësinë tuaj."]
+}

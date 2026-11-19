@@ -1,0 +1,39 @@
+{
+"title": "Confidentialité et conditions d'utilisation",
+"updated": "Version du 19 novembre 2026",
+"privacy": [
+["h", "1. Qui sommes-nous"],
+["p", "Kapibo est une application gratuite et open source publiée par Marketto (github.com/Marketto). Aucune société ni aucun serveur n'est derrière l'application : pour toute question ou demande, ouvrez un ticket sur github.com/Marketto/Kapibo."],
+["h", "2. Quelles données l'application traite"],
+["p", "Les données que vous saisissez ou que l'application lit dans vos documents : dépenses, catégories, revenus, soldes, titres-restaurant, relevés de compteurs, factures, ainsi que le texte lu sur les tickets de caisse, fiches de paie, relevés bancaires et factures. Les photos et PDF que vous choisissez sont lus uniquement sur votre appareil et ne sont pas conservés par l'application."],
+["h", "3. Où vont les données"],
+["p", "Sur votre appareil, dans le stockage du navigateur (IndexedDB/localStorage). Si vous connectez Dropbox ou Google Drive, une copie est enregistrée dans votre compte cloud : le transfert se fait directement de votre appareil vers le fournisseur choisi, selon ses conditions. Personne, pas même le développeur, ne reçoit vos données."],
+["h", "4. Services tiers"],
+["p", "Pour fonctionner, l'application télécharge certains fichiers (moteur de lecture des documents, données linguistiques) depuis marketto.github.io et, uniquement en cas d'indisponibilité, depuis cdn.jsdelivr.net : comme tout site web, ces services peuvent voir votre adresse IP. Facultatif : si vous saisissez votre propre clé API Claude, le texte lu sur les tickets (jamais les photos) est envoyé à Anthropic selon ses conditions. Dropbox et Google Drive ne sont utilisés que si vous les connectez."],
+["h", "5. Aucun suivi"],
+["p", "L'application n'utilise ni cookies de profilage, ni publicité, ni outils d'analyse ou de suivi."],
+["h", "6. Vos droits"],
+["p", "Vos données vous appartiennent et restent sous votre contrôle : vous pouvez les exporter (Plus › Sauvegarde), les supprimer (Plus › Supprimer toutes les données) et déconnecter le cloud à tout moment. Vous gérez les données de votre cloud depuis votre compte Dropbox ou Google. Vous bénéficiez des droits prévus par le règlement (UE) 2016/679 (RGPD), notamment celui d'introduire une réclamation auprès de votre autorité de protection des données."],
+["h", "7. Mineurs"],
+["p", "L'application est destinée aux adultes qui gèrent le budget de leur foyer."]
+],
+"terms": [
+["h", "1. Utilisation gratuite, en l'état"],
+["p", "Kapibo est fourni gratuitement, « en l'état » et « selon disponibilité », sans garantie d'aucune sorte, expresse ou implicite, y compris quant à l'exactitude, l'exhaustivité, la disponibilité et l'adéquation à un usage particulier."],
+["h", "2. Pas de conseil"],
+["p", "Les calculs, graphiques, conseils et phrases de la mascotte sont donnés à titre indicatif et ne constituent pas un conseil financier, fiscal, juridique ou de toute autre nature. Les décisions que vous prenez en utilisant l'application relèvent de votre seule responsabilité."],
+["h", "3. Vérifiez toujours vos données"],
+["p", "La lecture automatique des photos et des PDF peut comporter des erreurs de montants, de dates, de catégories et de consommations. Vous devez vérifier chaque élément avant de l'enregistrer et avant de vous y fier."],
+["h", "4. Sauvegardes"],
+["p", "Des données peuvent être perdues (effacement des données du navigateur, panne de l'appareil, erreurs de synchronisation ou du service cloud). Il vous appartient d'effectuer des sauvegardes régulières."],
+["h", "5. Limitation de responsabilité"],
+["p", "Dans toute la mesure permise par la loi applicable, le développeur et les contributeurs ne sont pas responsables des dommages directs ou indirects, de la perte de données, d'argent, de revenus ou d'opportunités, des erreurs de calcul ou de lecture, des interruptions ou dysfonctionnements, ni des services tiers (Dropbox, Google, Anthropic, GitHub, jsDelivr) et de leurs conditions. La responsabilité qui ne peut être exclue par la loi demeure inchangée."],
+["h", "6. Clés et comptes"],
+["p", "Les clés API et les connexions au cloud restent sur votre appareil : vous êtes responsable de leur sécurité et des éventuels frais facturés par les fournisseurs."],
+["h", "7. Modifications"],
+["p", "Ces conditions peuvent évoluer avec les mises à jour de l'application ; le cas échéant, elles vous seront présentées de nouveau et vous ne pourrez continuer à utiliser l'application qu'en les acceptant."],
+["h", "8. Licence et droit applicable"],
+["p", "Le code est publié sous licence MIT. Le droit italien s'applique, sans préjudice des droits impératifs des consommateurs."]
+],
+"summary": ["Gratuit, sans publicité, sans suivi.", "Vos données restent sur votre appareil et, si vous le souhaitez, dans votre cloud.", "La lecture automatique peut comporter des erreurs : vérifiez toujours.", "Aucun conseil financier et aucune garantie : vous utilisez l'application à vos propres risques."]
+}

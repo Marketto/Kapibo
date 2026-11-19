@@ -1,0 +1,39 @@
+{
+"title": "Integritet och användarvillkor",
+"updated": "Version från 19 november 2026",
+"privacy": [
+["h", "1. Vilka vi är"],
+["p", "Kapibo är en kostnadsfri app med öppen källkod, publicerad av Marketto (github.com/Marketto). Det finns inget företag eller någon server bakom appen: för frågor eller förfrågningar kan du öppna ett ärende (issue) på github.com/Marketto/Kapibo."],
+["h", "2. Vilka uppgifter appen hanterar"],
+["p", "De uppgifter du anger eller som appen läser från dina dokument: utgifter, kategorier, inkomster, saldon, måltidscheckar, mätaravläsningar, räkningar samt text som läses från kvitton, lönespecifikationer, kontoutdrag och räkningar. De foton och pdf-filer du väljer läses endast på din enhet och sparas inte av appen."],
+["h", "3. Vart uppgifterna går"],
+["p", "Till webbläsarens lagring på din enhet (IndexedDB/localStorage). Om du ansluter Dropbox eller Google Drive sparas en kopia i ditt molnkonto: överföringen sker direkt från din enhet till den leverantör du valt, enligt dennes villkor. Ingen, inte ens utvecklaren, tar emot dina uppgifter."],
+["h", "4. Tredjepartstjänster"],
+["p", "För att fungera hämtar appen vissa filer (läsmotor för dokument, språkdata) från marketto.github.io och, endast om den inte är tillgänglig, från cdn.jsdelivr.net: precis som på alla webbplatser kan dessa tjänster se din IP-adress. Valfritt: om du anger din egen Claude API-nyckel skickas texten som lästs från kvitton (aldrig fotona) till Anthropic enligt Anthropics villkor. Dropbox och Google Drive används endast om du ansluter dem."],
+["h", "5. Ingen spårning"],
+["p", "Appen använder inga profileringscookies, annonser, analysverktyg eller spårningsverktyg."],
+["h", "6. Dina rättigheter"],
+["p", "Dina uppgifter är dina och under din kontroll: du kan när som helst exportera dem (Mer › Säkerhetskopia), radera dem (Mer › Radera alla data) och koppla från molnet. Uppgifterna i ditt moln hanterar du via ditt Dropbox- eller Google-konto. Du har de rättigheter som följer av Europaparlamentets och rådets förordning (EU) 2016/679 (dataskyddsförordningen, GDPR), inklusive rätten att lämna in klagomål till din tillsynsmyndighet för dataskydd."],
+["h", "7. Minderåriga"],
+["p", "Appen är avsedd för vuxna som hanterar sin hushållsbudget."]
+],
+"terms": [
+["h", "1. Kostnadsfri användning i befintligt skick"],
+["p", "Kapibo tillhandahålls kostnadsfritt, ”i befintligt skick” och ”i mån av tillgång”, utan garantier av något slag, vare sig uttryckliga eller underförstådda, inklusive avseende riktighet, fullständighet, tillgänglighet och lämplighet för ett visst ändamål."],
+["h", "2. Inte rådgivning"],
+["p", "Beräkningar, diagram, tips och maskotens fraser är endast vägledande och utgör inte finansiell, skatterelaterad, juridisk eller annan rådgivning. Beslut du fattar med hjälp av appen är enbart dina egna."],
+["h", "3. Kontrollera alltid dina uppgifter"],
+["p", "Automatisk läsning av foton och pdf-filer kan ge fel i belopp, datum, kategorier och förbrukning. Du är skyldig att kontrollera varje post innan du sparar den och innan du förlitar dig på den."],
+["h", "4. Säkerhetskopior"],
+["p", "Uppgifter kan gå förlorade (rensade webbläsardata, enhetsfel, fel vid synkronisering eller i molntjänsten). Det är ditt ansvar att regelbundet ta säkerhetskopior."],
+["h", "5. Ansvarsbegränsning"],
+["p", "I den utsträckning tillämplig lag tillåter ansvarar utvecklaren och bidragsgivarna inte för direkta eller indirekta skador, förlust av data, pengar, inkomster eller möjligheter, beräknings- eller läsfel, avbrott eller felfunktioner, och inte heller för tredjepartstjänster (Dropbox, Google, Anthropic, GitHub, jsDelivr) och deras villkor. Ansvar som inte kan uteslutas enligt lag påverkas inte."],
+["h", "6. Nycklar och konton"],
+["p", "API-nycklar och molninloggningar stannar på din enhet: du ansvarar för att förvara dem säkert och för eventuella kostnader som leverantörerna tar ut."],
+["h", "7. Ändringar"],
+["p", "Dessa villkor kan ändras i samband med appuppdateringar; i så fall visar vi dem för dig igen och du kan fortsätta använda appen endast om du godkänner dem."],
+["h", "8. Licens och tillämplig lag"],
+["p", "Koden släpps under MIT-licensen. Italiensk lag tillämpas, utan att det påverkar tvingande konsumenträttigheter."]
+],
+"summary": ["Gratis, utan annonser och utan spårning.", "Dina uppgifter stannar på din enhet och, om du vill, i ditt moln.", "Automatisk läsning kan göra fel: kontrollera alltid.", "Ingen finansiell rådgivning och ingen garanti: du använder appen på egen risk."]
+}
