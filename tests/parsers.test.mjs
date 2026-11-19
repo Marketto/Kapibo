@@ -75,20 +75,24 @@ SALDO FINALE 3.000,00`);
   assert.equal(r.rows[0].amount, -45.2);
   assert.equal(r.rows[1].salary, true);
   assert.equal(r.rows[2].amount, -60);
+  assert.deepEqual(guessCats(r.rows[0].desc), ["food"]);
 });
 
 test("bolletta", () => {
   const r = parseBill(`Bolletta energia elettrica
 Periodo dal 01/09/2026 al 31/10/2026
 Consumo fatturato 250 kWh
-Totale da pagare € 95,40`);
+Totale da pagare € 95,40
+Scadenza 20/11/2026`);
   assert.equal(r.kind, "elec");
   assert.equal(r.amount, 95.4);
   assert.equal(r.cons, 250);
   assert.equal(r.freq, "2m");
+  assert.equal(r.period.to, "2026-10-31");
 });
 
 test("contatore", () => {
   assert.equal(parseMeter("A1 0 1 2 3 4,5 kWh").value !== null, true);
   assert.equal(parseMeter("03280,051").value, 3280.051);
+  assert.equal(parseMeter("03280,05\nGAS 03280,051 m3").value, 3280.051);
 });

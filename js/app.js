@@ -325,7 +325,8 @@ async function startScan(kind, cam) {
     let text;
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
     else text = (await ocr.recognize(file, { lang: lng, mode: kind === "meter" ? "digits" : "text", onStatus })).text;
-    if (kind === "meter" && !/\d{3}/.test(text)) text += "\n" + (await ocr.recognize(file, { lang: lng, mode: "text", onStatus })).text;
+    // contatori: due letture (solo cifre e normale), il parser sceglie il numero più completo
+    if (kind === "meter" && file.type !== "application/pdf") text += "\n" + (await ocr.recognize(file, { lang: lng, mode: "text", onStatus })).text;
     const P = await import(`./parsers/${kind}.js`);
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
     let res = P[fn](text);

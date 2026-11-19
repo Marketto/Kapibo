@@ -25,7 +25,10 @@ export function parseBill(text) {
     if (c && /consum|fatturat|totale|usage|verbrauch/i.test(l)) { const v = parseAmount(c[1].replace(/\s/g, "")); if (v != null && v > 0 && (cons == null || v > cons)) { cons = v; unit = c[2].toLowerCase() === "kwh" ? "kWh" : "m³"; } }
   }
   if (amount == null) { const a = L.flatMap(findAmounts).filter(x => x > 0); if (a.length) amount = Math.max(...a); }
-  const ds = findDates(text).sort(), period = /dal|periodo|from|period|zeitraum/i.test(text) && ds.length >= 2 ? { from: ds[0], to: ds[ds.length - 1] } : null;
+  // periodo: solo le date della riga "dal … al …" (la scadenza o la data di emissione non contano)
+  const pl = L.findIndex(l => /\b(dal|periodo|from|period|zeitraum|du|del)\b/i.test(l) && findDates(l).length);
+  const pd = pl < 0 ? [] : findDates(L[pl] + " " + (findDates(L[pl]).length < 2 ? L[pl + 1] || "" : "")).sort();
+  const period = pd.length >= 2 ? { from: pd[0], to: pd[pd.length - 1] } : null;
   let months = null;
   if (period) { const [a, b] = [new Date(period.from), new Date(period.to)]; months = Math.max(1, Math.round((b - a) / (30.4 * 864e5))); }
   const freq = months == null ? null : months >= 11 ? "y" : months >= 5 ? "6m" : months >= 3 ? "q" : months >= 2 ? "2m" : "m";
