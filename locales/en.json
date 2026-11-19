@@ -416,4 +416,7 @@
 "upd.done":"Kapibo updated to version {v} ✨",
 "news.110":"Capybara icons, themes, Kapi cheering you on, collectible stickers, the yuzu jar, easy install, automatic updates and a what's-new tour.",
 "news.111":"New, more complete privacy notice and terms of use, with specific approval of the clauses.",
-"o.advanced":"Advanced options"}
+"o.advanced":"Advanced options",
+"inst.and1":"If Kapibo opened inside another app, tap ⋮ and choose “Open in Chrome”",
+"inst.and2":"In Chrome tap ⋮ then “Install app” (or “Add to Home screen”)",
+"o.impHint2":"On Android, if the file is a Google Sheet on Drive, download it first: in Sheets tap ⋮ › Share & export › Save as Excel."}

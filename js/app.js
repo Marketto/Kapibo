@@ -584,7 +584,7 @@ function viewMore() {
     <label class="f sw"><input type="checkbox" class="chk" id="oBuzz" ${st.buzz ? "checked" : ""}> ${t("o.buzz")}</label>
     ${vb ? `<p class="muted">${t("o.vBalance", { v: money(vb) })}</p>` : ""}</div>
   ${albumCard()}
-  <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button></div></div>
+  <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><p class="hint">${t("o.impHint2")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button></div></div>
   ${installCard()}
   <div class="card" id="cloud"><h2>${ic("cloud")} ${t("o.cloud")}</h2><p class="muted">${t("o.cloudHint")}</p>
     <h3>Dropbox ${dbx.isConnected() ? ic("check") : ""}</h3>${dbx.isConnected() ? `<p class="muted">${esc(dbx.path())}</p><div class="btns"><button class="btn small" data-act="sync">${ic("sync")} ${t("o.syncNow")}</button><button class="btn small ghost" data-act="dbxOff">${t("o.disconnect")}</button></div>`
@@ -706,6 +706,7 @@ function installCard() {
   if (inst.installed()) return "";
   return `<div class="card" id="install"><h2>${ic("download")} ${t("inst.title")}</h2><p class="muted">${t("inst.hint")}</p>
     ${m === "prompt" ? `<div class="btns"><button class="btn" data-act="install">${ic("download")} ${t("inst.btn")}</button></div>`
+      : m === "android" ? `<ol class="install-steps"><li>${ic("globe")} ${t("inst.and1")}</li><li>${ic("more")} ${t("inst.and2")}</li><li>${ic("capy")} ${t("inst.ios3")}</li></ol>`
       : m === "ios" ? `<p><b>${t("inst.ios")}</b></p><ol class="install-steps"><li>${ic("upload")} ${t("inst.ios1")}</li><li>${ic("plus")} ${t("inst.ios2")}</li><li>${ic("capy")} ${t("inst.ios3")}</li></ol>`
       : `<p class="hint">${t("inst.none")}</p>`}</div>`;
 }
