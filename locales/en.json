@@ -420,4 +420,11 @@
 "inst.and1":"If Kapibo opened inside another app, tap ⋮ and choose “Open in Chrome”",
 "inst.and2":"In Chrome tap ⋮ then “Install app” (or “Add to Home screen”)",
 "o.impHint2":"On Android, if the file is a Google Sheet on Drive, download it first: in Sheets tap ⋮ › Share & export › Save as Excel.",
-"o.importDrive":"Import from Google Drive"}
+"o.importDrive":"Import from Google Drive",
+"u.bandsSum":"Sum of bands {list}",
+"u.sum12":"Last 12 months: {v} {u}",
+"u.costTrend":"Bill spending, last 12 months",
+"u.costHint":"Bills covering several months are split across the months they refer to.",
+"tour.costs.t":"Usage and bills over 12 months",
+"tour.costs.p":"Electricity adds up its bands, each meter shows the last 12 months and here you see your bill spending month by month.",
+"news.120":"Electricity bands summed into one meter, 12-month trends, monthly bill spending and correct yearly estimates for bills covering several months."}

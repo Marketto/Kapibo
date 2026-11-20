@@ -4,7 +4,7 @@ import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthO
 import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
-import { series, catAverages, tips, usage, unitPrice, voucherBalance } from "./stats.js";
+import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths } from "./stats.js";
 import { donut, hbars, timeline } from "./charts.js";
 import { APP_VERSION, CHANGELOG } from "./version.js";
 import * as sync from "./sync/index.js";
@@ -502,20 +502,34 @@ function reviewMeter() {
 function viewUsage() {
   const s = S(), ms = live(s.meters), bills = live(s.bills).sort((a, b) => (a.m < b.m ? 1 : -1));
   const meterCard = m => {
-    const u = usage(s, m.id).slice(-12), last = live(s.readings).filter(r => r.meter === m.id).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
+    const u = usage(s, m.id).filter(x => x.m <= cur).slice(-12), tot = round2(u.reduce((a, x) => a + x.use, 0)), last = live(s.readings).filter(r => r.meter === m.id).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
     const col = { elec: "#f7b500", gas: "#ff8a3d", water: "#38a8e8" }[m.kind] || "#a07cf0";
-    return `<div class="card"><div class="row"><h3 class="grow">$${ic({ elec: "c-elec", gas: "c-gas", water: "c-water" }[m.kind] || "meter")} ${esc(m.name)}</h3><button class="btn small soft" data-act="meter" data-id="${m.id}" aria-label="${esc(t("u.editMeter"))}">${ic("edit")}</button></div>
+    return `<div class="card"><div class="row"><h3 class="grow">${ic({ elec: "c-elec", gas: "c-gas", water: "c-water" }[m.kind] || "meter")} ${esc(m.name)}</h3><button class="btn small soft" data-act="meter" data-id="${m.id}" aria-label="${esc(t("u.editMeter"))}">${ic("edit")}</button></div>
       <p class="muted">${last ? t("u.last", { v: fmtNum(last.value, locale(), 3), u: m.unit, d: new Date(last.d).toLocaleDateString(locale()) }) : t("u.noReadings")}</p>
+      ${m.bands?.length ? `<p class="hint">${t("u.bandsSum", { list: m.bands.join(" + ") })}</p>` : ""}
+      ${u.length ? `<p><b>${t("u.sum12", { v: fmtNum(tot, locale(), 0), u: m.unit })}</b></p>` : ""}
       ${u.length ? timeline([{ name: m.name, color: col, values: u.map(x => x.use), type: "bar" }], u.map(x => monthLabel(x.m, { month: "short" })), { label: t("u.chart", { name: m.name }), fmt: v => fmtNum(v, locale()) + " " + m.unit }) : ""}
       <div class="btns"><button class="btn small" data-act="reading" data-id="${m.id}">${ic("plus")} ${t("u.addReading")}</button><button class="btn small soft" data-act="kind" data-kind="meter" data-cam="1">${ic("scan")} ${t("u.photo")}</button></div></div>`;
   };
   const prices = ["elec", "gas", "water"].map(k => [k, unitPrice(s, k)]).filter(x => x[1]);
+  // frequenza: quella indicata, altrimenti i mesi stimati dalla distanza tra le bollette
+  const cov = new Map(["elec", "gas", "water", "internet", "waste", "other"].flatMap(k => billMonths(s, k).map(b => [b.id, b.months])));
+  const F = { 1: "m", 2: "2m", 3: "q", 6: "6m", 12: "y" };
+  const freqLabel = b => { const f = b.freq || F[cov.get(b.id)]; return f ? t("u.f." + f) : ""; };
+  // spesa delle bollette negli ultimi 12 mesi fino al mese scelto (bollette pluri-mensili distribuite sui mesi)
+  const last12 = []; for (let m = cur, i = 0; i < 12; i++, m = prevMonth(m)) last12.unshift(m);
+  const COL = { elec: "#f7b500", gas: "#ff8a3d", water: "#38a8e8" };
+  const costSeries = ["elec", "gas", "water"].map(k => ({ name: t("u.k." + k), color: COL[k], values: billCostByMonth(s, k, last12), type: "bar" })).filter(x => x.values.some(v => v > 0));
+  const costCard = costSeries.length ? `<div class="card" id="costTrend"><h3>${ic("stats")} ${t("u.costTrend")}</h3>
+    ${timeline(costSeries, last12.map(m => monthLabel(m, { month: "short" })), { label: t("u.costTrend"), fmt: money })}
+    <ul class="legend">${costSeries.map(x => `<li><i style="--c:${x.color}"></i>${esc(x.name)} <b>${money(x.values.reduce((a, b) => a + b, 0))}</b></li>`).join("")}</ul><p class="hint">${t("u.costHint")}</p></div>` : "";
   return `<div class="card"><h2>${t("u.title")}</h2><p class="muted">${t("u.intro")}</p><div class="btns"><button class="btn" data-act="meter">${ic("plus")} ${t("u.newMeter")}</button><button class="btn soft" data-act="bill">${ic("plus")} ${t("u.addBill")}</button></div></div>
     ${ms.map(meterCard).join("") || `<div class="card">${empty("u.empty")}</div>`}
+    ${costCard}
     ${prices.length ? `<div class="card"><h3>${ic("coin")} ${t("u.prices")}</h3>${prices.map(([k, p]) => `<p>${t("u.k." + k)}: <b>${money(p.price)}</b> / ${k === "elec" ? "kWh" : "m³"} · ${t("u.year", { c: fmtNum(p.yearCons, locale(), 0), y: money(p.yearCost) })}</p>`).join("")}
       <button class="btn small soft" data-act="offer">${ic("search")} ${t("u.compare")}</button>${live(s.offers).map(o => `<button class="chip" data-act="offer" data-id="${o.id}">${ic("usage")} ${esc(o.name || t("u.k." + o.kind))}</button>`).join(" ")}</div>` : ""}
     ${bills.length ? `<div class="card"><h3>${ic("bill")} ${t("u.bills")}</h3><table class="t"><thead><tr><th>${t("s.month")}</th><th>${t("u.kind")}</th><th class="n">${t("u.cons")}</th><th class="n">${t("e.amount")}</th></tr></thead><tbody>
-      ${bills.slice(0, 24).map(b => `<tr data-act="bill" data-id="${b.id}" style="cursor:pointer"><td>${esc(monthLabel(b.m, { month: "short", year: "2-digit" }))}</td><td>${esc(b.name || t("u.k." + b.kind))} <small class="muted">${t("u.f." + (b.freq || "m"))}</small></td><td class="n">${b.cons ? fmtNum(b.cons, locale()) + " " + b.unit : "—"}</td><td class="n">${b.amount ? money(b.amount) : "—"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+      ${bills.slice(0, 24).map(b => `<tr data-act="bill" data-id="${b.id}" style="cursor:pointer"><td>${esc(monthLabel(b.m, { month: "short", year: "2-digit" }))}</td><td>${esc(b.name || t("u.k." + b.kind))} <small class="muted">${freqLabel(b)}</small></td><td class="n">${b.cons ? fmtNum(b.cons, locale()) + " " + b.unit : "—"}</td><td class="n">${b.amount ? money(b.amount) : "—"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
 }
 
 async function meterDialog(m) {
@@ -645,9 +659,12 @@ async function importFile(f) {
     const tm = Date.now(), stamp = arr => arr.map((x, i) => ({ ...x, u: tm + i }));
     const months = {}; for (const [k, v] of Object.entries(res.months)) months[k] = { ...(S().months[k] || {}), ...v, u: tm };
     const before = nLive();
-    store.set(merge(S(), { cats: stamp(res.cats), entries: stamp(res.entries), meters: stamp(res.meters), readings: stamp(res.readings), bills: stamp(res.bills), months }));
+    // contatori di una vecchia importazione (una colonna per fascia) sostituiti da quello che somma le fasce
+    const drop = new Set(res.drop?.meters || []);
+    const gone = { meters: S().meters.filter(x => drop.has(x.id) && !x.del).map(x => ({ ...x, del: 1 })), readings: S().readings.filter(x => drop.has(x.meter) && !x.del).map(x => ({ ...x, del: 1 })) };
+    store.set(merge(S(), { cats: stamp(res.cats), entries: stamp(res.entries), meters: stamp([...res.meters, ...gone.meters]), readings: stamp([...res.readings, ...gone.readings]), bills: stamp(res.bills), months }));
     const last = Object.keys(res.months).sort().pop(); if (last) cur = last;
-    kapi.confetti(40); go("stats"); afterSave({ say: ["import", { m: Object.keys(res.months).length }, 1], before, ev: ["import"] });
+    kapi.confetti(40); go("stats"); afterSave({ say: ["import", { m: Object.keys(res.months).length || Math.max(0, ...res.report.map(r => r.rows || 0)) }, 1], before, ev: ["import"] });
   } catch (err) { console.error(err); toast(t("o.impError")); kapi.say("kapi.oops"); }
 }
 

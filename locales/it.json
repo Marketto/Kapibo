@@ -420,4 +420,11 @@
 "inst.and1":"Se Kapibo si è aperta dentro un'altra app, tocca ⋮ e scegli «Apri in Chrome»",
 "inst.and2":"In Chrome tocca ⋮ e poi «Installa app» (o «Aggiungi a schermata Home»)",
 "o.impHint2":"Su Android, se il file è su Google Drive come Foglio Google, scaricalo prima: in Fogli tocca ⋮ › Condividi ed esporta › Salva come Excel.",
-"o.importDrive":"Importa da Google Drive"}
+"o.importDrive":"Importa da Google Drive",
+"u.bandsSum":"Somma delle fasce {list}",
+"u.sum12":"Ultimi 12 mesi: {v} {u}",
+"u.costTrend":"Spesa bollette, ultimi 12 mesi",
+"u.costHint":"Le bollette che coprono più mesi sono divise sui mesi a cui si riferiscono.",
+"tour.costs.t":"Consumi e bollette in 12 mesi",
+"tour.costs.p":"La luce somma le fasce, ogni contatore mostra gli ultimi 12 mesi e qui vedi quanto spendi di bollette mese per mese.",
+"news.120":"Fasce della luce sommate in un solo contatore, andamento degli ultimi 12 mesi, spesa delle bollette mese per mese e stime annue corrette per le bollette che coprono più mesi."}

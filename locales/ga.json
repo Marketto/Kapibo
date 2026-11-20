@@ -420,4 +420,11 @@
 "inst.and1":"Má osclaíodh Kapibo taobh istigh d'aip eile, tapáil ⋮ agus roghnaigh “Oscail i Chrome”",
 "inst.and2":"In Chrome tapáil ⋮ agus ansin “Suiteáil an aip” (nó “Cuir leis an scáileán baile”)",
 "o.impHint2":"Ar Android, más Bileog Google ar Drive é an comhad, íoslódáil ar dtús é: i Sheets tapáil ⋮ › Comhroinn agus easpórtáil › Sábháil mar Excel.",
-"o.importDrive":"Iompórtáil ó Google Drive"}
+"o.importDrive":"Iompórtáil ó Google Drive",
+"u.bandsSum":"Suim na mbanda {list}",
+"u.sum12":"an 12 mhí seo caite: {v} {u}",
+"u.costTrend":"Caiteachas billí, an 12 mhí seo caite",
+"u.costHint":"Roinntear billí a chlúdaíonn roinnt míonna ar na míonna lena mbaineann siad.",
+"tour.costs.t":"Úsáid agus billí thar 12 mhí",
+"tour.costs.p":"Cuireann an leictreachas na bandaí le chéile, taispeánann gach méadar na 12 mhí seo caite, agus anseo feiceann tú do chaiteachas billí mí ar mhí.",
+"news.120":"Bandaí leictreachais cuimsithe in aon mhéadar amháin, treocht 12 mhí, caiteachas billí míosúil agus meastacháin bhliantúla cearta do bhillí a chlúdaíonn roinnt míonna."}

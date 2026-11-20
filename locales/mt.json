@@ -420,4 +420,11 @@
 "inst.and1":"Jekk Kapibo nfetaħ ġol-app oħra, ittokka ⋮ u agħżel “Iftaħ f'Chrome”",
 "inst.and2":"F'Chrome ittokka ⋮ imbagħad “Installa l-app” (jew “Żid mal-iskrin tad-dar”)",
 "o.impHint2":"Fuq Android, jekk il-fajl huwa Google Sheet fuq Drive, niżżlu l-ewwel: f'Sheets ittokka ⋮ › Aqsam u esporta › Issejvja bħala Excel.",
-"o.importDrive":"Importa minn Google Drive"}
+"o.importDrive":"Importa minn Google Drive",
+"u.bandsSum":"Somma tal-meded {list}",
+"u.sum12":"L-aħħar 12-il xahar: {v} {u}",
+"u.costTrend":"Nefqa fuq il-kontijiet, l-aħħar 12-il xahar",
+"u.costHint":"Kontijiet li jkopru diversi xhur jinqasmu fuq ix-xhur li jirreferu għalihom.",
+"tour.costs.t":"Konsum u kontijiet fuq 12-il xahar",
+"tour.costs.p":"L-elettriku jiżżied il-faxxi, kull kejl juri l-aħħar 12-il xahar, u hawn tara kemm tonfoq fuq il-kontijiet xahar wara xahar.",
+"news.120":"Faxxi tal-elettriku miżjuda f'kejl wieħed, xejra ta' 12-il xahar, nefqa xahrija fuq il-kontijiet u stimi annwali korretti għal kontijiet li jkopru bosta xhur."}

@@ -420,4 +420,11 @@
 "inst.and1":"Si Kapibo se abrió dentro de otra app, toca ⋮ y elige «Abrir en Chrome»",
 "inst.and2":"En Chrome toca ⋮ y luego «Instalar aplicación» (o «Añadir a la pantalla de inicio»)",
 "o.impHint2":"En Android, si el archivo es una hoja de cálculo de Google en Drive, descárgalo antes: en Hojas de cálculo toca ⋮ › Compartir y exportar › Guardar como Excel.",
-"o.importDrive":"Importar desde Google Drive"}
+"o.importDrive":"Importar desde Google Drive",
+"u.bandsSum":"Suma de las franjas {list}",
+"u.sum12":"Últimos 12 meses: {v} {u}",
+"u.costTrend":"Gasto en facturas, últimos 12 meses",
+"u.costHint":"Las facturas que cubren varios meses se reparten entre los meses a los que se refieren.",
+"tour.costs.t":"Consumos y facturas en 12 meses",
+"tour.costs.p":"La luz suma las franjas, cada contador muestra los últimos 12 meses y aquí ves cuánto gastas en facturas mes a mes.",
+"news.120":"Franjas de la luz sumadas en un solo contador, evolución de 12 meses, gasto de facturas mes a mes y estimaciones anuales correctas para facturas de varios meses."}

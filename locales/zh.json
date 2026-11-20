@@ -420,4 +420,11 @@
 "inst.and1":"如果 Kapibo 在其他应用内打开,请点按 ⋮,然后选择“在 Chrome 中打开”",
 "inst.and2":"在 Chrome 中点按 ⋮,然后选择“安装应用”(或“添加到主屏幕”)",
 "o.impHint2":"在 Android 上,如果文件是云端硬盘中的 Google 表格,请先下载:在表格中点按 ⋮ › 共享和导出 › 另存为 Excel。",
-"o.importDrive":"从 Google 云端硬盘导入"}
+"o.importDrive":"从 Google 云端硬盘导入",
+"u.bandsSum":"时段合计 {list}",
+"u.sum12":"最近12个月：{v} {u}",
+"u.costTrend":"账单支出，最近12个月",
+"u.costHint":"跨多个月的账单会按所属月份分摊。",
+"tour.costs.t":"12个月的用量与账单",
+"tour.costs.p":"电费会把各时段加总，每个表显示最近12个月，在这里可以逐月查看账单支出。",
+"news.120":"电费时段合并为一个电表，12个月走势，按月账单支出，以及跨多个月账单的正确年度估算。"}

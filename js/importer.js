@@ -37,7 +37,7 @@ export function fillMerges(rows, merges = []) {
 
 /** @param sheets [{name, rows}] (array di righe, celle unite già riempite) */
 export function importSheets(sheets, existingCats = []) {
-  const out = { months: {}, entries: [], meters: [], readings: [], bills: [], cats: [], report: [] };
+  const out = { months: {}, entries: [], meters: [], readings: [], bills: [], cats: [], report: [], drop: { meters: [] } };
   const catByName = new Map(existingCats.map(c => [norm(c.name || ""), c.id]));
   for (const sh of sheets) {
     const rows = sh.rows || [];
@@ -86,12 +86,15 @@ const meterKind = s => { const k = norm(s); return /gas|metano/.test(k) ? "gas" 
 const unitOf = kind => (kind === "elec" ? "kWh" : "m³");
 
 function importUsage(rows, paths, out) {
-  const meters = new Map(), bills = new Map();
+  // Letture: le colonne con lo stesso servizio (es. Luce › A1, A2, A3, A4) diventano UN contatore che somma le fasce.
+  const groups = new Map(), bills = new Map();
   paths.forEach((p, c) => {
     const top = norm(p[0] || "");
     if (/letture|readings|lettura/.test(top)) {
-      const name = p.slice(1).join(" ") || p[0]; const kind = meterKind(name);
-      meters.set(c, { id: "m-" + norm(name).replace(/\s/g, "-"), name, kind, unit: unitOf(kind) });
+      const util = p[1] || p[0], key = norm(util);
+      const g = groups.get(key) || { util, cols: [] };
+      g.cols.push({ c, band: p[2] || "", oldId: "m-" + norm(p.slice(1).join(" ") || p[0]).replace(/\s/g, "-") });
+      groups.set(key, g);
     } else if (/bollett|bills|fattur/.test(top)) {
       const util = p[1] || p[0], field = norm(p[2] || "costo");
       const key = norm(util);
@@ -100,15 +103,31 @@ function importUsage(rows, paths, out) {
       bills.set(key, b);
     }
   });
-  out.meters.push(...meters.values());
+  const meters = [];
+  for (const [key, g] of groups) {
+    const kind = meterKind(g.util), id = "m-" + key.replace(/\s/g, "-");
+    // fasce = colonne con un numero (A1…A4, F1…F3); la colonna del totale (A) si usa solo se non ci sono fasce
+    const bands = g.cols.length > 1 ? g.cols.filter(x => /\d\s*$/.test(x.band)) : [];
+    const use = bands.length ? bands : g.cols.slice(0, 1);
+    meters.push({ id, name: g.util, kind, unit: unitOf(kind), cols: use, bands: bands.map(x => x.band) });
+    out.drop.meters.push(...g.cols.map(x => x.oldId).filter(o => o !== id));
+  }
+  out.meters.push(...meters.map(({ cols, ...m }) => (m.bands.length ? m : (delete m.bands, m))));
   let n = 0;
   for (const r of rows) {
     const m = parseMonth(r?.[0]); if (!m) continue; n++;
-    for (const [c, mt] of meters) { const v = toNum(r[c]); if (v != null && v > 0) out.readings.push({ id: `imp-${mt.id}-${m}`, meter: mt.id, m, d: m + "-01", value: v }); }
+    for (const mt of meters) {
+      const vals = mt.cols.map(x => toNum(r[x.c]));
+      if (vals.some(v => v == null || v <= 0)) continue; // lettura completa solo se ci sono tutte le fasce
+      const rd = { id: `imp-${mt.id}-${m}`, meter: mt.id, m, d: m + "-01", value: round2(vals.reduce((a, b) => a + b, 0) * 1000) / 1000 };
+      if (mt.bands.length) rd.bands = Object.fromEntries(mt.cols.map((x, i) => [x.band, vals[i]]));
+      out.readings.push(rd);
+    }
     for (const [key, b] of bills) {
       const amount = toNum(r[b.cols.amount]), cons = b.cols.cons != null ? toNum(r[b.cols.cons]) : null;
       if (!amount && !cons) continue;
-      out.bills.push({ id: `imp-${key.replace(/\s/g, "-")}-${m}`, kind: b.kind, name: b.util, m, amount: amount || null, cons: cons || null, unit: unitOf(b.kind), freq: "m" });
+      // frequenza sconosciuta: i mesi coperti si stimano dalla distanza tra le bollette (stats.billMonths)
+      out.bills.push({ id: `imp-${key.replace(/\s/g, "-")}-${m}`, kind: b.kind, name: b.util, m, amount: amount || null, cons: cons || null, unit: unitOf(b.kind), freq: null });
     }
   }
   return n;

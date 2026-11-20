@@ -1,6 +1,7 @@
 // Statistiche e consigli di risparmio (regole semplici, tutto in locale).
 import { monthSummary, monthsWithData, prevMonth, live } from "./store.js";
 import { round2 } from "./money.js";
+import { norm } from "./categories.js";
 
 export function series(s, lastN = 12, upTo) {
   let ms = monthsWithData(s);
@@ -24,11 +25,45 @@ export function usage(s, meterId) {
   return out;
 }
 
-/** Prezzo unitario medio pagato (bollette con consumo) per tipo, ultimi 12 mesi. */
+const FREQ = { m: 1, "2m": 2, q: 3, "6m": 6, y: 12 };
+export const monthDiff = (a, b) => (+b.slice(0, 4) - +a.slice(0, 4)) * 12 + (+b.slice(5, 7) - +a.slice(5, 7));
+
+/** Consumo medio mensile dai contatori di un tipo (ultimi 12 mesi), o null. */
+export function meterMonthly(s, kind) {
+  let tot = 0, n = 0;
+  for (const mt of live(s.meters).filter(m => m.kind === kind)) { const u = usage(s, mt.id).slice(-12); if (u.length) { tot += u.reduce((a, x) => a + x.use, 0) / u.length; n++; } }
+  return n ? tot : null;
+}
+
+/** Bollette di un tipo con i mesi che coprono: frequenza indicata, altrimenti distanza dalla bolletta precedente,
+ *  e per la prima stima dal consumo medio dei contatori. */
+export function billMonths(s, kind) {
+  const bs = live(s.bills).filter(b => b.kind === kind && b.amount > 0).sort((a, b) => (a.m < b.m ? -1 : 1));
+  const mUse = meterMonthly(s, kind);
+  // la distanza si misura tra bollette della stessa fornitura (es. «Luce» e «Luce cantina» sono serie diverse)
+  const prev = {};
+  return bs.map(b => {
+    const key = norm(b.name || b.kind), p = prev[key]; prev[key] = b;
+    const k = b.freq && b.freq !== "m" ? FREQ[b.freq] : p ? monthDiff(p.m, b.m) : b.cons > 0 && mUse ? Math.round(b.cons / mUse) : FREQ[b.freq] || 1;
+    return { ...b, months: Math.min(24, Math.max(1, k || 1)) };
+  });
+}
+
+/** Prezzo unitario medio pagato e stima annua, dalle bollette con consumo degli ultimi ~12 mesi. */
 export function unitPrice(s, kind) {
-  const bs = live(s.bills).filter(b => b.kind === kind && b.amount > 0 && b.cons > 0).sort((a, b) => (a.m < b.m ? -1 : 1)).slice(-12);
-  const a = bs.reduce((x, b) => x + b.amount, 0), c = bs.reduce((x, b) => x + b.cons, 0);
-  return c ? { price: a / c, yearCons: c * (12 / Math.max(1, bs.length)), yearCost: a * (12 / Math.max(1, bs.length)) } : null;
+  const bs = billMonths(s, kind).filter(b => b.cons > 0), take = [];
+  let months = 0;
+  for (let i = bs.length - 1; i >= 0 && months < 12; i--) { take.push(bs[i]); months += bs[i].months; }
+  if (!take.length) return null;
+  const a = take.reduce((x, b) => x + b.amount, 0), c = take.reduce((x, b) => x + b.cons, 0);
+  return { price: a / c, yearCons: (c / months) * 12, yearCost: (a / months) * 12 };
+}
+
+/** Spesa mensile stimata per tipo: ogni bolletta è distribuita sui mesi che copre. */
+export function billCostByMonth(s, kind, monthsList) {
+  const out = Object.fromEntries(monthsList.map(m => [m, 0]));
+  for (const b of billMonths(s, kind)) for (const m of monthsList) { const d = monthDiff(m, b.m); if (d >= 0 && d < b.months) out[m] += b.amount / b.months; }
+  return monthsList.map(m => round2(out[m]));
 }
 
 /** Consigli: [{key, vars, weight, icon}] da tradurre con t(key, vars). */

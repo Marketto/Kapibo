@@ -420,4 +420,11 @@
 "inst.and1":"Si Kapibo s'ha obert dins d'una altra aplicació, toca ⋮ i tria «Obre a Chrome»",
 "inst.and2":"A Chrome toca ⋮ i després «Instal·la l'aplicació» (o «Afegeix a la pantalla d'inici»)",
 "o.impHint2":"A Android, si el fitxer és un full de càlcul de Google a Drive, baixa'l primer: a Fulls de càlcul toca ⋮ › Comparteix i exporta › Desa com a Excel.",
-"o.importDrive":"Importa des de Google Drive"}
+"o.importDrive":"Importa des de Google Drive",
+"u.bandsSum":"Suma de les franges {list}",
+"u.sum12":"Últims 12 mesos: {v} {u}",
+"u.costTrend":"Despesa en factures, últims 12 mesos",
+"u.costHint":"Les factures que cobreixen diversos mesos es reparteixen entre els mesos als quals es refereixen.",
+"tour.costs.t":"Consums i factures en 12 mesos",
+"tour.costs.p":"La llum suma les franges, cada comptador mostra els últims 12 mesos i aquí veus quant gastes en factures mes a mes.",
+"news.120":"Franges de la llum sumades en un sol comptador, evolució dels últims 12 mesos, despesa de factures mes a mes i estimacions anuals correctes per a factures de diversos mesos."}

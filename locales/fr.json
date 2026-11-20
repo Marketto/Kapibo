@@ -420,4 +420,11 @@
 "inst.and1":"Si Kapibo s'est ouvert dans une autre appli, touche ⋮ et choisis « Ouvrir dans Chrome »",
 "inst.and2":"Dans Chrome, touche ⋮ puis « Installer l'application » (ou « Ajouter à l'écran d'accueil »)",
 "o.impHint2":"Sur Android, si le fichier est une feuille Google Sheets sur Drive, télécharge-le d'abord : dans Sheets, touche ⋮ › Partager et exporter › Enregistrer en tant qu'Excel.",
-"o.importDrive":"Importer depuis Google Drive"}
+"o.importDrive":"Importer depuis Google Drive",
+"u.bandsSum":"Somme des plages {list}",
+"u.sum12":"12 derniers mois : {v} {u}",
+"u.costTrend":"Dépenses de factures, 12 derniers mois",
+"u.costHint":"Les factures couvrant plusieurs mois sont réparties sur les mois concernés.",
+"tour.costs.t":"Consommations et factures sur 12 mois",
+"tour.costs.p":"L'électricité additionne les tranches, chaque compteur affiche les 12 derniers mois et ici tu vois ce que tu dépenses en factures mois par mois.",
+"news.120":"Tranches d'électricité additionnées en un seul compteur, évolution sur 12 mois, dépenses de factures mois par mois et estimations annuelles correctes pour les factures sur plusieurs mois."}

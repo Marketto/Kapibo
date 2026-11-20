@@ -420,4 +420,11 @@
 "inst.and1":"Ha a Kapibo egy másik appon belül nyílt meg, koppints a ⋮ elemre, és válaszd a „Megnyitás Chrome-ban” lehetőséget",
 "inst.and2":"A Chrome-ban koppints a ⋮ elemre, majd az „Alkalmazás telepítése” (vagy „Hozzáadás a kezdőképernyőhöz”) lehetőségre",
 "o.impHint2":"Androidon, ha a fájl Google Táblázat a Drive-on, előbb töltsd le: a Táblázatokban koppints a ⋮ › Megosztás és exportálás › Mentés Excelként elemre.",
-"o.importDrive":"Importálás a Google Drive-ból"}
+"o.importDrive":"Importálás a Google Drive-ból",
+"u.bandsSum":"Az idősávok összege {list}",
+"u.sum12":"Utolsó 12 hónap: {v} {u}",
+"u.costTrend":"Számlák költsége, utolsó 12 hónap",
+"u.costHint":"A több hónapot lefedő számlák a hozzájuk tartozó hónapokra oszlanak.",
+"tour.costs.t":"Fogyasztás és számlák 12 hónapra",
+"tour.costs.p":"Az áram összeadja a sávokat, minden mérő az utolsó 12 hónapot mutatja, itt pedig havonta látod, mennyit költesz számlákra.",
+"news.120":"Az áramsávok egy mérőbe összegezve, 12 hónapos alakulás, havi számlakiadások és helyes éves becslések több hónapot lefedő számlákhoz."}

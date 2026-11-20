@@ -420,4 +420,11 @@
 "inst.and1":"Jei Kapibo atsidarė kitoje programoje, palieskite ⋮ ir pasirinkite „Atidaryti naudojant „Chrome““",
 "inst.and2":"„Chrome“ palieskite ⋮, tada „Įdiegti programą“ (arba „Pridėti prie pagrindinio ekrano“)",
 "o.impHint2":"„Android“: jei failas yra „Google“ skaičiuoklė „Drive“, pirmiausia atsisiųskite. „Skaičiuoklėse“ palieskite ⋮ › Bendrinti ir eksportuoti › Išsaugoti kaip „Excel“.",
-"o.importDrive":"Importuoti iš „Google“ disko"}
+"o.importDrive":"Importuoti iš „Google“ disko",
+"u.bandsSum":"Laiko juostų suma {list}",
+"u.sum12":"Paskutiniai 12 mėnesių: {v} {u}",
+"u.costTrend":"Sąskaitų išlaidos, paskutiniai 12 mėnesių",
+"u.costHint":"Kelis mėnesius apimančios sąskaitos paskirstomos tiems mėnesiams, kuriems jos priklauso.",
+"tour.costs.t":"Sąnaudos ir sąskaitos per 12 mėnesių",
+"tour.costs.p":"Elektra susumuoja juostas, kiekvienas skaitiklis rodo paskutinius 12 mėnesių, o čia matai, kiek išleidi sąskaitoms mėnuo po mėnesio.",
+"news.120":"Elektros juostos sudėtos į vieną skaitiklį, 12 mėnesių tendencija, mėnesinės sąskaitų išlaidos ir teisingi metiniai įverčiai kelių mėnesių sąskaitoms."}

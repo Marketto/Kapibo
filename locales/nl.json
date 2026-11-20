@@ -420,4 +420,11 @@
 "inst.and1":"Als Kapibo in een andere app is geopend, tik op ⋮ en kies “Openen in Chrome”",
 "inst.and2":"Tik in Chrome op ⋮ en dan op “App installeren” (of “Toevoegen aan startscherm”)",
 "o.impHint2":"Op Android: als het bestand een Google Spreadsheet op Drive is, download het dan eerst. Tik in Spreadsheets op ⋮ › Delen en exporteren › Opslaan als Excel.",
-"o.importDrive":"Importeren uit Google Drive"}
+"o.importDrive":"Importeren uit Google Drive",
+"u.bandsSum":"Som van de tijdvakken {list}",
+"u.sum12":"Laatste 12 maanden: {v} {u}",
+"u.costTrend":"Uitgaven aan rekeningen, laatste 12 maanden",
+"u.costHint":"Rekeningen over meerdere maanden worden verdeeld over de maanden waarop ze betrekking hebben.",
+"tour.costs.t":"Verbruik en rekeningen over 12 maanden",
+"tour.costs.p":"Stroom telt de tariefbanden bij elkaar op, elke meter toont de laatste 12 maanden en hier zie je je rekeninguitgaven maand voor maand.",
+"news.120":"Stroombanden opgeteld in één meter, verloop over 12 maanden, maandelijkse rekeninguitgaven en juiste jaarschattingen voor rekeningen over meerdere maanden."}

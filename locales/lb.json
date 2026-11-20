@@ -420,4 +420,11 @@
 "inst.and1":"Wann Kapibo an enger anerer App opgaangen ass, tippt op ⋮ a wielt „Am Chrome opmaachen“",
 "inst.and2":"Am Chrome tippt op ⋮ an dann „App installéieren“ (oder „Op den Startbildschierm derbäisetzen“)",
 "o.impHint2":"Op Android: wann de Fichier eng Google Tabell op Drive ass, luet en éischt erof. A Sheets tippt op ⋮ › Deelen an exportéieren › Als Excel späicheren.",
-"o.importDrive":"Vu Google Drive importéieren"}
+"o.importDrive":"Vu Google Drive importéieren",
+"u.bandsSum":"Zomm vun de Zäitbänner {list}",
+"u.sum12":"Lescht 12 Méint: {v} {u}",
+"u.costTrend":"Rechnungsausgaben, lescht 12 Méint",
+"u.costHint":"Rechnungen, déi méi Méint ofdecken, ginn op déi betraffe Méint opgedeelt.",
+"tour.costs.t":"Verbrauch a Rechnunge iwwer 12 Méint",
+"tour.costs.p":"De Stroum addéiert d'Tarifzonen, all Zieler weist déi lescht 12 Méint, an hei gesäis de deng Rechnungsausgaben Mount fir Mount.",
+"news.120":"Stroum-Tarifzonen an engem Zieler zesummegezunn, Verlaf iwwer 12 Méint, monatlech Rechnungsausgaben a korrekt Joresschätzunge fir Rechnunge vu méi Méint."}

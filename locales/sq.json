@@ -420,4 +420,11 @@
 "inst.and1":"Nëse Kapibo u hap brenda një aplikacioni tjetër, prek ⋮ dhe zgjidh «Hap në Chrome»",
 "inst.and2":"Në Chrome prek ⋮ dhe pastaj «Instalo aplikacionin» (ose «Shto në ekranin bazë»)",
 "o.impHint2":"Në Android, nëse skedari është Google Sheet në Drive, shkarkoje së pari: te Sheets prek ⋮ › Ndaj dhe eksporto › Ruaj si Excel.",
-"o.importDrive":"Importo nga Google Drive"}
+"o.importDrive":"Importo nga Google Drive",
+"u.bandsSum":"Shuma e brezave {list}",
+"u.sum12":"12 muajt e fundit: {v} {u}",
+"u.costTrend":"Shpenzimet për fatura, 12 muajt e fundit",
+"u.costHint":"Faturat që mbulojnë disa muaj ndahen mes muajve ku i përkasin.",
+"tour.costs.t":"Konsumet dhe faturat në 12 muaj",
+"tour.costs.p":"Drita mbledh brezat, çdo matës shfaq 12 muajt e fundit dhe këtu sheh sa shpenzon për fatura muaj pas muaji.",
+"news.120":"Brezat e dritës të mbledhura në një matës, ecuria e 12 muajve, shpenzimi mujor për fatura dhe vlerësime vjetore të sakta për fatura që mbulojnë disa muaj."}

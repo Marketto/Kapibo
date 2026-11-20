@@ -420,4 +420,11 @@
 "inst.and1":"Ja Kapibo atvērās citā lietotnē, pieskaries ⋮ un izvēlies “Atvērt pārlūkā Chrome”",
 "inst.and2":"Pārlūkā Chrome pieskaries ⋮ un pēc tam “Instalēt lietotni” (vai “Pievienot sākuma ekrānam”)",
 "o.impHint2":"Android ierīcē: ja fails ir Google izklājlapa pakalpojumā Drive, vispirms lejupielādē to. Izklājlapās pieskaries ⋮ › Kopīgot un eksportēt › Saglabāt kā Excel.",
-"o.importDrive":"Importēt no Google diska"}
+"o.importDrive":"Importēt no Google diska",
+"u.bandsSum":"Laika joslu summa {list}",
+"u.sum12":"Pēdējie 12 mēneši: {v} {u}",
+"u.costTrend":"Rēķinu izdevumi, pēdējie 12 mēneši",
+"u.costHint":"Rēķini par vairākiem mēnešiem tiek sadalīti pa mēnešiem, uz kuriem tie attiecas.",
+"tour.costs.t":"Patēriņš un rēķini 12 mēnešos",
+"tour.costs.p":"Elektrība saskaita joslas, katrs skaitītājs rāda pēdējos 12 mēnešus, un šeit redzi rēķinu izdevumus mēnesi pa mēnesim.",
+"news.120":"Elektrības joslas saskaitītas vienā skaitītājā, 12 mēnešu tendence, ikmēneša rēķinu izdevumi un pareizi gada aprēķini rēķiniem par vairākiem mēnešiem."}

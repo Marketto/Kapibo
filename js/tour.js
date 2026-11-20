@@ -18,6 +18,7 @@ export const STEPS = [
   { id: "themes", v: "1.1.0", tab: "more", sel: "main .theme-pick" },
   { id: "stickers", v: "1.1.0", tab: "more", sel: "#stickers" },
   { id: "install", v: "1.1.0", tab: "more", sel: "#install" },
+  { id: "costs", v: "1.2.0", tab: "usage", sel: "#costTrend" },
   { id: "end", v: "1.0.0" },
 ];
 const LS = "kapibo.seen";

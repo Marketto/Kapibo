@@ -420,4 +420,11 @@
 "inst.and1":"Kui Kapibo avanes teises rakenduses, puuduta ⋮ ja vali „Ava Chrome'is“",
 "inst.and2":"Chrome'is puuduta ⋮ ja siis „Installi rakendus“ (või „Lisa avakuvale“)",
 "o.impHint2":"Androidis: kui fail on Google'i tabel Drive'is, laadi see esmalt alla. Tabelites puuduta ⋮ › Jaga ja ekspordi › Salvesta Excelina.",
-"o.importDrive":"Impordi Google Drive'ist"}
+"o.importDrive":"Impordi Google Drive'ist",
+"u.bandsSum":"Ajavahemike summa {list}",
+"u.sum12":"Viimased 12 kuud: {v} {u}",
+"u.costTrend":"Arvete kulu, viimased 12 kuud",
+"u.costHint":"Mitut kuud hõlmavad arved jagatakse nende kuude vahel, mida need puudutavad.",
+"tour.costs.t":"Tarbimine ja arved 12 kuu jooksul",
+"tour.costs.p":"Elekter liidab ajavööndid kokku, iga loendur näitab viimast 12 kuud ja siin näed, kui palju kulutad arvetele kuu kaupa.",
+"news.120":"Elektri ajavööndid liidetud üheks loendiks, 12 kuu trend, arvete kulu kuu kaupa ja õiged aastahinnangud mitut kuud hõlmavatele arvetele."}

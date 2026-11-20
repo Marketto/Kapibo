@@ -420,4 +420,11 @@
 "inst.and1":"Falls Kapibo in einer anderen App geöffnet wurde, tippe auf ⋮ und wähle „In Chrome öffnen“",
 "inst.and2":"Tippe in Chrome auf ⋮ und dann auf „App installieren“ (oder „Zum Startbildschirm hinzufügen“)",
 "o.impHint2":"Auf Android: Wenn die Datei eine Google-Tabelle in Drive ist, lade sie zuerst herunter. In Google Tabellen tippe auf ⋮ › Teilen und exportieren › Als Excel speichern.",
-"o.importDrive":"Aus Google Drive importieren"}
+"o.importDrive":"Aus Google Drive importieren",
+"u.bandsSum":"Summe der Zeitbänder {list}",
+"u.sum12":"Letzte 12 Monate: {v} {u}",
+"u.costTrend":"Rechnungsausgaben, letzte 12 Monate",
+"u.costHint":"Rechnungen über mehrere Monate werden auf die betreffenden Monate verteilt.",
+"tour.costs.t":"Verbrauch und Rechnungen über 12 Monate",
+"tour.costs.p":"Strom addiert die Tarifzeiten, jeder Zähler zeigt die letzten 12 Monate, und hier siehst du deine Rechnungsausgaben Monat für Monat.",
+"news.120":"Strom-Tarifzeiten in einem Zähler summiert, Verlauf über 12 Monate, monatliche Rechnungsausgaben und korrekte Jahresschätzungen für Rechnungen über mehrere Monate."}

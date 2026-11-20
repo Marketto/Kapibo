@@ -420,4 +420,11 @@
 "inst.and1":"Ef Kapibo opnaðist í öðru forriti, ýttu á ⋮ og veldu „Opna í Chrome“",
 "inst.and2":"Í Chrome ýttu á ⋮ og svo „Setja upp forrit“ (eða „Bæta við heimaskjá“)",
 "o.impHint2":"Í Android: ef skráin er Google reiknirit á Drive, sæktu hana fyrst. Í Töflureiknum ýttu á ⋮ › Deila og flytja út › Vista sem Excel.",
-"o.importDrive":"Flytja inn af Google Drive"}
+"o.importDrive":"Flytja inn af Google Drive",
+"u.bandsSum":"Summa tímabila {list}",
+"u.sum12":"Síðustu 12 mánuðir: {v} {u}",
+"u.costTrend":"Reikningskostnaður, síðustu 12 mánuðir",
+"u.costHint":"Reikningum sem ná yfir fleiri mánuði er skipt á þá mánuði sem þeir tilheyra.",
+"tour.costs.t":"Notkun og reikningar yfir 12 mánuði",
+"tour.costs.p":"Rafmagnið leggur saman tímabilin, hver mælir sýnir síðustu 12 mánuði og hér sérðu reikningaútgjöldin mánuð fyrir mánuð.",
+"news.120":"Rafmagnstímabil lögð saman í einn mæli, þróun síðustu 12 mánaða, mánaðarleg reikningaútgjöld og réttar ársáætlanir fyrir reikninga sem ná yfir marga mánuði."}

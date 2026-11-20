@@ -420,4 +420,11 @@
 "inst.and1":"Dacă Kapibo s-a deschis într-o altă aplicație, atinge ⋮ și alege „Deschide în Chrome”",
 "inst.and2":"În Chrome atinge ⋮, apoi „Instalează aplicația” (sau „Adaugă pe ecranul de pornire”)",
 "o.impHint2":"Pe Android, dacă fișierul este o foaie de calcul Google în Drive, descarc-o mai întâi: în Foi de calcul atinge ⋮ › Trimite și exportă › Salvează ca Excel.",
-"o.importDrive":"Importă din Google Drive"}
+"o.importDrive":"Importă din Google Drive",
+"u.bandsSum":"Suma intervalelor {list}",
+"u.sum12":"Ultimele 12 luni: {v} {u}",
+"u.costTrend":"Cheltuieli cu facturile, ultimele 12 luni",
+"u.costHint":"Facturile care acoperă mai multe luni sunt împărțite pe lunile la care se referă.",
+"tour.costs.t":"Consumuri și facturi pe 12 luni",
+"tour.costs.p":"Curentul însumează intervalele orare, fiecare contor arată ultimele 12 luni, iar aici vezi cât cheltuiești pe facturi lună de lună.",
+"news.120":"Intervalele orare ale curentului însumate într-un singur contor, evoluția pe 12 luni, cheltuieli lunare cu facturile și estimări anuale corecte pentru facturile pe mai multe luni."}

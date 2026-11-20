@@ -420,4 +420,11 @@
 "inst.and1":"Jeśli Kapibo otworzyło się w innej aplikacji, kliknij ⋮ i wybierz „Otwórz w Chrome”",
 "inst.and2":"W Chrome kliknij ⋮, a potem „Zainstaluj aplikację” (lub „Dodaj do ekranu głównego”)",
 "o.impHint2":"Na Androidzie: jeśli plik to Arkusz Google na Dysku, najpierw go pobierz. W Arkuszach kliknij ⋮ › Udostępnij i eksportuj › Zapisz jako Excel.",
-"o.importDrive":"Importuj z Dysku Google"}
+"o.importDrive":"Importuj z Dysku Google",
+"u.bandsSum":"Suma stref {list}",
+"u.sum12":"Ostatnie 12 miesięcy: {v} {u}",
+"u.costTrend":"Wydatki na rachunki, ostatnie 12 miesięcy",
+"u.costHint":"Rachunki obejmujące kilka miesięcy są dzielone na miesiące, których dotyczą.",
+"tour.costs.t":"Zużycie i rachunki z 12 miesięcy",
+"tour.costs.p":"Prąd sumuje pasma, każdy licznik pokazuje ostatnie 12 miesięcy, a tu widzisz wydatki na rachunki miesiąc po miesiącu.",
+"news.120":"Pasma prądu zsumowane w jednym liczniku, trend z 12 miesięcy, miesięczne wydatki na rachunki i poprawne szacunki roczne dla rachunków obejmujących kilka miesięcy."}

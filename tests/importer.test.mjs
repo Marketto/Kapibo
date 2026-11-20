@@ -49,3 +49,25 @@ test("merge: vince la modifica più recente, tombstone inclusi", () => {
   assert.ok(!m.entries.find(e => e.id === "2").del);
   assert.equal(m.entries.length, 3);
 });
+
+test("fasce della luce sommate in un solo contatore e bollette pluri-mensili", async () => {
+  const { unitPrice, billCostByMonth } = await import("../js/stats.js");
+  const sh = { name: "Consumi", rows: fillMerges([
+    ["Mese", "Letture", null, null, null, null, null, "Bollette", null],
+    [null, "Luce", null, null, null, "Acqua", null, "Acqua", null],
+    [null, "A", "A1", "A2", "A3", null, null, "Consumo", "Costo"],
+    ...["gennaio 2026", "febbraio 2026", "marzo 2026", "aprile 2026", "maggio 2026", "giugno 2026", "luglio 2026", "agosto 2026", "settembre 2026", "ottobre 2026", "novembre 2026"]
+      .map((m, i) => [m, 300 + i * 30, 100 + i * 10, 100 + i * 10, 100 + i * 10, 1000 + i * 10, null, i === 9 ? 100 : null, i === 9 ? 300 : null]),
+  ], [{ s: { r: 0, c: 1 }, e: { r: 0, c: 6 } }, { s: { r: 0, c: 7 }, e: { r: 0, c: 8 } }, { s: { r: 1, c: 1 }, e: { r: 1, c: 4 } }, { s: { r: 1, c: 5 }, e: { r: 2, c: 5 } }, { s: { r: 1, c: 7 }, e: { r: 1, c: 8 } }]) };
+  const r = importSheets([sh]);
+  const luce = r.meters.find(m => m.name === "Luce");
+  assert.deepEqual(luce.bands, ["A1", "A2", "A3"]);
+  assert.equal(r.readings.find(x => x.meter === luce.id && x.m === "2026-01").value, 300); // A1+A2+A3, non A
+  assert.ok(r.drop.meters.includes("m-luce-a1"));
+  const st = createStore(); st.set({ ...st.get(), meters: r.meters, readings: r.readings, bills: r.bills });
+  const up = unitPrice(st.get(), "water");
+  assert.equal(up.price, 3);                        // 300 € / 100 m³
+  assert.ok(Math.abs(up.yearCons - 120) < 1);       // 100 m³ in ~10 mesi (10 m³/mese dal contatore) → 120 l'anno, non 1200
+  const cost = billCostByMonth(st.get(), "water", ["2026-09", "2026-10", "2026-11"]);
+  assert.deepEqual(cost, [30, 30, 0]);
+});

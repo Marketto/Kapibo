@@ -420,4 +420,11 @@
 "inst.and1":"Kapibo başka bir uygulamanın içinde açıldıysa ⋮ simgesine dokun ve “Chrome'da aç” seçeneğini seç",
 "inst.and2":"Chrome'da ⋮ simgesine dokun, ardından “Uygulamayı yükle” (veya “Ana ekrana ekle”) seçeneğini seç",
 "o.impHint2":"Android'de dosya Drive'daki bir Google E-Tablo ise önce indir: E-Tablolar'da ⋮ › Paylaş ve dışa aktar › Excel olarak kaydet seçeneğine dokun.",
-"o.importDrive":"Google Drive'dan içe aktar"}
+"o.importDrive":"Google Drive'dan içe aktar",
+"u.bandsSum":"Zaman dilimlerinin toplamı {list}",
+"u.sum12":"Son 12 ay: {v} {u}",
+"u.costTrend":"Fatura harcaması, son 12 ay",
+"u.costHint":"Birden fazla ayı kapsayan faturalar, ilgili aylara bölünür.",
+"tour.costs.t":"12 aylık tüketim ve faturalar",
+"tour.costs.p":"Elektrik dilimleri toplar, her sayaç son 12 ayı gösterir ve burada faturalara ay ay ne harcadığını görürsün.",
+"news.120":"Elektrik dilimleri tek sayaçta toplandı, 12 aylık seyir, aylık fatura harcaması ve birkaç ayı kapsayan faturalar için doğru yıllık tahminler."}

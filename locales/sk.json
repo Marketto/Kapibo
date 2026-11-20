@@ -420,4 +420,11 @@
 "inst.and1":"Ak sa Kapibo otvorilo v inej aplikácii, klepni na ⋮ a vyber „Otvoriť v Chrome“",
 "inst.and2":"V Chrome klepni na ⋮ a potom na „Inštalovať aplikáciu“ (alebo „Pridať na plochu“)",
 "o.impHint2":"V Androide: ak je súbor Tabuľka Google na Disku, najprv ho stiahni. V Tabuľkách klepni na ⋮ › Zdieľať a exportovať › Uložiť ako Excel.",
-"o.importDrive":"Importovať z Disku Google"}
+"o.importDrive":"Importovať z Disku Google",
+"u.bandsSum":"Súčet pásiem {list}",
+"u.sum12":"Posledných 12 mesiacov: {v} {u}",
+"u.costTrend":"Výdavky na účty, posledných 12 mesiacov",
+"u.costHint":"Účty za viac mesiacov sa rozdelia na mesiace, ktorých sa týkajú.",
+"tour.costs.t":"Spotreba a účty za 12 mesiacov",
+"tour.costs.p":"Elektrina sčítava pásma, každý merač ukazuje posledných 12 mesiacov a tu vidíš, koľko míňaš na účty mesiac po mesiaci.",
+"news.120":"Pásma elektriny sčítané do jedného merača, vývoj za 12 mesiacov, mesačné výdavky na účty a správne ročné odhady pre účty za viac mesiacov."}

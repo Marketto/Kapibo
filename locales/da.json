@@ -420,4 +420,11 @@
 "inst.and1":"Hvis Kapibo åbnede i en anden app, tryk på ⋮ og vælg “Åbn i Chrome”",
 "inst.and2":"I Chrome tryk på ⋮ og derefter “Installer app” (eller “Føj til startskærm”)",
 "o.impHint2":"På Android: hvis filen er et Google Regneark på Drev, så download det først. I Regneark tryk på ⋮ › Del og eksporter › Gem som Excel.",
-"o.importDrive":"Importér fra Google Drev"}
+"o.importDrive":"Importér fra Google Drev",
+"u.bandsSum":"Sum af tidsbånd {list}",
+"u.sum12":"Seneste 12 måneder: {v} {u}",
+"u.costTrend":"Udgifter til regninger, seneste 12 måneder",
+"u.costHint":"Regninger, der dækker flere måneder, fordeles på de måneder, de gælder for.",
+"tour.costs.t":"Forbrug og regninger over 12 måneder",
+"tour.costs.p":"Strømmen lægger tidsbåndene sammen, hver måler viser de seneste 12 måneder, og her ser du, hvad du bruger på regninger måned for måned.",
+"news.120":"Strømbånd lagt sammen i én måler, udvikling over 12 måneder, månedligt forbrug på regninger og korrekte årsoverslag for regninger over flere måneder."}

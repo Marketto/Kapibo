@@ -420,4 +420,11 @@
 "inst.and1":"Če se je Kapibo odprl v drugi aplikaciji, tapni ⋮ in izberi »Odpri v Chromu«",
 "inst.and2":"V Chromu tapni ⋮ in nato »Namesti aplikacijo« (ali »Dodaj na začetni zaslon«)",
 "o.impHint2":"V Androidu: če je datoteka Google preglednica na Disku, jo najprej prenesi. V Preglednicah tapni ⋮ › Deli in izvozi › Shrani kot Excel.",
-"o.importDrive":"Uvozi iz Google Drive"}
+"o.importDrive":"Uvozi iz Google Drive",
+"u.bandsSum":"Vsota pasov {list}",
+"u.sum12":"Zadnjih 12 mesecev: {v} {u}",
+"u.costTrend":"Stroški računov, zadnjih 12 mesecev",
+"u.costHint":"Računi, ki zajemajo več mesecev, se razdelijo na mesece, na katere se nanašajo.",
+"tour.costs.t":"Poraba in računi za 12 mesecev",
+"tour.costs.p":"Elektrika sešteje pasove, vsak števec prikazuje zadnjih 12 mesecev, tu pa vidiš, koliko porabiš za račune iz meseca v mesec.",
+"news.120":"Pasovi elektrike sešteti v enem števcu, gibanje zadnjih 12 mesecev, mesečni izdatki za račune in pravilne letne ocene za račune, ki zajemajo več mesecev."}
