@@ -16,3 +16,8 @@ Kapibo non ha server: ogni utente collega il proprio cloud dal browser. Serve un
 4. Salva il Client ID come variabile del repository `GOOGLE_CLIENT_ID` (come per Dropbox): il prossimo deploy lo rende predefinito. In alternativa incollalo in Kapibo › Altro › Collega Google Drive.
 
 `drive.file` dà accesso solo ai file creati da Kapibo (`kapibo.json`), non al resto del Drive.
+
+## Import da Google Drive (Google Picker)
+1. Libreria API: abilita **Google Picker API**.
+2. Credenziali › Chiave API «Chiave API Kapibo»: limitazioni *Siti web* `https://marketto.github.io/*` e *API* solo Google Picker API.
+3. Variabile del repository `GOOGLE_API_KEY`. L'App ID del Picker è il numero di progetto (prima parte del Client ID).
