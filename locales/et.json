@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: tarbimine −{pct} % võrreldes samaga kuuga eelmisel aastal. Planeet ja rahakott tänavad 🌱",
 "tour.yoy.t":"Võrdlus eelmise aastaga",
 "tour.yoy.p":"Iga kuu eelmise aasta sama kuu kõrval, kulude ja tarbimise jaoks: Kapi leiab hooajalised tõusud ja säästud.",
-"news.140":"Kuu kuu haaval võrdlus eelmise aastaga kulude, kategooriate ja mõõtjate jaoks, hooajanõuannete ja kiitusega."}
+"news.140":"Kuu kuu haaval võrdlus eelmise aastaga kulude, kategooriate ja mõõtjate jaoks, hooajanõuannete ja kiitusega.",
+"share.btn":"Jaga",
+"share.text":"Kapibo: kodune eelarve ja kapibaara kui ostukaaslane.",
+"share.copied":"Link kopeeritud: kleebi see, kuhu soovid.",
+"kofi.btn":"Toeta",
+"kofi.label":"Tee Kapibole Ko-fis kohvi välja (avaneb uuel vahekaardil)",
+"app.version":"Versioon {v}",
+"kapi.ev.share":"Aitäh, et sõna levitad! 💖|Armas žest: rohkem sõpru, rohkem korras eelarveid ✨|Jagatud! Kapi hüpleb rõõmust 🐾|Suust suhu on mu lemmik 🍊",
+"tour.share.t":"Versioon, jagamine ja toetus",
+"tour.share.p":"Iga lehe ülaosas on versioon (puuduta uudiste nägemiseks), Kapibo jagamise nupp ja, kui lubatud, kohvinupp Ko-fis. Kerimisel muutub päis taas väiksemaks.",
+"news.150":"Uus päis versiooni, Jaga ja Toeta Ko-fis nuppudega; samad nupud ka jaotises Veel."}

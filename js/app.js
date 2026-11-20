@@ -17,6 +17,7 @@ import * as inst from "./install.js";
 import * as ch from "./cheer.js";
 import { STICKERS, earned } from "./stickers.js";
 import { jarSVG } from "./jar.js";
+import { CONFIG } from "./config.js";
 
 // ---------- utilità ----------
 const $ = s => document.querySelector(s);
@@ -110,7 +111,28 @@ function bindChrome() {
   };
   $("#syncBtn").onclick = () => (sync.connected().length ? doSync(true) : go("more", "#cloud"));
   $("#main").addEventListener("click", onAction);
+  bindHero();
   window.addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h && h !== tab) go(h); });
+}
+/** Testata grande in cima alla pagina (versione, Condividi, Ko-fi); scorrendo resta quella discreta. */
+const kofiUrl = () => CONFIG.kofi ? "https://ko-fi.com/" + encodeURIComponent(CONFIG.kofi) : "";
+function bindHero() {
+  const top = document.querySelector(".top"), row = $("#heroRow"); if (!top || !row) return;
+  $("#verTxt").textContent = "v" + APP_VERSION;
+  const k = $("#kofiBtn"); if (kofiUrl()) { k.href = kofiUrl(); k.hidden = false; }
+  row.addEventListener("click", e => { const b = e.target.closest("[data-act]"); if (b) onAction({ target: b }); });
+  let raf = 0, on = null;
+  const set = v => { if (v === on) return; on = v; top.classList.toggle("expanded", v); row.inert = !v; };
+  const check = () => { raf = 0; const y = window.scrollY; set(y < 4 ? true : y > 24 ? false : (on ?? true)); };
+  window.addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(check); }, { passive: true });
+  check();
+}
+async function shareApp() {
+  const url = location.origin + location.pathname;
+  try {
+    if (navigator.share) { await navigator.share({ title: "Kapibo", text: t("share.text"), url }); ch.cheer("share", {}, { big: true }); }
+    else { await navigator.clipboard.writeText(url); toast(t("share.copied")); ch.cheer("share", {}, { big: true }); }
+  } catch (e) { if (e?.name === "AbortError") return; try { await navigator.clipboard.writeText(url); toast(t("share.copied")); } catch { toast(t("share.copied") + " " + url); } }
 }
 function go(next, focusSel) {
   tab = next; history.replaceState(null, "", "#" + next);
@@ -133,6 +155,7 @@ function countUp(root) {
   });
 }
 function render() {
+  const vb = $("#verBtn"); if (vb) vb.setAttribute("aria-label", t("app.version", { v: APP_VERSION }) + " — " + t("o.news"));
   $("#mLabel").textContent = monthLabel(cur);
   document.querySelectorAll(".tabs button").forEach(b => (b.dataset.tab === tab ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
   const v = { month: viewMonth, scan: viewScan, usage: viewUsage, stats: viewStats, more: viewMore }[tab] || viewMonth;
@@ -166,7 +189,7 @@ async function onAction(e) {
     backup: exportBackup, restore: () => $("#fileJson").click(),
     dbx: dropboxConnect, dbxOff: () => { dbx.disconnect(); render(); }, gd: gdriveConnect, gdOff: () => { gd.disconnect(); render(); },
     sync: () => doSync(true), newCat: () => catDialog(), editCat: () => catDialog(catById(id)),
-    aiKey: aiDialog, news: newsDialog, wipe: wipeAll,
+    aiKey: aiDialog, news: newsDialog, share: shareApp, wipe: wipeAll,
     install: async () => { if (await inst.install()) { toast(t("inst.done")); kapi.confetti(30); kapi.mood("love"); } render(); },
     legal: () => legal.show(), tour: () => startTour(true),
   };
@@ -654,7 +677,8 @@ function viewMore() {
     <details><summary>${t("o.danger")}</summary><button class="btn danger" data-act="wipe">${t("o.wipe")}</button></details></div>
   <div class="card"><h2>${ic("capy")} Kapibo ${APP_VERSION}</h2><p class="muted">${t("o.about")}</p>
     <div class="btns"><button class="btn small soft" data-act="tour">${ic("capy")} ${t("o.tour")}</button><button class="btn small soft" data-act="legal">${ic("lock")} ${t("o.legal")}</button><button class="btn small soft" data-act="news">${ic("sparkle")} ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
-    <a class="btn small ghost" href="https://github.com/Marketto/kapibo" rel="noopener">GitHub</a></div></div>`;
+    <a class="btn small ghost" href="https://github.com/Marketto/kapibo" rel="noopener">GitHub</a>
+    <button class="btn small soft" data-act="share">${ic("upload")} ${t("share.btn")}</button>${kofiUrl() ? `<a class="btn small kofi" href="${kofiUrl()}" target="_blank" rel="noopener" aria-label="${esc(t("kofi.label"))}">${ic("heart")} ${t("kofi.btn")}</a>` : ""}</div></div>`;
 }
 function albumCard() {
   const have = S().settings.stickers || {}, n = STICKERS.filter(x => have[x.id]).length;

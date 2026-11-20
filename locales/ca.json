@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: consum −{pct}% respecte al mateix mes de l'any passat. El planeta i la cartera t'ho agraeixen 🌱",
 "tour.yoy.t":"Comparació amb l'any anterior",
 "tour.yoy.p":"Cada mes al costat del mateix mes de l'any passat, per a despeses i consums: la Kapi troba els augments i els estalvis de temporada.",
-"news.140":"Comparació mes a mes amb l'any anterior per a despeses, categories i comptadors, amb consells i felicitacions de temporada."}
+"news.140":"Comparació mes a mes amb l'any anterior per a despeses, categories i comptadors, amb consells i felicitacions de temporada.",
+"share.btn":"Comparteix",
+"share.text":"Kapibo: els comptes de casa, amb una capibara de companya de compres.",
+"share.copied":"Enllaç copiat: ja el pots enganxar on vulguis.",
+"kofi.btn":"Dona",
+"kofi.label":"Convida Kapibo a un cafè a Ko-fi (s'obre en una pestanya nova)",
+"app.version":"Versió {v}",
+"kapi.ev.share":"Gràcies per passar la veu! 💖|Quin detall: més amics, més pressupostos ordenats ✨|Compartit! La Kapi balla d'alegria 🐾|El boca-orella és el que més m'agrada 🍊",
+"tour.share.t":"Versió, comparteix i dona",
+"tour.share.p":"A dalt de cada pàgina trobaràs la versió (toca per veure les novetats), el botó per compartir Kapibo i, si està activat, un per convidar a un cafè a Ko-fi. Quan desplaces, la capçalera es torna a reduir.",
+"news.150":"Capçalera nova amb versió, Comparteix i Dona a Ko-fi; els mateixos botons també a Més."}

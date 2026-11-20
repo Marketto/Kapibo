@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: konsumi −{pct}% krahasuar me të njëjtin muaj të vitit të shkuar. Planeti dhe portofoli të falënderojnë 🌱",
 "tour.yoy.t":"Krahasim me vitin e kaluar",
 "tour.yoy.p":"Çdo muaj pranë të njëjtit muaj të vitit të shkuar, për shpenzime dhe konsume: Kapi gjen rritjet dhe kursimet sezonale.",
-"news.140":"Krahasim muaj pas muaji me vitin e kaluar për shpenzime, kategori dhe matës, me këshilla sezonale dhe urime."}
+"news.140":"Krahasim muaj pas muaji me vitin e kaluar për shpenzime, kategori dhe matës, me këshilla sezonale dhe urime.",
+"share.btn":"Ndaj",
+"share.text":"Kapibo: llogaritë e shtëpisë, me një kapibara si shoqe blerjesh.",
+"share.copied":"Lidhja u kopjua: ngjite ku të duash.",
+"kofi.btn":"Dhuro",
+"kofi.label":"Ofroji Kapibos një kafe në Ko-fi (hapet në skedë të re)",
+"app.version":"Versioni {v}",
+"kapi.ev.share":"Faleminderit që e përhap fjalën! 💖|Gjest i bukur: më shumë miq, më shumë buxhete të rregullta ✨|U ndanë! Kapi kërcen nga gëzimi 🐾|Fjala nga goja në gojë është e preferuara ime 🍊",
+"tour.share.t":"Versioni, ndarja dhe dhurimi",
+"tour.share.p":"Në krye të çdo faqeje gjen versionin (prek për lajmet), butonin për ta ndarë Kapibon dhe, nëse është aktivizuar, një për një kafe në Ko-fi. Kur lëviz, kreu zvogëlohet sërish.",
+"news.150":"Kreu i ri me versionin, Ndaj dhe Dhuro në Ko-fi; të njëjtat butona edhe te Më shumë."}

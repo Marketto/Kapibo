@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: tüketim geçen yılın aynı ayına göre −%{pct}. Gezegen ve cüzdanın teşekkür ediyor 🌱",
 "tour.yoy.t":"Önceki yılla karşılaştırma",
 "tour.yoy.p":"Her ay geçen yılın aynı ayının yanında, harcama ve tüketim için: Kapi mevsimlik artışları ve tasarrufları bulur.",
-"news.140":"Harcamalar, kategoriler ve sayaçlar için önceki yılla ay ay karşılaştırma; mevsimsel ipuçları ve övgülerle."}
+"news.140":"Harcamalar, kategoriler ve sayaçlar için önceki yılla ay ay karşılaştırma; mevsimsel ipuçları ve övgülerle.",
+"share.btn":"Paylaş",
+"share.text":"Kapibo: evin hesapları, alışverişte arkadaş olarak bir kapibarayla.",
+"share.copied":"Bağlantı kopyalandı: istediğin yere yapıştırabilirsin.",
+"kofi.btn":"Bağış yap",
+"kofi.label":"Ko-fi'de Kapibo'ya bir kahve ısmarla (yeni sekmede açılır)",
+"app.version":"Sürüm {v}",
+"kapi.ev.share":"Duyurduğun için teşekkürler! 💖|Ne güzel bir jest: daha çok arkadaş, daha derli toplu bütçeler ✨|Paylaşıldı! Kapi sevinçten zıplıyor 🐾|En çok ağızdan ağıza yayılmayı seviyorum 🍊",
+"tour.share.t":"Sürüm, paylaş ve bağış",
+"tour.share.p":"Her sayfanın üstünde sürümü (yenilikler için dokun), Kapibo'yu paylaşma düğmesini ve etkinse Ko-fi'de kahve ısmarlama düğmesini bulursun. Kaydırınca üst başlık yeniden küçülür.",
+"news.150":"Üstte sürüm, Paylaş ve Ko-fi'de Bağış yap içeren yeni başlık; aynı düğmeler Daha fazla bölümünde de."}

@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: spotřeba −{pct} % oproti stejnému měsíci loni. Planeta i peněženka děkují 🌱",
 "tour.yoy.t":"Srovnání s předchozím rokem",
 "tour.yoy.p":"Každý měsíc vedle stejného měsíce loni, pro výdaje a spotřebu: Kapi najde sezónní nárůsty i úspory.",
-"news.140":"Srovnání měsíc po měsíci s předchozím rokem pro výdaje, kategorie a měřiče, se sezónními radami a pochvalami."}
+"news.140":"Srovnání měsíc po měsíci s předchozím rokem pro výdaje, kategorie a měřiče, se sezónními radami a pochvalami.",
+"share.btn":"Sdílet",
+"share.text":"Kapibo: domácí rozpočet s kapybarou jako parťačkou na nákupy.",
+"share.copied":"Odkaz zkopírován: vlož ho, kam chceš.",
+"kofi.btn":"Přispět",
+"kofi.label":"Pozvi Kapibo na kávu na Ko-fi (otevře se na nové kartě)",
+"app.version":"Verze {v}",
+"kapi.ev.share":"Díky, že šíříš dobrou zprávu! 💖|Milé gesto: víc kamarádů, víc uspořádaných rozpočtů ✨|Sdíleno! Kapi skáče radostí 🐾|Doporučení od kamarádů mám nejraději 🍊",
+"tour.share.t":"Verze, sdílení a příspěvek",
+"tour.share.p":"Nahoře na každé stránce najdeš verzi (klepnutím zobrazíš novinky), tlačítko pro sdílení Kapibo a, je-li zapnuté, tlačítko pro kávu na Ko-fi. Při posouvání se záhlaví opět zmenší.",
+"news.150":"Nové záhlaví s verzí, Sdílet a Přispět na Ko-fi; stejná tlačítka i v Více."}

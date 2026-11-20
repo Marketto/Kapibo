@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: patēriņš −{pct} % salīdzinot ar to pašu mēnesi pagājušajā gadā. Planēta un maks pateicas 🌱",
 "tour.yoy.t":"Salīdzinājums ar iepriekšējo gadu",
 "tour.yoy.p":"Katrs mēnesis blakus tam pašam mēnesim pagājušajā gadā, izdevumiem un patēriņam: Kapi atrod sezonālos pieaugumus un ietaupījumus.",
-"news.140":"Salīdzinājums mēnesi pret mēnesi ar iepriekšējo gadu izdevumiem, kategorijām un skaitītājiem, ar sezonāliem padomiem un uzslavām."}
+"news.140":"Salīdzinājums mēnesi pret mēnesi ar iepriekšējo gadu izdevumiem, kategorijām un skaitītājiem, ar sezonāliem padomiem un uzslavām.",
+"share.btn":"Dalīties",
+"share.text":"Kapibo: mājas budžets ar kapibaru kā iepirkšanās draugu.",
+"share.copied":"Saite nokopēta: ielīmē, kur vēlies.",
+"kofi.btn":"Atbalstīt",
+"kofi.label":"Uzcienā Kapibo ar kafiju vietnē Ko-fi (atveras jaunā cilnē)",
+"app.version":"Versija {v}",
+"kapi.ev.share":"Paldies, ka stāsti citiem! 💖|Jauks žests: vairāk draugu, vairāk sakārtotu budžetu ✨|Kopīgots! Kapi lēkā aiz prieka 🐾|Mutvārdu reklāma man patīk visvairāk 🍊",
+"tour.share.t":"Versija, kopīgošana un atbalsts",
+"tour.share.p":"Katras lapas augšā atradīsi versiju (pieskaries, lai redzētu jaunumus), pogu Kapibo kopīgošanai un, ja iespējots, kafijas pogu vietnē Ko-fi. Ritinot galvene atkal sašaurinās.",
+"news.150":"Jauna galvene augšā ar versiju, pogām Dalīties un Atbalstīt vietnē Ko-fi; tās pašas pogas arī sadaļā Vairāk."}

@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: notkun −{pct}% miðað við sama mánuð í fyrra. Jörðin og veskið þakka þér 🌱",
 "tour.yoy.t":"Samanburður við árið á undan",
 "tour.yoy.p":"Hver mánuður við hlið sama mánaðar í fyrra, fyrir útgjöld og notkun: Kapi finnur árstíðabundna aukningu og sparnað.",
-"news.140":"Samanburður mánuð fyrir mánuð við árið á undan fyrir útgjöld, flokka og mæla, með árstíðabundnum ráðum og hrósi."}
+"news.140":"Samanburður mánuð fyrir mánuð við árið á undan fyrir útgjöld, flokka og mæla, með árstíðabundnum ráðum og hrósi.",
+"share.btn":"Deila",
+"share.text":"Kapibo: heimilisbókhald með kapíbörum sem innkaupafélaga.",
+"share.copied":"Hlekkur afritaður: límdu hann hvar sem þú vilt.",
+"kofi.btn":"Styrkja",
+"kofi.label":"Bjóddu Kapibo í kaffi á Ko-fi (opnast í nýjum flipa)",
+"app.version":"Útgáfa {v}",
+"kapi.ev.share":"Takk fyrir að breiða út boðskapinn! 💖|Fallegt af þér: fleiri vinir, fleiri snyrtileg fjárhagsáætlun ✨|Deilt! Kapi hoppar af gleði 🐾|Orðspor frá vini er mitt uppáhald 🍊",
+"tour.share.t":"Útgáfa, deiling og styrkur",
+"tour.share.p":"Efst á hverri síðu finnurðu útgáfuna (ýttu til að sjá nýjungar), hnapp til að deila Kapibo og, ef kveikt er á því, einn til að bjóða í kaffi á Ko-fi. Þegar þú skrunar minnkar haus aftur.",
+"news.150":"Nýr haus efst með útgáfu, Deila og Styrkja á Ko-fi; sömu hnappar einnig undir Meira."}

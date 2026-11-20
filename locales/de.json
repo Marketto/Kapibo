@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: Verbrauch −{pct} % gegenüber demselben Monat des Vorjahres. Der Planet und dein Geldbeutel sagen danke 🌱",
 "tour.yoy.t":"Vergleich mit dem Vorjahr",
 "tour.yoy.p":"Jeder Monat neben dem gleichen Monat des Vorjahres, für Ausgaben und Verbrauch: Kapi findet saisonale Anstiege und Ersparnisse.",
-"news.140":"Monatsvergleich mit dem Vorjahr für Ausgaben, Kategorien und Zähler, mit saisonalen Tipps und Komplimenten."}
+"news.140":"Monatsvergleich mit dem Vorjahr für Ausgaben, Kategorien und Zähler, mit saisonalen Tipps und Komplimenten.",
+"share.btn":"Teilen",
+"share.text":"Kapibo: Haushaltsbuch mit einem Wasserschwein als Einkaufsfreundin.",
+"share.copied":"Link kopiert: Füge ihn ein, wo du magst.",
+"kofi.btn":"Spenden",
+"kofi.label":"Spendiere Kapibo einen Kaffee auf Ko-fi (öffnet in neuem Tab)",
+"app.version":"Version {v}",
+"kapi.ev.share":"Danke fürs Weitersagen! 💖|Schöne Geste: mehr Freunde, mehr ordentliche Budgets ✨|Geteilt! Kapi hüpft vor Freude 🐾|Mundpropaganda mag ich am liebsten 🍊",
+"tour.share.t":"Version, Teilen und Spenden",
+"tour.share.p":"Oben auf jeder Seite findest du die Version (tippen für Neuigkeiten), den Button zum Teilen von Kapibo und, falls aktiviert, einen für einen Kaffee auf Ko-fi. Beim Scrollen wird die Kopfzeile wieder kleiner.",
+"news.150":"Neue Kopfzeile oben mit Version, Teilen und Spenden auf Ko-fi; dieselben Buttons auch unter Mehr."}

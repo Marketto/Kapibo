@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: forbrug −{pct} % i forhold til samme måned sidste år. Planeten og din pung siger tak 🌱",
 "tour.yoy.t":"Sammenligning med året før",
 "tour.yoy.p":"Hver måned ved siden af samme måned sidste år, for udgifter og forbrug: Kapi finder stigninger og besparelser efter årstid.",
-"news.140":"Sammenligning måned for måned med året før for udgifter, kategorier og målere, med sæsonråd og ros."}
+"news.140":"Sammenligning måned for måned med året før for udgifter, kategorier og målere, med sæsonråd og ros.",
+"share.btn":"Del",
+"share.text":"Kapibo: husholdningsbudget med en capybara som indkøbsmakker.",
+"share.copied":"Link kopieret: indsæt det, hvor du vil.",
+"kofi.btn":"Støt",
+"kofi.label":"Giv Kapibo en kop kaffe på Ko-fi (åbner i en ny fane)",
+"app.version":"Version {v}",
+"kapi.ev.share":"Tak fordi du fortæller det videre! 💖|Fint tegn: flere venner, flere ordnede budgetter ✨|Delt! Kapi hopper af glæde 🐾|Mund-til-mund er det, jeg bedst kan lide 🍊",
+"tour.share.t":"Version, del og støt",
+"tour.share.p":"Øverst på hver side finder du versionen (tryk for nyheder), knappen til at dele Kapibo og, hvis aktiveret, en til at give en kop kaffe på Ko-fi. Når du scroller, bliver overskriften mindre igen.",
+"news.150":"Ny overskrift øverst med version, Del og Støt på Ko-fi; de samme knapper også under Mere."}

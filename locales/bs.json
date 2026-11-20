@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: potrošnja −{pct}% u odnosu na isti mjesec prošle godine. Planeta i novčanik zahvaljuju 🌱",
 "tour.yoy.t":"Poređenje s prethodnom godinom",
 "tour.yoy.p":"Svaki mjesec uz isti mjesec prošle godine, za troškove i potrošnju: Kapi pronalazi sezonska povećanja i uštede.",
-"news.140":"Poređenje mjesec po mjesec s prethodnom godinom za troškove, kategorije i brojila, uz sezonske savjete i pohvale."}
+"news.140":"Poređenje mjesec po mjesec s prethodnom godinom za troškove, kategorije i brojila, uz sezonske savjete i pohvale.",
+"share.btn":"Podijeli",
+"share.text":"Kapibo: kućni budžet s kapibarom kao pratiocem u kupovini.",
+"share.copied":"Link je kopiran: zalijepi ga gdje želiš.",
+"kofi.btn":"Doniraj",
+"kofi.label":"Častite Kapibo kafom na Ko-fi (otvara se u novoj kartici)",
+"app.version":"Verzija {v}",
+"kapi.ev.share":"Hvala što širiš priču! 💖|Lijep gest: više prijatelja, više uređenih budžeta ✨|Podijeljeno! Kapi pleše od sreće 🐾|Preporuka je moja najdraža stvar 🍊",
+"tour.share.t":"Verzija, dijeljenje i donacija",
+"tour.share.p":"Na vrhu svake stranice nalaze se verzija (dodirni za novosti), dugme za dijeljenje Kapibo i, ako je uključeno, dugme za kafu na Ko-fi. Kad skroluješ, zaglavlje se opet smanjuje.",
+"news.150":"Novo zaglavlje s verzijom, Podijeli i Doniraj na Ko-fi; ista dugmad i u Više."}

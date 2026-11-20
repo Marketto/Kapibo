@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: zużycie −{pct}% względem tego samego miesiąca zeszłego roku. Planeta i portfel dziękują 🌱",
 "tour.yoy.t":"Porównanie z rokiem wcześniej",
 "tour.yoy.p":"Każdy miesiąc obok tego samego miesiąca zeszłego roku, dla wydatków i zużycia: Kapi znajduje sezonowe wzrosty i oszczędności.",
-"news.140":"Porównanie miesiąc po miesiącu z rokiem wcześniej dla wydatków, kategorii i liczników, z sezonowymi radami i pochwałami."}
+"news.140":"Porównanie miesiąc po miesiącu z rokiem wcześniej dla wydatków, kategorii i liczników, z sezonowymi radami i pochwałami.",
+"share.btn":"Udostępnij",
+"share.text":"Kapibo: domowy budżet z kapibarą jako towarzyszką zakupów.",
+"share.copied":"Link skopiowany: wklej go, gdzie chcesz.",
+"kofi.btn":"Wesprzyj",
+"kofi.label":"Postaw Kapibo kawę na Ko-fi (otworzy się w nowej karcie)",
+"app.version":"Wersja {v}",
+"kapi.ev.share":"Dzięki, że polecasz dalej! 💖|Miły gest: więcej przyjaciół, więcej uporządkowanych budżetów ✨|Udostępniono! Kapi skacze z radości 🐾|Najbardziej lubię pocztę pantoflową 🍊",
+"tour.share.t":"Wersja, udostępnianie i wsparcie",
+"tour.share.p":"U góry każdej strony znajdziesz wersję (dotknij, by zobaczyć nowości), przycisk udostępniania Kapibo i, jeśli włączony, przycisk kawy na Ko-fi. Po przewinięciu nagłówek znów się zmniejsza.",
+"news.150":"Nowy nagłówek u góry z wersją, Udostępnij i Wesprzyj na Ko-fi; te same przyciski także w Więcej."}

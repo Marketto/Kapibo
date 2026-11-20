@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: consumo −{pct}% face ao mesmo mês do ano passado. O planeta e a tua carteira agradecem 🌱",
 "tour.yoy.t":"Comparação com o ano anterior",
 "tour.yoy.p":"Cada mês ao lado do mesmo mês do ano passado, para gastos e consumos: o Kapi descobre os aumentos e as poupanças sazonais.",
-"news.140":"Comparação mês a mês com o ano anterior para gastos, categorias e contadores, com dicas e elogios sazonais."}
+"news.140":"Comparação mês a mês com o ano anterior para gastos, categorias e contadores, com dicas e elogios sazonais.",
+"share.btn":"Partilhar",
+"share.text":"Kapibo: as contas de casa, com uma capivara como companheira de compras.",
+"share.copied":"Link copiado: cola-o onde quiseres.",
+"kofi.btn":"Doar",
+"kofi.label":"Oferece um café ao Kapibo no Ko-fi (abre num novo separador)",
+"app.version":"Versão {v}",
+"kapi.ev.share":"Obrigada por espalhares a novidade! 💖|Que gesto lindo: mais amigos, mais orçamentos arrumados ✨|Partilhado! A Kapi salta de alegria 🐾|O passa-palavra é o que mais gosto 🍊",
+"tour.share.t":"Versão, partilhar e doar",
+"tour.share.p":"No topo de cada página encontras a versão (toca para ver as novidades), o botão para partilhar o Kapibo e, se ativado, um para oferecer um café no Ko-fi. Ao deslizar, o cabeçalho volta a encolher.",
+"news.150":"Novo cabeçalho no topo com versão, Partilhar e Doar no Ko-fi; os mesmos botões também em Mais."}

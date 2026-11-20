@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: suvartojimas −{pct} % palyginti su tuo pačiu mėnesiu pernai. Planeta ir piniginė dėkoja 🌱",
 "tour.yoy.t":"Palyginimas su praėjusiais metais",
 "tour.yoy.p":"Kiekvienas mėnuo šalia to paties mėnesio pernai, išlaidoms ir suvartojimui: Kapi randa sezoninius padidėjimus ir sutaupymus.",
-"news.140":"Palyginimas mėnuo po mėnesio su praėjusiais metais išlaidoms, kategorijoms ir skaitikliams, su sezoniniais patarimais ir pagyrimais."}
+"news.140":"Palyginimas mėnuo po mėnesio su praėjusiais metais išlaidoms, kategorijoms ir skaitikliams, su sezoniniais patarimais ir pagyrimais.",
+"share.btn":"Dalytis",
+"share.text":"Kapibo: namų biudžetas su kapibara kaip apsipirkimo drauge.",
+"share.copied":"Nuoroda nukopijuota: įklijuok, kur nori.",
+"kofi.btn":"Paremti",
+"kofi.label":"Pakviesk Kapibo kavos Ko-fi (atsidaro naujame skirtuke)",
+"app.version":"{v} versija",
+"kapi.ev.share":"Ačiū, kad pasakoji kitiems! 💖|Gražus gestas: daugiau draugų, daugiau sutvarkytų biudžetų ✨|Pasidalinta! Kapi šoka iš džiaugsmo 🐾|Žodis iš lūpų į lūpas man patinka labiausiai 🍊",
+"tour.share.t":"Versija, dalijimasis ir parama",
+"tour.share.p":"Kiekvieno puslapio viršuje rasi versiją (palieski, kad pamatytum naujienas), Kapibo dalijimosi mygtuką ir, jei įjungta, kavos mygtuką Ko-fi. Slenkant antraštė vėl sumažėja.",
+"news.150":"Nauja antraštė viršuje su versija, Dalytis ir Paremti Ko-fi; tie patys mygtukai ir skiltyje Daugiau."}

@@ -20,6 +20,7 @@ export const STEPS = [
   { id: "install", v: "1.1.0", tab: "more", sel: "#install" },
   { id: "costs", v: "1.2.0", tab: "usage", sel: "#costTrend" },
   { id: "trends", v: "1.3.0", tab: "stats", sel: "#trends" },
+  { id: "share", v: "1.5.0", sel: "#heroRow", top: true },
   { id: "yoy", v: "1.4.0", tab: "stats", sel: "#yoy" },
   { id: "end", v: "1.0.0" },
 ];
@@ -49,7 +50,8 @@ export function run(steps, { go, kapiSvg, onEnd } = {}) {
   async function show(dir = 1) {
     let s = visible[i];
     if (s.tab) go?.(s.tab);
-    await new Promise(r => setTimeout(r, s.tab ? 260 : 40));
+    if (s.top) window.scrollTo(0, 0);
+    await new Promise(r => setTimeout(r, s.top ? 420 : s.tab ? 260 : 40));
     const el = s.sel && document.querySelector(s.sel);
     if (s.sel && !el) { i += dir; if (i < 0) i = 0; if (i >= visible.length) return end(); return show(dir); }
     box.querySelector("#tourT").textContent = t(`tour.${s.id}.t`);

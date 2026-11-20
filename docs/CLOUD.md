@@ -21,3 +21,6 @@ Kapibo non ha server: ogni utente collega il proprio cloud dal browser. Serve un
 1. Libreria API: abilita **Google Picker API**.
 2. Credenziali › Chiave API «Chiave API Kapibo»: limitazioni *Siti web* `https://marketto.github.io/*` e *API* solo Google Picker API.
 3. Variabile del repository `GOOGLE_API_KEY`. L'App ID del Picker è il numero di progetto (prima parte del Client ID).
+
+## Ko-fi
+Predefinito `marketto` (ko-fi.com/marketto, lo stesso di Printopus) in `js/config.js`. Per cambiarlo senza toccare il sorgente: variabile del repository `KOFI_USER` (solo il nome utente). Con il valore vuoto il pulsante «Dona» non compare.

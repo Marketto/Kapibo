@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: verbruik −{pct}% ten opzichte van dezelfde maand vorig jaar. De planeet en je portemonnee zeggen dankjewel 🌱",
 "tour.yoy.t":"Vergelijking met het jaar ervoor",
 "tour.yoy.p":"Elke maand naast dezelfde maand vorig jaar, voor uitgaven en verbruik: Kapi ziet seizoensstijgingen en besparingen.",
-"news.140":"Maand-voor-maand vergelijking met het jaar ervoor voor uitgaven, categorieën en meters, met seizoenstips en complimentjes."}
+"news.140":"Maand-voor-maand vergelijking met het jaar ervoor voor uitgaven, categorieën en meters, met seizoenstips en complimentjes.",
+"share.btn":"Delen",
+"share.text":"Kapibo: het huishoudboekje, met een capibara als boodschappenmaatje.",
+"share.copied":"Link gekopieerd: plak hem waar je maar wilt.",
+"kofi.btn":"Doneren",
+"kofi.label":"Trakteer Kapibo op een koffie via Ko-fi (opent in een nieuw tabblad)",
+"app.version":"Versie {v}",
+"kapi.ev.share":"Bedankt voor het verspreiden! 💖|Lief gebaar: meer vrienden, meer nette budgetten ✨|Gedeeld! Kapi springt een gat in de lucht 🐾|Mond-tot-mondreclame vind ik het fijnst 🍊",
+"tour.share.t":"Versie, delen en doneren",
+"tour.share.p":"Bovenaan elke pagina vind je de versie (tik voor nieuws), de knop om Kapibo te delen en, indien ingeschakeld, een knop voor een koffie op Ko-fi. Als je scrolt, wordt de kop weer kleiner.",
+"news.150":"Nieuwe kop bovenaan met versie, Delen en Doneren op Ko-fi; dezelfde knoppen ook onder Meer."}

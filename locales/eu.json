@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: kontsumoa −%{pct} joan den urteko hilabete berarekin alderatuta. Planetak eta zure patrikak eskerrak ematen dizkizute 🌱",
 "tour.yoy.t":"Aurreko urtearekiko konparazioa",
 "tour.yoy.p":"Hilabete bakoitza joan den urteko hilabete berdinaren ondoan, gastu eta kontsumoetarako: Kapik urtaroko igoerak eta aurrezkiak aurkitzen ditu.",
-"news.140":"Hilabeteka konparazioa aurreko urtearekin gastu, kategoria eta kontagailuetarako, urtaroko aholku eta zorionekin."}
+"news.140":"Hilabeteka konparazioa aurreko urtearekin gastu, kategoria eta kontagailuetarako, urtaroko aholku eta zorionekin.",
+"share.btn":"Partekatu",
+"share.text":"Kapibo: etxeko kontuak, kapibara bat erosketetako lagun duzula.",
+"share.copied":"Esteka kopiatu da: itsatsi nahi duzun lekuan.",
+"kofi.btn":"Dohaintza",
+"kofi.label":"Gonbidatu Kapibo kafe batera Ko-fi-n (fitxa berrian irekitzen da)",
+"app.version":"{v} bertsioa",
+"kapi.ev.share":"Eskerrik asko hitza zabaltzeagatik! 💖|Keinu polita: lagun gehiago, aurrekontu ordenatu gehiago ✨|Partekatuta! Kapi poztasunez dantzan dago 🐾|Ahoz aho da gehien gustatzen zaidana 🍊",
+"tour.share.t":"Bertsioa, partekatu eta dohaintza",
+"tour.share.p":"Orri bakoitzaren goian bertsioa aurkituko duzu (sakatu berrien berri izateko), Kapibo partekatzeko botoia eta, gaituta badago, Ko-fi-n kafe bat emateko bat. Korritzean, goiburua berriro txikitzen da.",
+"news.150":"Goiburu berria bertsioarekin, Partekatu eta Dohaintza Ko-fi-n; botoi berberak Gehiago atalean ere."}

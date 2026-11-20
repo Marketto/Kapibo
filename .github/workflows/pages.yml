@@ -22,10 +22,12 @@ jobs:
           sed -i "s/const VERSION = \"dev\"/const VERSION = \"$V\"/" _site/sw.js
           # chiavi pubbliche dei servizi cloud: solo nel sito pubblicato, mai nel sorgente
           sed -i "s/dropboxKey: \"\"/dropboxKey: \"$DROPBOX_APP_KEY\"/; s/googleClientId: \"\"/googleClientId: \"$GOOGLE_CLIENT_ID\"/; s/googleApiKey: \"\"/googleApiKey: \"$GOOGLE_API_KEY\"/" _site/js/config.js
+          if [ -n "$KOFI_USER" ]; then sed -i "s/kofi: \"[^\"]*\"/kofi: \"$KOFI_USER\"/" _site/js/config.js; fi
         env:
           DROPBOX_APP_KEY: ${{ vars.DROPBOX_APP_KEY }}
           GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
           GOOGLE_API_KEY: ${{ vars.GOOGLE_API_KEY }}
+          KOFI_USER: ${{ vars.KOFI_USER }}
       - uses: actions/upload-pages-artifact@v3
   deploy:
     needs: build

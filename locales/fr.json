@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter} : consommation −{pct} % par rapport au même mois de l'an dernier. La planète et ton porte-monnaie te disent merci 🌱",
 "tour.yoy.t":"Comparaison avec l'année d'avant",
 "tour.yoy.p":"Chaque mois à côté du même mois de l'an dernier, pour les dépenses et les consommations : Kapi repère les hausses et les économies de saison.",
-"news.140":"Comparaison mois par mois avec l'année d'avant pour dépenses, catégories et compteurs, avec conseils et compliments de saison."}
+"news.140":"Comparaison mois par mois avec l'année d'avant pour dépenses, catégories et compteurs, avec conseils et compliments de saison.",
+"share.btn":"Partager",
+"share.text":"Kapibo : les comptes de la maison, avec une capybara comme copine de courses.",
+"share.copied":"Lien copié : colle-le où tu veux.",
+"kofi.btn":"Faire un don",
+"kofi.label":"Offre un café à Kapibo sur Ko-fi (s'ouvre dans un nouvel onglet)",
+"app.version":"Version {v}",
+"kapi.ev.share":"Merci de faire passer le mot ! 💖|Joli geste : plus d'amis, plus de budgets bien rangés ✨|Partagé ! Kapi frétille de joie 🐾|Le bouche-à-oreille, c'est mon préféré 🍊",
+"tour.share.t":"Version, partage et don",
+"tour.share.p":"En haut de chaque page, tu trouves la version (touche pour les nouveautés), le bouton pour partager Kapibo et, si activé, un pour offrir un café sur Ko-fi. Quand tu défiles, l'en-tête rétrécit à nouveau.",
+"news.150":"Nouvel en-tête avec version, Partager et Faire un don sur Ko-fi ; les mêmes boutons aussi dans Plus."}

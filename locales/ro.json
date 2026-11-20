@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: consum −{pct}% față de aceeași lună din anul trecut. Planeta și portofelul îți mulțumesc 🌱",
 "tour.yoy.t":"Comparație cu anul precedent",
 "tour.yoy.p":"Fiecare lună lângă aceeași lună din anul trecut, pentru cheltuieli și consumuri: Kapi găsește creșterile și economiile de sezon.",
-"news.140":"Comparație lună de lună cu anul precedent pentru cheltuieli, categorii și contoare, cu sfaturi și felicitări de sezon."}
+"news.140":"Comparație lună de lună cu anul precedent pentru cheltuieli, categorii și contoare, cu sfaturi și felicitări de sezon.",
+"share.btn":"Distribuie",
+"share.text":"Kapibo: bugetul casei, cu o capibara ca prietenă de cumpărături.",
+"share.copied":"Link copiat: lipește-l unde vrei.",
+"kofi.btn":"Donează",
+"kofi.label":"Cinstește-l pe Kapibo cu o cafea pe Ko-fi (se deschide într-o filă nouă)",
+"app.version":"Versiunea {v}",
+"kapi.ev.share":"Mulțumesc că răspândești vestea! 💖|Gest frumos: mai mulți prieteni, mai multe bugete ordonate ✨|Distribuit! Kapi sare de bucurie 🐾|Din gură în gură e preferata mea 🍊",
+"tour.share.t":"Versiune, distribuire și donații",
+"tour.share.p":"În partea de sus a fiecărei pagini găsești versiunea (atinge pentru noutăți), butonul de distribuire Kapibo și, dacă e activat, unul pentru o cafea pe Ko-fi. Când derulezi, antetul se micșorează din nou.",
+"news.150":"Antet nou sus cu versiune, Distribuie și Donează pe Ko-fi; aceleași butoane și în Mai mult."}

@@ -463,4 +463,14 @@
 "tip.meterDown":"{meter}: úsáid −{pct}% i gcomparáid leis an mí chéanna anuraidh. Tá an phláinéid agus do sparán buíoch 🌱",
 "tour.yoy.t":"Comparáid leis an mbliain roimhe",
 "tour.yoy.p":"Gach mí taobh leis an mí chéanna anuraidh, do chaiteachas agus úsáid: aimsíonn Kapi méaduithe séasúracha agus sábhálacha.",
-"news.140":"Comparáid mhí ar mhí leis an mbliain roimhe do chaiteachas, catagóirí agus méadair, le leideanna séasúracha agus moladh."}
+"news.140":"Comparáid mhí ar mhí leis an mbliain roimhe do chaiteachas, catagóirí agus méadair, le leideanna séasúracha agus moladh.",
+"share.btn":"Roinn",
+"share.text":"Kapibo: cuntais an tí, le capaibara mar chompánach siopadóireachta.",
+"share.copied":"Nasc cóipeáilte: greamaigh áit ar bith é.",
+"kofi.btn":"Tabhair síntiús",
+"kofi.label":"Ceannaigh caife do Kapibo ar Ko-fi (osclaítear i gcluaisín nua)",
+"app.version":"Leagan {v}",
+"kapi.ev.share":"Go raibh maith agat as an scéal a scaipeadh! 💖|Gníomh álainn: níos mó cairde, níos mó buiséad néata ✨|Roinnte! Tá Kapi ag damhsa le háthas 🐾|Is breá liom caint ó bhéal 🍊",
+"tour.share.t":"Leagan, roinn agus síntiús",
+"tour.share.p":"Ag barr gach leathanaigh gheobhaidh tú an leagan (tapáil le haghaidh nuachta), an cnaipe chun Kapibo a roinnt agus, má tá sé cumasaithe, ceann chun caife a cheannach ar Ko-fi. Nuair a scrollaíonn tú, laghdaíonn an ceannteideal arís.",
+"news.150":"Ceannteideal nua ag an mbarr le leagan, Roinn agus Tabhair síntiús ar Ko-fi; na cnaipí céanna in Tuilleadh freisin."}
