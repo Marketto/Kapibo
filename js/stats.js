@@ -134,6 +134,63 @@ export function trendTips(s, end) {
   return out;
 }
 
+// ---------- confronto con lo stesso mese dell'anno prima ----------
+export const yearBefore = m => String(+m.slice(0, 4) - 1) + m.slice(4);
+const spent = (s, m, cat) => live(s.entries).filter(e => e.m === m && (!cat || e.cat === cat)).reduce((a, e) => a + e.amt, 0);
+
+/** Ultimi 12 mesi fino a `end`: spesa di ogni mese e dello stesso mese un anno prima (null se quel mese non ha dati). */
+export function yoy(s, end, cat = null) {
+  const have = new Set(live(s.entries).map(e => e.m)), months = [];
+  for (let m = end, i = 0; i < 12; i++, m = prevMonth(m)) months.unshift(m);
+  const now = months.map(m => (have.has(m) ? round2(spent(s, m, cat)) : null));
+  const prev = months.map(m => (have.has(yearBefore(m)) ? round2(spent(s, yearBefore(m), cat)) : null));
+  const both = months.map((_, i) => now[i] != null && prev[i] != null);
+  const sumN = round2(now.reduce((a, v, i) => a + (both[i] ? v : 0), 0)), sumP = round2(prev.reduce((a, v, i) => a + (both[i] ? v : 0), 0));
+  return { months, now, prev, pairs: both.filter(Boolean).length, sumNow: sumN, sumPrev: sumP, pct: sumP > 0 ? Math.round((sumN / sumP - 1) * 100) : null };
+}
+
+/** Consumi di un contatore mese per mese con l'anno prima. */
+export function meterYoy(s, meterId, end) {
+  const u = new Map(usage(s, meterId).map(x => [x.m, x.use])), months = [];
+  for (let m = end, i = 0; i < 12; i++, m = prevMonth(m)) months.unshift(m);
+  const now = months.map(m => u.get(m) ?? null), prev = months.map(m => u.get(yearBefore(m)) ?? null);
+  const both = months.map((_, i) => now[i] != null && prev[i] != null);
+  const sN = now.reduce((a, v, i) => a + (both[i] ? v : 0), 0), sP = prev.reduce((a, v, i) => a + (both[i] ? v : 0), 0);
+  return { months, now, prev, pairs: both.filter(Boolean).length, sumNow: round2(sN), sumPrev: round2(sP), pct: sP > 0 ? Math.round((sN / sP - 1) * 100) : null };
+}
+
+/** Consigli stagionali: mese rispetto allo stesso mese dell'anno prima, e ultimi 3 mesi rispetto agli stessi 3 dell'anno prima. */
+export function seasonTips(s, end) {
+  const out = [], have = new Set(live(s.entries).map(e => e.m));
+  if (have.has(end) && have.has(yearBefore(end))) {
+    const cats = [...new Set(live(s.entries).filter(e => e.m === end || e.m === yearBefore(end)).map(e => e.cat))];
+    for (const c of cats) {
+      const a = spent(s, end, c), b = spent(s, yearBefore(end), c), d = round2(a - b);
+      if (b < 15) continue;
+      const pct = Math.round((a / b - 1) * 100);
+      if (pct >= 20 && d >= 20) out.push({ key: "tip.yoyUp", vars: { cat: c, pct, diff: d, month: end }, weight: d, icon: "calendar", tone: "watch" });
+      else if (pct <= -15 && d <= -15) out.push({ key: "tip.yoyDown", vars: { cat: c, pct: -pct, diff: -d, month: end }, weight: -d * 0.9, icon: "heart", tone: "good" });
+    }
+  }
+  const w = [end, prevMonth(end), prevMonth(prevMonth(end))];
+  if (w.every(m => have.has(m) && have.has(yearBefore(m)))) {
+    const a = w.reduce((x, m) => x + spent(s, m), 0) / 3, b = w.reduce((x, m) => x + spent(s, yearBefore(m)), 0) / 3;
+    if (b > 0) {
+      const pct = Math.round((a / b - 1) * 100), d = round2(Math.abs(a - b));
+      if (pct >= 10) out.push({ key: "tip.seasonUp", vars: { pct, diff: d }, weight: 65, icon: "calendar", tone: "watch" });
+      else if (pct <= -5) out.push({ key: "tip.seasonDown", vars: { pct: -pct, diff: d }, weight: 75, icon: "piggy", tone: "good" });
+    }
+  }
+  for (const mt of live(s.meters)) {
+    const y = meterYoy(s, mt.id, end), i = y.months.length - 1;
+    if (y.now[i] != null && y.prev[i] > 0) {
+      const pct = Math.round((y.now[i] / y.prev[i] - 1) * 100);
+      if (pct <= -15) out.push({ key: "tip.meterDown", vars: { meter: mt.name, pct: -pct }, weight: 22, icon: "c-" + (mt.kind === "other" ? "other" : mt.kind), tone: "good" });
+    }
+  }
+  return out;
+}
+
 /** Consigli: [{key, vars, weight, icon}] da tradurre con t(key, vars). */
 export function tips(s, m, fmt, opts = {}) {
   const out = [], cur = monthSummary(s, m);
@@ -174,6 +231,8 @@ export function tips(s, m, fmt, opts = {}) {
   // andamento rispetto ai 3/6/9/12 mesi precedenti (vale per categoria: non ripete i consigli già dati sopra)
   const have = new Set(out.map(x => x.vars?.cat).filter(Boolean));
   const money = v => (typeof v === "number" ? fmt(v) : v);
+  const fmtMonth = opts.monthName || (m => m);
+  for (const x of seasonTips(s, opts.end || prevMonth(m))) if (!x.vars.cat || !have.has(x.vars.cat)) out.push({ ...x, vars: { ...x.vars, diff: money(x.vars.diff), month: x.vars.month ? fmtMonth(x.vars.month) : undefined } });
   for (const x of trendTips(s, opts.end || prevMonth(m))) if (!x.vars.cat || !have.has(x.vars.cat)) out.push({ ...x, vars: { ...x.vars, diff: money(x.vars.diff), before: money(x.vars.before), now: money(x.vars.now) } });
   if (!out.length) out.push({ key: cur.tracked ? "tip.good" : "tip.start", vars: {}, weight: 0, icon: "capy" });
   // in testa i più importanti, ma sempre almeno un complimento se c'è

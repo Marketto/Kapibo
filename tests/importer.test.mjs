@@ -91,3 +91,23 @@ test("andamento: aumenti, riduzioni, prezzi dei prodotti", async () => {
   assert.ok(tt.some(x => x.key === "tip.priceUp"));
   assert.equal(catTrends(st.get(), "2026-06", 6), null); // servono 12 mesi
 });
+
+test("confronto con l'anno prima e consigli stagionali", async () => {
+  const { yoy, seasonTips, meterYoy } = await import("../js/stats.js");
+  const E = [], R = []; let r = 1000;
+  for (let y = 2025; y <= 2026; y++) for (let mo = 1; mo <= 10; mo++) {
+    const m = `${y}-${String(mo).padStart(2, "0")}`, winter = mo <= 3;
+    E.push({ id: "g" + m, m, d: m + "-05", cat: "gas", amt: y === 2026 ? (winter ? 90 : 20) : (winter ? 120 : 20) });
+    E.push({ id: "f" + m, m, d: m + "-06", cat: "food", amt: y === 2026 && mo >= 8 ? 400 : 300 });
+    r += y === 2026 ? 8 : 10; R.push({ id: "r" + m, meter: "m1", m, d: m + "-01", value: r });
+  }
+  const st = createStore(); st.set({ ...st.get(), entries: E, readings: R, meters: [{ id: "m1", name: "Acqua", kind: "water", unit: "m³" }] });
+  const y = yoy(st.get(), "2026-10");
+  assert.equal(y.pairs, 10);
+  assert.equal(yoy(st.get(), "2026-10", "gas").pct, -18);           // 410 contro 500
+  const tt = seasonTips(st.get(), "2026-10");
+  assert.ok(tt.some(x => x.key === "tip.yoyUp" && x.vars.cat === "food"));
+  assert.ok(tt.some(x => x.key === "tip.seasonUp"));
+  assert.ok(tt.some(x => x.key === "tip.meterDown" && x.tone === "good"));
+  assert.ok(meterYoy(st.get(), "m1", "2026-10").pct <= -15);
+});

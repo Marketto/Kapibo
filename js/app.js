@@ -4,7 +4,7 @@ import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthO
 import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
-import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths, catTrends, productTrends, trendEnd, trendTips, TREND_WINDOWS } from "./stats.js";
+import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths, catTrends, productTrends, trendEnd, trendTips, TREND_WINDOWS, yoy, meterYoy } from "./stats.js";
 import { donut, hbars, timeline } from "./charts.js";
 import { APP_VERSION, CHANGELOG } from "./version.js";
 import * as sync from "./sync/index.js";
@@ -509,7 +509,11 @@ function viewUsage() {
       <p class="muted">${last ? t("u.last", { v: fmtNum(last.value, locale(), 3), u: m.unit, d: new Date(last.d).toLocaleDateString(locale()) }) : t("u.noReadings")}</p>
       ${m.bands?.length ? `<p class="hint">${t("u.bandsSum", { list: m.bands.join(" + ") })}</p>` : ""}
       ${u.length ? `<p><b>${t("u.sum12", { v: fmtNum(tot, locale(), 0), u: m.unit })}</b></p>` : ""}
-      ${u.length ? timeline([{ name: m.name, color: col, values: u.map(x => x.use), type: "bar" }], u.map(x => monthLabel(x.m, { month: "short" })), { label: t("u.chart", { name: m.name }), fmt: v => fmtNum(v, locale()) + " " + m.unit }) : ""}
+      ${(() => { const y = meterYoy(s, m.id, cur), has = y.prev.some(v => v != null); if (!u.length) return "";
+        const ser = [{ name: m.name, color: col, values: y.now, type: "bar" }]; if (has) ser.unshift({ name: t("st.lastYear"), color: "#c9b8a8", values: y.prev, type: "bar" });
+        return timeline(ser, y.months.map(x => monthLabel(x, { month: "short" })), { label: t("u.chart", { name: m.name }), fmt: v => fmtNum(v, locale()) + " " + m.unit })
+          + (has ? `<ul class="legend"><li><i style="--c:#c9b8a8"></i>${t("st.lastYear")}</li><li><i style="--c:${col}"></i>${t("st.thisYear")}</li></ul>` : "")
+          + (y.pairs && y.pct != null ? `<p class="muted">${t("u.yoy", { now: fmtNum(y.sumNow, locale(), 0), before: fmtNum(y.sumPrev, locale(), 0), u: m.unit, n: y.pairs })} ${y.pct > 0 ? `<b class="neg">▲ ${y.pct}%</b>` : y.pct < 0 ? `<b class="pos">▼ ${-y.pct}%</b>` : "="}</p>` : ""); })()}
       <div class="btns"><button class="btn small" data-act="reading" data-id="${m.id}">${ic("plus")} ${t("u.addReading")}</button><button class="btn small soft" data-act="kind" data-kind="meter" data-cam="1">${ic("scan")} ${t("u.photo")}</button></div></div>`;
   };
   const prices = ["elec", "gas", "water"].map(k => [k, unitPrice(s, k)]).filter(x => x[1]);
@@ -577,10 +581,11 @@ function viewStats() {
   const slices = Object.entries(m.byCat).sort((a, b) => b[1] - a[1]).map(([id, v]) => { const c = catById(id); return { label: `${cname(c)} ${money(v)}`, value: v, color: c.color, c }; });
   const prev = list.filter(x => x.m < cur), avg = catAverages(prev.length ? prev : list);
   const avgRows = Object.entries(avg).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([id, v]) => { const c = catById(id); return { label: cname(c), icon: catIcon(c) + " ", value: v, color: c.color }; });
-  const end = trendEnd(cur, monthOf(today())), tps = tips(s, cur, money, { end });
+  const end = trendEnd(cur, monthOf(today())), tps = tips(s, cur, money, { end, monthName: m => monthLabel(m, { month: "long", year: "numeric" }) });
   const rates = list.filter(x => x.rate != null);
   return `<div class="card"><h2>${ic("capy")} ${t("st.tips")}</h2>${tps.map(x => `<div class="tip ${x.tone || ""}"><span>${ic(x.icon)}</span><p style="margin:0">${esc(t(x.key, { ...x.vars, cat: x.vars.cat ? cname(catById(x.vars.cat)) : "" }))}</p></div>`).join("")}</div>
     ${trendCard(s, end)}
+    ${yoyCard(s, end)}
     <div class="card"><h2>${t("st.trend")}</h2>${timeline([{ name: t("m.spent"), color: "#ff9f6b", values: list.map(x => x.tracked), type: "bar" }, { name: t("m.income"), color: "#4caf7d", values: list.map(x => x.income || null), type: "line" }], labels, { label: t("st.trendLabel"), fmt: money })}
       <ul class="legend"><li><i style="--c:#ff9f6b"></i>${t("m.spent")}</li><li><i style="--c:#4caf7d"></i>${t("m.income")}</li></ul>
       ${rates.length ? `<p class="muted">${t("st.rate", { r: Math.round((rates.reduce((a, b) => a + b.rate, 0) / rates.length) * 100) })}</p>` : ""}</div>
@@ -605,6 +610,24 @@ function trendCard(s, end) {
   return `<div class="card" id="trends"><h2>${ic("stats")} ${t("st.trends")}</h2><div class="chips" role="group" aria-label="${esc(t("st.trends"))}">${chips}</div>${body}</div>`;
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-trend]"); if (!b) return; trendN = +b.dataset.trend; render(); });
+
+// confronto mese per mese con lo stesso mese dell'anno prima (totale o una categoria)
+let yoyCat = "";
+function yoyCard(s, end) {
+  const y = yoy(s, end, yoyCat || null);
+  const top = Object.entries(live(s.entries).filter(e => y.months.includes(e.m)).reduce((o, e) => ((o[e.cat] = (o[e.cat] || 0) + e.amt), o), {})).sort((a, b) => b[1] - a[1]).slice(0, 6).map(x => x[0]);
+  if (yoyCat && !top.includes(yoyCat)) top.push(yoyCat);
+  const chips = [`<button type="button" class="chip" data-yoy="" aria-pressed="${!yoyCat}">${t("st.all")}</button>`, ...top.map(c => { const k = catById(c); return `<button type="button" class="chip" data-yoy="${esc(c)}" aria-pressed="${yoyCat === c}">${catIcon(k)} ${esc(cname(k))}</button>`; })].join("");
+  const arrow = p => (p == null ? "" : p > 0 ? `<b class="neg">▲ ${p}%</b>` : p < 0 ? `<b class="pos">▼ ${Math.abs(p)}%</b>` : "=");
+  const body = !y.pairs ? `<p class="muted">${t("st.yoyNone")}</p>` : `
+    ${timeline([{ name: t("st.lastYear"), color: "#c9b8a8", values: y.prev, type: "bar" }, { name: t("st.thisYear"), color: "#ff9f6b", values: y.now, type: "bar" }], y.months.map(m => monthLabel(m, { month: "short" })), { label: t("st.yoy"), fmt: money })}
+    <ul class="legend"><li><i style="--c:#c9b8a8"></i>${t("st.lastYear")}</li><li><i style="--c:#ff9f6b"></i>${t("st.thisYear")}</li></ul>
+    <p><b>${t("st.yoySum", { now: money(y.sumNow), before: money(y.sumPrev), n: y.pairs })}</b> ${arrow(y.pct)}</p>
+    <details><summary>${t("st.table")}</summary><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("st.lastYear")}</th><th class="n">${t("st.thisYear")}</th><th class="n">%</th></tr></thead><tbody>
+    ${y.months.map((m, i) => y.now[i] == null && y.prev[i] == null ? "" : `<tr><td>${esc(monthLabel(m, { month: "short", year: "2-digit" }))}</td><td class="n">${y.prev[i] == null ? "—" : money(y.prev[i])}</td><td class="n">${y.now[i] == null ? "—" : money(y.now[i])}</td><td class="n">${y.prev[i] > 0 && y.now[i] != null ? arrow(Math.round((y.now[i] / y.prev[i] - 1) * 100)) : ""}</td></tr>`).reverse().join("")}</tbody></table></details>`;
+  return `<div class="card" id="yoy"><h2>${ic("calendar")} ${t("st.yoy")}</h2><p class="hint">${t("st.yoyHint")}</p><div class="chips" role="group" aria-label="${esc(t("st.yoy"))}">${chips}</div>${body}</div>`;
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-yoy]"); if (!b) return; yoyCat = b.dataset.yoy; render(); });
 
 // ---------- altro ----------
 function viewMore() {

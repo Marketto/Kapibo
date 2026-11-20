@@ -20,6 +20,7 @@ export const STEPS = [
   { id: "install", v: "1.1.0", tab: "more", sel: "#install" },
   { id: "costs", v: "1.2.0", tab: "usage", sel: "#costTrend" },
   { id: "trends", v: "1.3.0", tab: "stats", sel: "#trends" },
+  { id: "yoy", v: "1.4.0", tab: "stats", sel: "#yoy" },
   { id: "end", v: "1.0.0" },
 ];
 const LS = "kapibo.seen";
