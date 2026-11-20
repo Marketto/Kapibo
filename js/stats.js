@@ -66,8 +66,76 @@ export function billCostByMonth(s, kind, monthsList) {
   return monthsList.map(m => round2(out[m]));
 }
 
+// ---------- andamento: ultimi N mesi rispetto agli N precedenti ----------
+export const TREND_WINDOWS = [3, 6, 9, 12];
+const back = (m, n) => { for (let i = 0; i < n; i++) m = prevMonth(m); return m; };
+/** Ultimo mese "completo" da analizzare: il mese scelto, ma se è quello in corso si usa il precedente. */
+export const trendEnd = (cur, thisMonth) => (cur >= thisMonth ? prevMonth(thisMonth) : cur);
+const monthsBetween = (from, to) => { const out = []; for (let m = from; m <= to; m = nextOf(m)) out.push(m); return out; };
+const nextOf = m => { const [y, mo] = m.split("-").map(Number); const d = new Date(y, mo, 1); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); };
+
+/** Spesa media mensile per categoria nei due periodi; solo se ci sono dati in entrambi. */
+export function catTrends(s, end, n) {
+  const recent = monthsBetween(back(end, n - 1), end), prev = monthsBetween(back(end, 2 * n - 1), back(end, n));
+  const have = new Set(live(s.entries).map(e => e.m));
+  if (prev.filter(m => have.has(m)).length < Math.ceil(n / 2) || recent.filter(m => have.has(m)).length < Math.ceil(n / 2)) return null;
+  const sum = (ms, c) => live(s.entries).filter(e => ms.includes(e.m) && (!c || e.cat === c)).reduce((a, e) => a + e.amt, 0);
+  const cats = [...new Set(live(s.entries).filter(e => recent.includes(e.m) || prev.includes(e.m)).map(e => e.cat))];
+  const rows = cats.map(c => {
+    const now = round2(sum(recent, c) / n), before = round2(sum(prev, c) / n);
+    return { cat: c, now, before, diff: round2(now - before), pct: before > 0 ? Math.round((now / before - 1) * 100) : null };
+  }).filter(r => r.now >= 5 || r.before >= 5).sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+  const tNow = round2(sum(recent) / n), tBefore = round2(sum(prev) / n);
+  return { n, recent, prev, rows, total: { now: tNow, before: tBefore, pct: tBefore > 0 ? Math.round((tNow / tBefore - 1) * 100) : null } };
+}
+
+/** Prezzi dei prodotti negli scontrini: prezzo medio per acquisto nei due periodi (almeno 2 acquisti per periodo). */
+export function productTrends(s, end, n) {
+  const recent = new Set(monthsBetween(back(end, n - 1), end)), prev = new Set(monthsBetween(back(end, 2 * n - 1), back(end, n)));
+  const acc = new Map();
+  for (const e of live(s.entries)) {
+    if (!e.items?.length) continue;
+    const side = recent.has(e.m) ? "r" : prev.has(e.m) ? "p" : null; if (!side) continue;
+    for (const it of e.items) {
+      const k = norm(it.n); if (!k || !(it.a > 0)) continue;
+      const o = acc.get(k) || { name: it.n, r: [], p: [] }; o[side].push(it.a); acc.set(k, o);
+    }
+  }
+  const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+  return [...acc.values()].filter(o => o.r.length >= 2 && o.p.length >= 2).map(o => {
+    const now = avg(o.r), before = avg(o.p);
+    return { name: o.name, now: round2(now), before: round2(before), pct: Math.round((now / before - 1) * 100), count: o.r.length };
+  }).filter(o => Math.abs(o.pct) >= 5).sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+}
+
+/** Consigli dall'andamento: per ogni categoria la finestra più significativa; aumenti → attenzione, riduzioni → complimenti. */
+export function trendTips(s, end) {
+  const out = [], used = new Set();
+  for (const n of TREND_WINDOWS) {
+    const tr = catTrends(s, end, n); if (!tr) continue;
+    for (const r of tr.rows) {
+      if (used.has(r.cat) || r.pct == null) continue;
+      if (r.pct >= 15 && r.diff >= 15) { out.push({ key: "tip.trendUp", vars: { cat: r.cat, pct: r.pct, n, diff: r.diff }, weight: r.diff * 1.2, icon: "stats", tone: "watch" }); used.add(r.cat); }
+      else if (r.pct <= -10 && r.diff <= -10) { out.push({ key: "tip.trendDown", vars: { cat: r.cat, pct: Math.abs(r.pct), n, diff: Math.abs(r.diff) }, weight: Math.abs(r.diff), icon: "heart", tone: "good" }); used.add(r.cat); }
+    }
+    if (n === 3 && tr.total.pct != null) {
+      if (tr.total.pct <= -5) out.push({ key: "tip.totalDown", vars: { pct: Math.abs(tr.total.pct), n, diff: round2(tr.total.before - tr.total.now) }, weight: 80, icon: "piggy", tone: "good" });
+      else if (tr.total.pct >= 10) out.push({ key: "tip.totalUp", vars: { pct: tr.total.pct, n, diff: round2(tr.total.now - tr.total.before) }, weight: 70, icon: "stats", tone: "watch" });
+    }
+  }
+  const pr = productTrends(s, end, 3).concat(productTrends(s, end, 6));
+  const seen = new Set();
+  for (const p of pr) {
+    const k = norm(p.name); if (seen.has(k)) continue; seen.add(k);
+    if (p.pct >= 8) out.push({ key: "tip.priceUp", vars: { name: p.name, pct: p.pct, before: p.before, now: p.now }, weight: 25 + p.pct, icon: "receipt", tone: "watch" });
+    else if (p.pct <= -8) out.push({ key: "tip.priceDown", vars: { name: p.name, pct: Math.abs(p.pct) }, weight: 15 + Math.abs(p.pct), icon: "sparkle", tone: "good" });
+    if (seen.size >= 3) break;
+  }
+  return out;
+}
+
 /** Consigli: [{key, vars, weight, icon}] da tradurre con t(key, vars). */
-export function tips(s, m, fmt) {
+export function tips(s, m, fmt, opts = {}) {
   const out = [], cur = monthSummary(s, m);
   const prev = series(s, 7, prevMonth(m)).filter(x => x.m < m).slice(-6);
   const avg = catAverages(prev);
@@ -103,8 +171,15 @@ export function tips(s, m, fmt) {
     const u = usage(s, mt.id), now = u.find(x => x.m === m), ly = u.find(x => x.m === String(+m.slice(0, 4) - 1) + m.slice(4));
     if (now && ly && ly.use > 0 && now.use > ly.use * 1.25) out.push({ key: "tip.meter", vars: { meter: mt.name, pct: Math.round((now.use / ly.use - 1) * 100) }, weight: 20, icon: "meter" });
   }
+  // andamento rispetto ai 3/6/9/12 mesi precedenti (vale per categoria: non ripete i consigli già dati sopra)
+  const have = new Set(out.map(x => x.vars?.cat).filter(Boolean));
+  const money = v => (typeof v === "number" ? fmt(v) : v);
+  for (const x of trendTips(s, opts.end || prevMonth(m))) if (!x.vars.cat || !have.has(x.vars.cat)) out.push({ ...x, vars: { ...x.vars, diff: money(x.vars.diff), before: money(x.vars.before), now: money(x.vars.now) } });
   if (!out.length) out.push({ key: cur.tracked ? "tip.good" : "tip.start", vars: {}, weight: 0, icon: "capy" });
-  return out.sort((a, b) => b.weight - a.weight).slice(0, 6);
+  // in testa i più importanti, ma sempre almeno un complimento se c'è
+  const top = out.sort((a, b) => b.weight - a.weight).slice(0, 7), good = out.find(x => x.tone === "good");
+  if (good && !top.includes(good)) top[top.length - 1] = good;
+  return top;
 }
 
 /** Saldo buoni pasto: entrati − usati di sempre. */

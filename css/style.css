@@ -317,3 +317,6 @@ main > section { animation: tabIn .5s cubic-bezier(.3, 1.5, .5, 1); }
   [data-mood="love"] .k-heart { opacity: 1; animation: none !important; }
   .sparkles { display: none; }
 }
+.tip.good > span { background: var(--c-ok-soft); color: var(--c-ok); }
+.tip.watch > span { background: var(--c-pri-soft); color: var(--c-pri); }
+#trends .chips { margin-bottom: 8px; }

@@ -4,7 +4,7 @@ import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthO
 import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
-import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths } from "./stats.js";
+import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths, catTrends, productTrends, trendEnd, trendTips, TREND_WINDOWS } from "./stats.js";
 import { donut, hbars, timeline } from "./charts.js";
 import { APP_VERSION, CHANGELOG } from "./version.js";
 import * as sync from "./sync/index.js";
@@ -116,6 +116,7 @@ function go(next, focusSel) {
   tab = next; history.replaceState(null, "", "#" + next);
   if (next !== "scan") scanState = scanState?.busy ? scanState : null;
   render(); ch.cheerTab(next); window.scrollTo({ top: 0, behavior: "smooth" });
+  if (next === "stats") { const good = trendTips(S(), trendEnd(cur, monthOf(today()))).find(x => x.tone === "good" && x.vars.cat); if (good) setTimeout(() => ch.cheer("trendGood", { cat: cname(catById(good.vars.cat)), pct: good.vars.pct }, { big: true }), 900); }
   if (focusSel) setTimeout(() => $(focusSel)?.scrollIntoView({ behavior: "smooth" }), 80); else $("#main").focus({ preventScroll: true });
 }
 
@@ -576,9 +577,10 @@ function viewStats() {
   const slices = Object.entries(m.byCat).sort((a, b) => b[1] - a[1]).map(([id, v]) => { const c = catById(id); return { label: `${cname(c)} ${money(v)}`, value: v, color: c.color, c }; });
   const prev = list.filter(x => x.m < cur), avg = catAverages(prev.length ? prev : list);
   const avgRows = Object.entries(avg).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([id, v]) => { const c = catById(id); return { label: cname(c), icon: catIcon(c) + " ", value: v, color: c.color }; });
-  const tps = tips(s, cur, money);
+  const end = trendEnd(cur, monthOf(today())), tps = tips(s, cur, money, { end });
   const rates = list.filter(x => x.rate != null);
-  return `<div class="card"><h2>${ic("capy")} ${t("st.tips")}</h2>${tps.map(x => `<div class="tip"><span>${ic(x.icon)}</span><p style="margin:0">${esc(t(x.key, { ...x.vars, cat: x.vars.cat ? cname(catById(x.vars.cat)) : "" }))}</p></div>`).join("")}</div>
+  return `<div class="card"><h2>${ic("capy")} ${t("st.tips")}</h2>${tps.map(x => `<div class="tip ${x.tone || ""}"><span>${ic(x.icon)}</span><p style="margin:0">${esc(t(x.key, { ...x.vars, cat: x.vars.cat ? cname(catById(x.vars.cat)) : "" }))}</p></div>`).join("")}</div>
+    ${trendCard(s, end)}
     <div class="card"><h2>${t("st.trend")}</h2>${timeline([{ name: t("m.spent"), color: "#ff9f6b", values: list.map(x => x.tracked), type: "bar" }, { name: t("m.income"), color: "#4caf7d", values: list.map(x => x.income || null), type: "line" }], labels, { label: t("st.trendLabel"), fmt: money })}
       <ul class="legend"><li><i style="--c:#ff9f6b"></i>${t("m.spent")}</li><li><i style="--c:#4caf7d"></i>${t("m.income")}</li></ul>
       ${rates.length ? `<p class="muted">${t("st.rate", { r: Math.round((rates.reduce((a, b) => a + b.rate, 0) / rates.length) * 100) })}</p>` : ""}</div>
@@ -587,6 +589,22 @@ function viewStats() {
     <div class="card"><details><summary>${t("st.table")}</summary><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("m.income")}</th><th class="n">${t("m.spent")}</th><th class="n">${t("m.saved")}</th></tr></thead>
       <tbody>${list.slice().reverse().map(x => `<tr><td>${esc(monthLabel(x.m, { month: "short", year: "2-digit" }))}</td><td class="n">${money(x.income)}</td><td class="n">${money(x.tracked)}</td><td class="n ${x.savings >= 0 ? "pos" : "neg"}">${x.savings == null ? "—" : money(x.savings)}</td></tr>`).join("")}</tbody></table></details></div>`;
 }
+
+// andamento per categoria e prezzi dei prodotti: ultimi N mesi rispetto agli N precedenti
+let trendN = 3;
+function trendCard(s, end) {
+  const tr = catTrends(s, end, trendN), pr = productTrends(s, end, trendN).slice(0, 8);
+  const chips = TREND_WINDOWS.map(n => `<button type="button" class="chip" data-trend="${n}" aria-pressed="${n === trendN}">${t("st.months", { n })}</button>`).join("");
+  const arrow = p => (p == null ? "" : p > 0 ? `<b class="neg">▲ ${p}%</b>` : p < 0 ? `<b class="pos">▼ ${Math.abs(p)}%</b>` : "=");
+  const body = !tr ? `<p class="muted">${t("st.noTrend", { n2: trendN * 2 })}</p>` : `
+    <p class="hint">${t("st.trendsHint", { n: trendN, from: monthLabel(tr.recent[0], { month: "short", year: "2-digit" }), to: monthLabel(end, { month: "short", year: "2-digit" }) })}</p>
+    <p><b>${t("st.trendTotal")}</b>: ${money(tr.total.before)} → ${money(tr.total.now)} ${arrow(tr.total.pct)}</p>
+    <table class="t"><thead><tr><th>${t("e.cat")}</th><th class="n">${t("st.before")}</th><th class="n">${t("st.now")}</th><th class="n">%</th></tr></thead><tbody>
+    ${tr.rows.slice(0, 12).map(r => { const c = catById(r.cat); return `<tr><td>${catIcon(c)} ${esc(cname(c))}</td><td class="n">${money(r.before)}</td><td class="n">${money(r.now)}</td><td class="n">${r.pct == null ? `<span class="muted">${t("st.new")}</span>` : arrow(r.pct)}</td></tr>`; }).join("")}</tbody></table>
+    ${pr.length ? `<h3 style="margin-top:1em">${ic("receipt")} ${t("st.products")}</h3><p class="hint">${t("st.prodHint", { n: trendN })}</p><table class="t"><tbody>${pr.map(p => `<tr><td>${esc(p.name)}</td><td class="n">${money(p.before)}</td><td class="n">${money(p.now)}</td><td class="n">${arrow(p.pct)}</td></tr>`).join("")}</tbody></table>` : ""}`;
+  return `<div class="card" id="trends"><h2>${ic("stats")} ${t("st.trends")}</h2><div class="chips" role="group" aria-label="${esc(t("st.trends"))}">${chips}</div>${body}</div>`;
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-trend]"); if (!b) return; trendN = +b.dataset.trend; render(); });
 
 // ---------- altro ----------
 function viewMore() {

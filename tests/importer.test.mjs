@@ -71,3 +71,23 @@ test("fasce della luce sommate in un solo contatore e bollette pluri-mensili", a
   const cost = billCostByMonth(st.get(), "water", ["2026-09", "2026-10", "2026-11"]);
   assert.deepEqual(cost, [30, 30, 0]);
 });
+
+test("andamento: aumenti, riduzioni, prezzi dei prodotti", async () => {
+  const { catTrends, productTrends, trendTips } = await import("../js/stats.js");
+  const ms = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"], E = [];
+  ms.forEach((m, i) => {
+    const late = i >= 3;
+    E.push({ id: "f" + m, m, d: m + "-10", cat: "food", amt: late ? 400 : 300, items: [{ n: "Latte intero", a: late ? 1.5 : 1.2 }, { n: "Latte intero", a: late ? 1.5 : 1.2 }] });
+    E.push({ id: "t" + m, m, d: m + "-11", cat: "tobacco", amt: late ? 40 : 80 });
+  });
+  const st = createStore(); st.set({ ...st.get(), entries: E });
+  const tr = catTrends(st.get(), "2026-06", 3);
+  assert.equal(tr.rows.find(r => r.cat === "food").pct, 33);
+  assert.equal(tr.rows.find(r => r.cat === "tobacco").pct, -50);
+  assert.equal(productTrends(st.get(), "2026-06", 3)[0].pct, 25);
+  const tt = trendTips(st.get(), "2026-06");
+  assert.ok(tt.some(x => x.key === "tip.trendUp" && x.vars.cat === "food"));
+  assert.ok(tt.some(x => x.key === "tip.trendDown" && x.vars.cat === "tobacco" && x.tone === "good"));
+  assert.ok(tt.some(x => x.key === "tip.priceUp"));
+  assert.equal(catTrends(st.get(), "2026-06", 6), null); // servono 12 mesi
+});
