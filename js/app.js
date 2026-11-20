@@ -678,7 +678,7 @@ function viewMore() {
   <div class="card"><h2>${ic("capy")} Kapibo ${APP_VERSION}</h2><p class="muted">${t("o.about")}</p>
     <div class="btns"><button class="btn small soft" data-act="tour">${ic("capy")} ${t("o.tour")}</button><button class="btn small soft" data-act="legal">${ic("lock")} ${t("o.legal")}</button><button class="btn small soft" data-act="news">${ic("sparkle")} ${t("o.news")}</button><a class="btn small ghost" href="../mochi-spesa/" rel="noopener">🍡 Mochi Spesa</a><a class="btn small ghost" href="../pdf-tiny-tools/" rel="noopener">🗜️ Schiaccia PDF</a>
     <a class="btn small ghost" href="https://github.com/Marketto/kapibo" rel="noopener">GitHub</a>
-    <button class="btn small soft" data-act="share">${ic("upload")} ${t("share.btn")}</button>${kofiUrl() ? `<a class="btn small kofi" href="${kofiUrl()}" target="_blank" rel="noopener" aria-label="${esc(t("kofi.label"))}">${ic("heart")} ${t("kofi.btn")}</a>` : ""}</div></div>`;
+    <button class="btn small soft" data-act="share">${ic("share")} ${t("share.btn")}</button>${kofiUrl() ? `<a class="btn small kofi" href="${kofiUrl()}" target="_blank" rel="noopener" aria-label="${esc(t("kofi.label"))}">${ic("heart")} ${t("kofi.btn")}</a>` : ""}</div></div>`;
 }
 function albumCard() {
   const have = S().settings.stickers || {}, n = STICKERS.filter(x => have[x.id]).length;

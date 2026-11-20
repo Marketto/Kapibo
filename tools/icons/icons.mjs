@@ -28,6 +28,7 @@ export const ICONS = {
   prev: `<path d="m14.5 6-6 6 6 6"/>`,
   next: `<path d="m9.5 6 6 6-6 6"/>`,
   trash: `<path d="M4.5 7h15M9.5 7V5h5v2M6.5 7l1 12a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1l1-12"/><path d="M10 11v5M14 11v5"/>`,
+  share: `<circle cx="17.5" cy="5.8" r="2.6"/><circle cx="6.5" cy="12" r="2.6"/><circle cx="17.5" cy="18.2" r="2.6"/><path d="m8.8 10.7 6.4-3.6M8.8 13.3l6.4 3.6"/>`,
   cloud: `<path d="M7 18a4 4 0 0 1-.6-8A5.5 5.5 0 0 1 17 9a4.5 4.5 0 0 1 .5 9z"/>`,
   sync: `<path d="M19 9a7 7 0 0 0-12.6-2M5 15a7 7 0 0 0 12.6 2"/><path d="M6 3.5V7h3.5M18 20.5V17h-3.5"/>`,
   upload: `<path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/>`,
