@@ -556,8 +556,8 @@ function viewUsage() {
     ${costCard}
     ${prices.length ? `<div class="card"><h3>${ic("coin")} ${t("u.prices")}</h3>${prices.map(([k, p]) => `<p>${t("u.k." + k)}: <b>${money(p.price)}</b> / ${k === "elec" ? "kWh" : "m³"} · ${t("u.year", { c: fmtNum(p.yearCons, locale(), 0), y: money(p.yearCost) })}</p>`).join("")}
       <button class="btn small soft" data-act="offer">${ic("search")} ${t("u.compare")}</button>${live(s.offers).map(o => `<button class="chip" data-act="offer" data-id="${o.id}">${ic("usage")} ${esc(o.name || t("u.k." + o.kind))}</button>`).join(" ")}</div>` : ""}
-    ${bills.length ? `<div class="card"><h3>${ic("bill")} ${t("u.bills")}</h3><table class="t"><thead><tr><th>${t("s.month")}</th><th>${t("u.kind")}</th><th class="n">${t("u.cons")}</th><th class="n">${t("e.amount")}</th></tr></thead><tbody>
-      ${bills.slice(0, 24).map(b => `<tr data-act="bill" data-id="${b.id}" style="cursor:pointer"><td>${esc(monthLabel(b.m, { month: "short", year: "2-digit" }))}</td><td>${esc(b.name || t("u.k." + b.kind))} <small class="muted">${freqLabel(b)}</small></td><td class="n">${b.cons ? fmtNum(b.cons, locale()) + " " + b.unit : "—"}</td><td class="n">${b.amount ? money(b.amount) : "—"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+    ${bills.length ? `<div class="card"><h3>${ic("bill")} ${t("u.bills")}</h3><div class="tw" tabindex="0"><table class="t"><thead><tr><th>${t("s.month")}</th><th>${t("u.kind")}</th><th class="n">${t("u.cons")}</th><th class="n">${t("e.amount")}</th></tr></thead><tbody>
+      ${bills.slice(0, 24).map(b => `<tr data-act="bill" data-id="${b.id}" style="cursor:pointer"><td>${esc(monthLabel(b.m, { month: "short", year: "2-digit" }))}</td><td>${esc(b.name || t("u.k." + b.kind))} <small class="muted">${freqLabel(b)}</small></td><td class="n">${b.cons ? fmtNum(b.cons, locale()) + " " + b.unit : "—"}</td><td class="n">${b.amount ? money(b.amount) : "—"}</td></tr>`).join("")}</tbody></table></div></div>` : ""}`;
 }
 
 async function meterDialog(m) {
@@ -614,8 +614,8 @@ function viewStats() {
       ${rates.length ? `<p class="muted">${t("st.rate", { r: Math.round((rates.reduce((a, b) => a + b.rate, 0) / rates.length) * 100) })}</p>` : ""}</div>
     ${slices.length ? `<div class="card"><h2>${t("st.month", { m: monthLabel(cur) })}</h2>${donut(slices, { label: t("st.donutLabel"), center: money(m.tracked) })}<ul class="legend">${slices.map(x => `<li><i style="--c:${x.color}"></i>${catIcon(x.c)} ${esc(x.label)}</li>`).join("")}</ul></div>` : ""}
     <div class="card"><h2>${t("st.avg")}</h2>${hbars(avgRows, money)}</div>
-    <div class="card"><details><summary>${t("st.table")}</summary><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("m.income")}</th><th class="n">${t("m.spent")}</th><th class="n">${t("m.saved")}</th></tr></thead>
-      <tbody>${list.slice().reverse().map(x => `<tr><td>${esc(monthLabel(x.m, { month: "short", year: "2-digit" }))}</td><td class="n">${money(x.income)}</td><td class="n">${money(x.tracked)}</td><td class="n ${x.savings >= 0 ? "pos" : "neg"}">${x.savings == null ? "—" : money(x.savings)}</td></tr>`).join("")}</tbody></table></details></div>`;
+    <div class="card"><details><summary>${t("st.table")}</summary><div class="tw" tabindex="0"><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("m.income")}</th><th class="n">${t("m.spent")}</th><th class="n">${t("m.saved")}</th></tr></thead>
+      <tbody>${list.slice().reverse().map(x => `<tr><td>${esc(monthLabel(x.m, { month: "short", year: "2-digit" }))}</td><td class="n">${money(x.income)}</td><td class="n">${money(x.tracked)}</td><td class="n ${x.savings >= 0 ? "pos" : "neg"}">${x.savings == null ? "—" : money(x.savings)}</td></tr>`).join("")}</tbody></table></div></details></div>`;
 }
 
 // andamento per categoria e prezzi dei prodotti: ultimi N mesi rispetto agli N precedenti
@@ -627,9 +627,9 @@ function trendCard(s, end) {
   const body = !tr ? `<p class="muted">${t("st.noTrend", { n2: trendN * 2 })}</p>` : `
     <p class="hint">${t("st.trendsHint", { n: trendN, from: monthLabel(tr.recent[0], { month: "short", year: "2-digit" }), to: monthLabel(end, { month: "short", year: "2-digit" }) })}</p>
     <p><b>${t("st.trendTotal")}</b>: ${money(tr.total.before)} → ${money(tr.total.now)} ${arrow(tr.total.pct)}</p>
-    <table class="t"><thead><tr><th>${t("e.cat")}</th><th class="n">${t("st.before")}</th><th class="n">${t("st.now")}</th><th class="n">%</th></tr></thead><tbody>
-    ${tr.rows.slice(0, 12).map(r => { const c = catById(r.cat); return `<tr><td>${catIcon(c)} ${esc(cname(c))}</td><td class="n">${money(r.before)}</td><td class="n">${money(r.now)}</td><td class="n">${r.pct == null ? `<span class="muted">${t("st.new")}</span>` : arrow(r.pct)}</td></tr>`; }).join("")}</tbody></table>
-    ${pr.length ? `<h3 style="margin-top:1em">${ic("receipt")} ${t("st.products")}</h3><p class="hint">${t("st.prodHint", { n: trendN })}</p><table class="t"><tbody>${pr.map(p => `<tr><td>${esc(p.name)}</td><td class="n">${money(p.before)}</td><td class="n">${money(p.now)}</td><td class="n">${arrow(p.pct)}</td></tr>`).join("")}</tbody></table>` : ""}`;
+    <div class="tw" tabindex="0"><table class="t"><thead><tr><th>${t("e.cat")}</th><th class="n">${t("st.before")}</th><th class="n">${t("st.now")}</th><th class="n">%</th></tr></thead><tbody>
+    ${tr.rows.slice(0, 12).map(r => { const c = catById(r.cat); return `<tr><td>${catIcon(c)} ${esc(cname(c))}</td><td class="n">${money(r.before)}</td><td class="n">${money(r.now)}</td><td class="n">${r.pct == null ? `<span class="muted">${t("st.new")}</span>` : arrow(r.pct)}</td></tr>`; }).join("")}</tbody></table></div>
+    ${pr.length ? `<h3 style="margin-top:1em">${ic("receipt")} ${t("st.products")}</h3><p class="hint">${t("st.prodHint", { n: trendN })}</p><div class="tw" tabindex="0"><table class="t"><tbody>${pr.map(p => `<tr><td>${esc(p.name)}</td><td class="n">${money(p.before)}</td><td class="n">${money(p.now)}</td><td class="n">${arrow(p.pct)}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
   return `<div class="card" id="trends"><h2>${ic("stats")} ${t("st.trends")}</h2><div class="chips" role="group" aria-label="${esc(t("st.trends"))}">${chips}</div>${body}</div>`;
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-trend]"); if (!b) return; trendN = +b.dataset.trend; render(); });
@@ -646,8 +646,8 @@ function yoyCard(s, end) {
     ${timeline([{ name: t("st.lastYear"), color: "#c9b8a8", values: y.prev, type: "bar" }, { name: t("st.thisYear"), color: "#ff9f6b", values: y.now, type: "bar" }], y.months.map(m => monthLabel(m, { month: "short" })), { label: t("st.yoy"), fmt: money })}
     <ul class="legend"><li><i style="--c:#c9b8a8"></i>${t("st.lastYear")}</li><li><i style="--c:#ff9f6b"></i>${t("st.thisYear")}</li></ul>
     <p><b>${t("st.yoySum", { now: money(y.sumNow), before: money(y.sumPrev), n: y.pairs })}</b> ${arrow(y.pct)}</p>
-    <details><summary>${t("st.table")}</summary><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("st.lastYear")}</th><th class="n">${t("st.thisYear")}</th><th class="n">%</th></tr></thead><tbody>
-    ${y.months.map((m, i) => y.now[i] == null && y.prev[i] == null ? "" : `<tr><td>${esc(monthLabel(m, { month: "short", year: "2-digit" }))}</td><td class="n">${y.prev[i] == null ? "—" : money(y.prev[i])}</td><td class="n">${y.now[i] == null ? "—" : money(y.now[i])}</td><td class="n">${y.prev[i] > 0 && y.now[i] != null ? arrow(Math.round((y.now[i] / y.prev[i] - 1) * 100)) : ""}</td></tr>`).reverse().join("")}</tbody></table></details>`;
+    <details><summary>${t("st.table")}</summary><div class="tw" tabindex="0"><table class="t"><thead><tr><th>${t("s.month")}</th><th class="n">${t("st.lastYear")}</th><th class="n">${t("st.thisYear")}</th><th class="n">%</th></tr></thead><tbody>
+    ${y.months.map((m, i) => y.now[i] == null && y.prev[i] == null ? "" : `<tr><td>${esc(monthLabel(m, { month: "short", year: "2-digit" }))}</td><td class="n">${y.prev[i] == null ? "—" : money(y.prev[i])}</td><td class="n">${y.now[i] == null ? "—" : money(y.now[i])}</td><td class="n">${y.prev[i] > 0 && y.now[i] != null ? arrow(Math.round((y.now[i] / y.prev[i] - 1) * 100)) : ""}</td></tr>`).reverse().join("")}</tbody></table></div></details>`;
   return `<div class="card" id="yoy"><h2>${ic("calendar")} ${t("st.yoy")}</h2><p class="hint">${t("st.yoyHint")}</p><div class="chips" role="group" aria-label="${esc(t("st.yoy"))}">${chips}</div>${body}</div>`;
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-yoy]"); if (!b) return; yoyCat = b.dataset.yoy; render(); });

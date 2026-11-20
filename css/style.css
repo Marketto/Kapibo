@@ -334,3 +334,40 @@ main > section { animation: tabIn .5s cubic-bezier(.3, 1.5, .5, 1); }
 .tip.good > span { background: var(--c-ok-soft); color: var(--c-ok); }
 .tip.watch > span { background: var(--c-pri-soft); color: var(--c-pri); }
 #trends .chips { margin-bottom: 8px; }
+
+/* responsive: tabelle, campi allineati, header stretto */
+.tw { overflow-x: auto; margin-inline: -4px; padding-inline: 4px; scrollbar-width: thin; }
+.tw:focus-visible { outline: 3px solid var(--c-focus); }
+table.t td:first-child { overflow-wrap: anywhere; }
+@media (max-width: 420px) {
+  table.t { font-size: .8rem; }
+  table.t th, table.t td { padding: 6px 3px; }
+}
+/* campi affiancati: l'input sta sempre in basso, anche se un'etichetta va a capo */
+.grid2 > label.f { display: flex; flex-wrap: wrap; align-content: flex-end; align-items: baseline; gap: 0 5px; }
+.grid2 > label.f > input, .grid2 > label.f > select, .grid2 > label.f > textarea { flex: 0 0 100%; }
+/* interruttori: la casella resta piccola accanto al testo */
+label.f.sw { font-weight: 600; }
+label.f.sw > input[type="checkbox"] { display: inline-block; width: 26px; height: 26px; min-height: 0; margin: 0; padding: 0; flex: none; }
+/* barre orizzontali: tutte le barre partono e finiscono allo stesso punto */
+.hbars { display: grid; grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr) max-content; column-gap: 8px; }
+.hbars li { grid-column: 1 / -1; grid-template-columns: subgrid; }
+.hb-v, .hbars li > :last-child { text-align: end; font-variant-numeric: tabular-nums; }
+.theme-pick .chip { text-align: start; min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+@media (max-width: 380px) { .theme-pick .chip { font-size: .82rem; padding-inline: 8px; } }
+/* schermi stretti: nome e importo sopra, barra a tutta larghezza sotto */
+@media (max-width: 420px) {
+  .hbars { grid-template-columns: minmax(0, 1fr) max-content; row-gap: 2px; }
+  .hbars li { row-gap: 4px; padding: 6px 0; }
+  .hbars li > .hb-l { grid-column: 1; grid-row: 1; }
+  .hbars li > :last-child { grid-column: 2; grid-row: 1; }
+  .hbars li > .hb-t { grid-column: 1 / -1; grid-row: 2; }
+}
+/* header: i tre tasti stanno su una riga anche su schermi stretti */
+.hero-in { flex-wrap: nowrap; }
+.hero-in .btn { flex: 0 1 auto; min-width: 0; white-space: nowrap; }
+@media (max-width: 380px) { .hero-in { gap: 6px; } .hero-in .btn { padding-inline: 11px; font-size: .88rem; } }
+table.t th, table.t th.n { white-space: normal; vertical-align: bottom; }
+/* se una tabella resta comunque larga, un'ombra sul bordo dice che si può scorrere */
+.tw { background: linear-gradient(to right, var(--c-card) 30%, transparent) left / 20px 100% no-repeat local, linear-gradient(to left, var(--c-card) 30%, transparent) right / 20px 100% no-repeat local, radial-gradient(farthest-side at 0 50%, rgba(0,0,0,.14), transparent) left / 10px 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.14), transparent) right / 10px 100% no-repeat scroll; }
+@media (max-width: 340px) { table.t { font-size: .75rem; } table.t th, table.t td { padding-inline: 2px; } }
