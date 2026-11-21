@@ -182,7 +182,13 @@ async function onAction(e) {
     edit: () => entryDialog(S().entries.find(x => x.id === id)),
     meta: monthDialog, album: () => go("more", "#stickers"),
     cat: () => catDetail(id),
-    kind: () => startScan(b.dataset.kind, b.dataset.cam === "1"),
+    kind: async () => {
+      // dai tipi grandi: si sceglie sempre se scattare o prendere una foto già fatta / un PDF
+      if (b.dataset.cam !== "1" || b.dataset.direct) return startScan(b.dataset.kind, b.dataset.cam === "1");
+      const r = await dialog(t("s.k." + b.dataset.kind), `<p class="hint">${esc(t("s.srcHint"))}</p>`, { ok: null, cancel: null,
+        extra: `<div class="src-pick"><button class="btn" value="cam">${ic("photo")} ${esc(t("s.srcCam"))}</button><button class="btn soft" value="file">${ic("file")} ${esc(t("s.srcFile"))}</button></div>` });
+      if (r?._btn === "cam" || r?._btn === "file") startScan(b.dataset.kind, r._btn === "cam");
+    },
     scanBack: () => { scanState = null; render(); },
     meter: () => meterDialog(S().meters.find(x => x.id === id)),
     reading: () => readingDialog(id),

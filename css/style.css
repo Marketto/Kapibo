@@ -375,3 +375,6 @@ table.t th, table.t th.n { white-space: normal; vertical-align: bottom; }
 .seg { display: flex; gap: 8px; margin: 10px 0; }
 .seg .chip { flex: 1 1 0; justify-content: center; min-height: 44px; }
 .ritem .qty { font-variant-numeric: tabular-nums; font-weight: 800; cursor: default; }
+/* scelta della sorgente: fotocamera o foto/PDF già pronti */
+.src-pick { display: grid; gap: 10px; width: 100%; }
+.src-pick .btn { width: 100%; min-height: 52px; justify-content: center; }
