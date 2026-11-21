@@ -486,6 +486,7 @@
 "tour.share.p":"Hore na každej stránke nájdeš verziu (klepnutím zobrazíš novinky), tlačidlo na zdieľanie Kapibo a, ak je zapnuté, tlačidlo na kávu na Ko-fi. Pri posúvaní sa hlavička opäť zmenší.",
 "tour.mochi.t":"Kapibo a Mochi Spesa",
 "tour.mochi.p":"Ak používaš aj Mochi Spesa, nákupy putujú medzi aplikáciami: bloček → špajza, hotový nákup → rozpočet. Tu vyber, či sa mám pýtať zakaždým.",
+"news.164":"Bločky odfotené v ruke, nakrivo alebo zvlnené: Kapibo poskladá riadky podľa polohy cien a vyradí nemožné okraje papiera.",
 "news.163":"Oveľa presnejšie bločky: Kapibo používa skener Schiaccia PDF (okraje papiera, tiene, záhyby), číta viackrát a spája čítania, kým riadky nesedia s celkom. Zobrazuje sa aj množstvo (napr. ×3).",
 "news.162":"Fotky bločkov sa čítajú lepšie: Kapi oreže papier od pozadia, použije plné rozlíšenie a ak súčet nesedí, prečíta ich znova.",
 "news.161":"Bločky: zapíš každú položku alebo len celkovú sumu. Kategórie sa navrhujú podľa produktov a obchodu spolu (napr. jedlo z IKEA → potraviny) a Kapi sa učí z tvojich opráv. Čistejšie názvy položiek.",

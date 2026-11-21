@@ -486,6 +486,7 @@
 "tour.share.p":"A dalt de cada pàgina trobaràs la versió (toca per veure les novetats), el botó per compartir Kapibo i, si està activat, un per convidar a un cafè a Ko-fi. Quan desplaces, la capçalera es torna a reduir.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Si també fas servir Mochi Spesa, les compres viatgen entre les apps: tiquet → rebost, compra feta → pressupost. Tria aquí si he de preguntar cada vegada.",
+"news.164":"Tiquets fotografiats a la mà, torts o arrugats: Kapibo reconstrueix les línies a partir de la posició dels preus i descarta les vores impossibles del paper.",
 "news.163":"Tiquets molt més precisos: Kapibo fa servir l'escàner de Schiaccia PDF (vores del paper, ombres, plecs), llegeix diverses vegades i uneix les lectures fins que les línies quadren amb el total. També es veu la quantitat (p. ex. ×3).",
 "news.162":"Les fotos dels tiquets es llegeixen millor: la Kapi retalla el paper del fons, fa servir tota la resolució i torna a llegir si el total no quadra.",
 "news.161":"Tiquets: registra cada línia o només el total. Les categories es suggereixen segons productes i botiga alhora (p. ex. menjar d'IKEA → queviures) i Kapi aprèn de les teves correccions. Noms de línia més nets.",

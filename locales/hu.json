@@ -486,6 +486,7 @@
 "tour.share.p":"Minden oldal tetején ott a verzió (koppints az újdonságokért), a Kapibo megosztása gomb és, ha engedélyezett, egy kávé gomb a Ko-fin. Görgetéskor a fejléc újra összezsugorodik.",
 "tour.mochi.t":"Kapibo és Mochi Spesa",
 "tour.mochi.p":"Ha a Mochi Spesát is használod, a vásárlások mozognak az appok között: blokk → kamra, kész bevásárlás → költségvetés. Itt választhatod, kérdezzek-e minden alkalommal.",
+"news.164":"Kézben fotózott, ferde vagy görbe blokkok: a Kapibo az árak helyzetéből építi újra a sorokat, és elveti a lehetetlen papírszéleket.",
 "news.163":"Sokkal pontosabb nyugták: a Kapibo a Schiaccia PDF szkennerét használja (papírszélek, árnyékok, hajtások), többször olvas, és egyesíti az olvasatokat, amíg a sorok ki nem adják a végösszeget. A mennyiség is látszik (pl. ×3).",
 "news.162":"A blokkfotók jobban olvashatók: Kapi kivágja a papírt a háttérből, teljes felbontást használ, és újraolvas, ha nem stimmel a végösszeg.",
 "news.161":"Blokkok: rögzíthetsz minden tételt vagy csak az összeget. A kategóriákat a termékek és az üzlet együtt alapján javasoljuk (pl. IKEA-s étel → élelmiszer), és Kapi tanul a javításaidból. Tisztább tételnevek.",

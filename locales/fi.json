@@ -486,6 +486,7 @@
 "tour.share.p":"Jokaisen sivun yläosasta löydät version (napauta uutisia varten), Kapibon jakopainikkeen ja, jos käytössä, kahvipainikkeen Ko-fissa. Selatessa otsake pienenee taas.",
 "tour.mochi.t":"Kapibo ja Mochi Spesa",
 "tour.mochi.p":"Jos käytät myös Mochi Spesaa, ostokset liikkuvat sovellusten välillä: kuitti → ruokakomero, tehdyt ostokset → budjetti. Valitse tässä, kysynkö joka kerta.",
+"news.164":"Kädessä kuvatut kuitit, vinossa tai rullalla: Kapibo kokoaa rivit hintojen sijainnin perusteella ja hylkää mahdottomat paperin reunat.",
 "news.163":"Paljon tarkemmat kuitit: Kapibo käyttää Schiaccia PDF:n skanneria (paperin reunat, varjot, taitokset), lukee useita kertoja ja yhdistää lukemat, kunnes rivit täsmäävät loppusummaan. Myös määrä näkyy (esim. ×3).",
 "news.162":"Kuittikuvat luetaan paremmin: Kapi rajaa paperin taustasta, käyttää täyttä tarkkuutta ja lukee uudelleen, jos summa ei täsmää.",
 "news.161":"Kuitit: tallenna jokainen rivi tai vain loppusumma. Luokat ehdotetaan tuotteiden ja kaupan perusteella yhdessä (esim. ruoka IKEAsta → ruokaostokset), ja Kapi oppii korjauksistasi. Siistimmät rivinimet.",

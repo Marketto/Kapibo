@@ -486,6 +486,7 @@
 "tour.share.p":"U góry każdej strony znajdziesz wersję (dotknij, by zobaczyć nowości), przycisk udostępniania Kapibo i, jeśli włączony, przycisk kawy na Ko-fi. Po przewinięciu nagłówek znów się zmniejsza.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Jeśli używasz też Mochi Spesa, zakupy wędrują między aplikacjami: paragon → spiżarnia, zakupy zrobione → budżet. Wybierz tu, czy mam pytać za każdym razem.",
+"news.164":"Paragony sfotografowane w dłoni, krzywe lub pozwijane: Kapibo odtwarza wiersze na podstawie położenia cen i odrzuca niemożliwe krawędzie kartki.",
 "news.163":"Znacznie dokładniejsze paragony: Kapibo używa skanera Schiaccia PDF (krawędzie papieru, cienie, zagięcia), czyta kilka razy i łączy odczyty, aż pozycje zgadzają się z sumą. Widać też ilość (np. ×3).",
 "news.162":"Zdjęcia paragonów są lepiej odczytywane: Kapi wycina papier z tła, używa pełnej rozdzielczości i czyta ponownie, gdy suma się nie zgadza.",
 "news.161":"Paragony: zapisuj każdą pozycję albo tylko sumę. Kategorie są podpowiadane na podstawie produktów i sklepu razem (np. jedzenie z IKEA → spożywcze), a Kapi uczy się z Twoich poprawek. Czytelniejsze nazwy pozycji.",

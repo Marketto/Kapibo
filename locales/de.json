@@ -486,6 +486,7 @@
 "tour.share.p":"Oben auf jeder Seite findest du die Version (tippen für Neuigkeiten), den Button zum Teilen von Kapibo und, falls aktiviert, einen für einen Kaffee auf Ko-fi. Beim Scrollen wird die Kopfzeile wieder kleiner.",
 "tour.mochi.t":"Kapibo und Mochi Spesa",
 "tour.mochi.p":"Wenn du auch Mochi Spesa nutzt, wandern Einkäufe zwischen den Apps: Bon → Vorrat, erledigter Einkauf → Budget. Wähl hier, ob ich jedes Mal fragen soll.",
+"news.164":"Belege in der Hand fotografiert, schief oder gewellt: Kapibo baut die Zeilen aus der Position der Preise neu auf und verwirft unmögliche Papierkanten.",
 "news.163":"Viel genauere Kassenbons: Kapibo nutzt den Scanner von Schiaccia PDF (Papierränder, Schatten, Falten), liest mehrmals und führt die Ergebnisse zusammen, bis die Zeilen zur Summe passen. Auch die Menge wird angezeigt (z. B. ×3).",
 "news.162":"Kassenbon-Fotos werden besser gelesen: Kapi schneidet das Papier vom Hintergrund aus, nutzt die volle Auflösung und liest erneut, wenn die Summe nicht stimmt.",
 "news.161":"Belege: erfasse jede Position oder nur die Summe. Kategorien werden aus Produkten und Geschäft zusammen vorgeschlagen (z. B. Essen von IKEA → Lebensmittel), und Kapi lernt aus deinen Korrekturen. Sauberere Positionsnamen.",

@@ -486,6 +486,7 @@
 "tour.share.p":"Her sayfanın üstünde sürümü (yenilikler için dokun), Kapibo'yu paylaşma düğmesini ve etkinse Ko-fi'de kahve ısmarlama düğmesini bulursun. Kaydırınca üst başlık yeniden küçülür.",
 "tour.mochi.t":"Kapibo ve Mochi Spesa",
 "tour.mochi.p":"Mochi Spesa'yı da kullanıyorsan alışverişler uygulamalar arasında gidip gelir: fiş → kiler, biten alışveriş → bütçe. Her seferinde sorup sormayacağımı buradan seç.",
+"news.164":"Elde çekilmiş, eğri veya kıvrık fişler: Kapibo satırları fiyatların konumundan yeniden kurar ve imkânsız kâğıt kenarlarını eler.",
 "news.163":"Çok daha doğru fişler: Kapibo, Schiaccia PDF'in tarayıcısını (kağıt kenarları, gölgeler, kıvrımlar) kullanır, birkaç kez okur ve satırlar toplamla tutana kadar okumaları birleştirir. Miktar da görünür (örn. ×3).",
 "news.162":"Fiş fotoğrafları daha iyi okunuyor: Kapi kâğıdı arka plandan kırpar, tam çözünürlük kullanır ve toplam tutmazsa yeniden okur.",
 "news.161":"Fişler: her kalemi ya da yalnızca toplamı kaydedebilirsin. Kategoriler ürün ve mağaza birlikte değerlendirilerek önerilir (örn. IKEA'dan yiyecek → market) ve Kapi düzeltmelerinden öğrenir. Daha temiz kalem adları.",

@@ -8,13 +8,14 @@ const VOUCHER = ["buoni pasto", "buono pasto", "ticket restaurant", "ticket", "e
 const DISCOUNT = ["sconto", "sc ", "promo", "offerta", "coupon", "risparmio", "rabatt", "remise", "descuento", "discount", "скидка", "割引", "할인"];
 const CODE = /^\W*(?:art\.?\s*\/?\s*ean|ean|cod(?:ice)?\.?|plu|sku|rif\.?)\b\s*[:.]?\s*[\w-]*\d{4,}/i;
 // "2 x 0,89", "5 PZ x 0.89 EUR/PZ", "0,512 KG x 2,49 €/KG"
-const QTY = /^(\d+(?:[.,]\d+)?)\s*(?:pz|pezzi|pc|pcs|n|nr|st|stk|kg|g|lt?)?\.?\s*[x×*]\s*(\d+[.,]\d{2,3})/i;
+const QTY = /^(\d+(?:[.,]\d+)?)\s*(?:pz|pezzi|pc|pcs|n|nr|st|stk|kg|g|lt?)?\.?\s*[x×*]+\s*(\d+[.,]\d{2,3})/i;
 const UNIT = /\b(?:eur|euro|€)?\s*\/?\s*(?:pz|pezzo|pezzi|kg|lt?|cad|pc|stk)\b|€|\beur(?:o)?\b/gi;
 // Catene note: il nome si cerca in tutto lo scontrino (il logo spesso non si legge), poi il sito www.<nome>.it
-const CHAINS = [["eurospin", "Eurospin"], ["esselunga", "Esselunga"], ["ipercoop", "Ipercoop"], ["coop", "Coop"], ["conad", "Conad"], ["lidl", "Lidl"], ["aldi", "Aldi"], ["carrefour", "Carrefour"], ["penny", "Penny"], ["despar", "Despar"], ["eurospar", "Eurospar"], ["interspar", "Interspar"], ["tigros", "Tigros"], ["famila", "Famila"], ["bennet", "Bennet"], ["unes", "Unes"], ["crai", "Crai"], ["todis", "Todis"], ["naturasi", "NaturaSì"], ["tuodi", "Tuodì"], ["in's mercato", "In's"], ["md spa", "MD"], ["pam panorama", "Pam"], ["panorama", "Panorama"], ["simply", "Simply"], ["sigma", "Sigma"], ["iper la grande", "Iper"], ["decathlon", "Decathlon"], ["ikea", "IKEA"], ["leroy merlin", "Leroy Merlin"], ["mediaworld", "MediaWorld"], ["unieuro", "Unieuro"], ["euronics", "Euronics"], ["tigota", "Tigotà"], ["acqua & sapone", "Acqua & Sapone"], ["acqua e sapone", "Acqua & Sapone"], ["rewe", "REWE"], ["edeka", "EDEKA"], ["mercadona", "Mercadona"], ["auchan", "Auchan"], ["leclerc", "E.Leclerc"], ["tesco", "Tesco"], ["sainsbury", "Sainsbury's"]];
+const CHAINS = [["eurospin", "Eurospin"], ["esselunga", "Esselunga"], ["ipercoop", "Ipercoop"], ["coop", "Coop"], ["conad", "Conad"], ["lidl", "Lidl"], ["aldi", "Aldi"], ["carrefour", "Carrefour"], ["penny", "Penny"], ["despar", "Despar"], ["eurospar", "Eurospar"], ["interspar", "Interspar"], ["tigros", "Tigros"], ["famila", "Famila"], ["bennet", "Bennet"], ["unes", "Unes"], ["crai", "Crai"], ["todis", "Todis"], ["naturasi", "NaturaSì"], ["tuodi", "Tuodì"], ["in's mercato", "In's"], ["md spa", "MD"], ["pam panorama", "Pam"], ["panorama", "Panorama"], ["simply", "Simply"], ["sigma", "Sigma"], ["iper la grande", "Iper"], ["decathlon", "Decathlon"], ["ikea", "IKEA"], ["leroy merlin", "Leroy Merlin"], ["mediaworld", "MediaWorld"], ["unieuro", "Unieuro"], ["euronics", "Euronics"], ["tigota", "Tigotà"], ["acqua & sapone", "Acqua & Sapone"], ["acqua e sapone", "Acqua & Sapone"], ["rewe", "REWE"], ["edeka", "EDEKA"], ["mercadona", "Mercadona"], ["auchan", "Auchan"], ["leclerc", "E.Leclerc"], ["tesco", "Tesco"], ["sainsbury", "Sainsbury's"], ["emisfero", "Emisfero"], ["misfero", "Emisfero"], ["sfero", "Emisfero"], ["gros", "GROS"], ["elite", "Elite"], ["prix", "Prix"], ["deco", "Decò"], ["dpiu", "Dpiù"], ["mercato", null]].filter(c => c[1]);
 export function findChain(text) {
   const n = norm(text).replace(/\s+/g, " ");
-  for (const [k, name] of CHAINS) if (new RegExp(`(^|[^a-z])${k.replace(/[&']/g, m => "\\" + m)}([^a-z]|$)`).test(n)) return name;
+  // nomi lunghi: basta l'inizio della parola ("sferoò" letto dal logo); corti: parola intera
+  for (const [k, name] of CHAINS) if (new RegExp(`(^|[^a-z])${k.replace(/[&']/g, m => "\\" + m)}${k.length >= 5 ? "" : "([^a-z]|$)"}`).test(n)) return name;
   const w = String(text).match(/www\s?\.\s?([a-z0-9-]{3,30})\.(?:it|com|de|fr|es|eu|co\.uk)/i);
   return w ? w[1].charAt(0).toUpperCase() + w[1].slice(1).toLowerCase() : null;
 }
@@ -31,7 +32,9 @@ export function parseReceipt(text) {
   };
   for (let i = 0; i < L.length; i++) {
     // OCR: il codice IVA dopo il prezzo attaccato al prezzo ("7,001" = 7,00 + 1); non per pesi e quantità ("0,512 kg x")
-    const l = /\b(?:kg|g|lt?)\b|[x×*]/i.test(L[i]) ? L[i] : L[i].replace(/(\d[.,]\d{2})\d(?=[^\d]*$)/, "$1 ");
+    // OCR: virgola letta come "°" ("0° 86" = 0,86)
+    const l0 = L[i].replace(/(\b\d{1,3})\s?[°º]\s?(\d{2})\b/g, "$1,$2");
+    const l = /\b(?:kg|g|lt?)\b|[x×*]/i.test(l0) ? l0 : l0.replace(/(\d[.,]\d{2})\d(?=[^\d]*$)/, "$1 ");
     // codici articolo (IKEA "Art/Ean 123", "Cod. 456"): non sono prodotti e non interrompono il nome sopra
     if (CODE.test(l)) continue;
     if (!date) date = findDate(l);
@@ -100,7 +103,7 @@ export function mergeReceipts(list) {
   let slots = base.items.map(it => ({ name: it.name, amts: [it.amount], qty: it.qty, seen: 1 }));
   for (const r of list) {
     if (r === base) continue;
-    const A = slots, B = r.items, n = A.length, m = B.length, D = Array.from({ length: n + 1 }, () => new Float32Array(m + 1));
+    const A = slots, B = r.items, n = A.length, m = B.length, D = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
     for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) { const s = sim(A[i].name, B[j].name); D[i][j] = Math.max(D[i + 1][j], D[i][j + 1], s >= 0.5 ? D[i + 1][j + 1] + s : -1); }
     const out = []; let i = 0, j = 0;
     while (i < n || j < m) {
@@ -111,7 +114,11 @@ export function mergeReceipts(list) {
     }
     slots = out;
   }
-  const totals = list.map(r => r.total).filter(x => x != null), total = totals.length ? mode(totals) : null;
+  // totale: il più votato tra quelli possibili (non più piccolo della voce più cara vista in almeno due letture)
+  const big = Math.max(0, ...slots.filter(s => s.amts.length > 1).map(s => Math.min(...s.amts)));
+  const totals = list.map(r => r.total).filter(x => x != null && x >= big - 0.01), total = totals.length ? mode(totals) : null;
+  // una "voce" che vale quanto il totale è la riga del totale finita sul nome sbagliato
+  if (total != null && slots.length > 1) slots = slots.filter(s => !s.amts.every(a => Math.abs(a - total) < 0.01));
   for (const s of slots) { const c = {}; s.amts.forEach(a => (c[a] = (c[a] || 0) + 1)); s.cands = Object.entries(c).sort((a, b) => b[1] - a[1]).map(([a]) => +a); s.pick = s.cands[0]; s.on = true; }
   const sum = () => round2(slots.reduce((a, s) => a + (s.on ? s.pick : 0), 0));
   if (total != null && Math.abs(sum() - total) >= 0.02) {
@@ -129,6 +136,39 @@ export function mergeReceipts(list) {
   }
   const items = slots.filter(s => s.on).map(s => ({ name: s.name, amount: s.pick, ...(s.qty ? { qty: s.qty } : {}) }));
   const r0 = list.find(r => r.total === total) || base;
-  return { ...r0, items, total, sum: round2(items.reduce((a, b) => a + b.amount, 0)), merged: list.length };
+  // negozio: quello riconosciuto come catena nel maggior numero di letture
+  const chains = list.map(r => r.store).filter(x => x && CHAINS.some(c => c[1] === x)), store = chains.length ? mode2(chains) : r0.store;
+  return { ...r0, store, items, total, sum: round2(items.reduce((a, b) => a + b.amount, 0)), merged: list.length };
 }
+const mode2 = a => { const c = {}; a.forEach(x => (c[x] = (c[x] || 0) + 1)); return Object.entries(c).sort((x, y) => y[1] - x[1])[0][0]; };
 const mode = a => { const c = {}; a.forEach(x => (c[x] = (c[x] || 0) + 1)); return +Object.entries(c).sort((x, y) => y[1] - x[1])[0][0]; };
+
+/**
+ * Testo ricostruito dalle posizioni delle parole: ogni importo della colonna di destra va alla riga di testo più vicina
+ * (centro verticale), saltando le righe di codici articolo, che non hanno mai un prezzo. Serve per gli scontrini
+ * arricciati o fotografati storti, dove il prezzo non sta sulla stessa riga del nome.
+ * lines: [{ words: [{ text, bbox: {x0,y0,x1,y1} }] }], width: larghezza dell'immagine.
+ */
+export function layoutText(lines, width) {
+  const AM = /^-?\d{1,4}[.,]\d{2}$/, rows = [], prices = [];
+  for (const l of lines || []) {
+    const keep = [];
+    for (const w of l.words || []) {
+      const t = String(w.text || "").replace(/[^\d.,-]+$/, "").replace(/^[^\d-]+/, "");
+      if (AM.test(t) && w.bbox.x0 > width * 0.5) prices.push({ t, y: (w.bbox.y0 + w.bbox.y1) / 2, x: w.bbox.x0 });
+      else if (!(w.bbox.x0 > width * 0.6 && /^[\d|il!]{1,2}\W?$/i.test(w.text))) keep.push(w); // codice IVA "1" in fondo
+    }
+    if (!keep.length) continue;
+    const y0 = Math.min(...keep.map(w => w.bbox.y0)), y1 = Math.max(...keep.map(w => w.bbox.y1));
+    const text = keep.map(w => w.text).join(" ");
+    rows.push({ text, y: (y0 + y1) / 2, h: y1 - y0, code: CODE.test(text), price: [] });
+  }
+  for (const p of prices) {
+    let best = null, bd = Infinity;
+    for (const r of rows) { if (r.code) continue; const d = Math.abs(r.y - p.y); if (d < bd) { bd = d; best = r; } }
+    if (best && bd < Math.max(best.h, 12) * 1.6) best.price.push(p);
+    else rows.push({ text: "", y: p.y, h: 0, price: [p] });
+  }
+  rows.sort((a, b) => a.y - b.y);
+  return rows.map(r => [r.text, ...r.price.sort((a, b) => a.x - b.x).map(p => p.t)].join("   ").trim()).filter(Boolean).join("\n");
+}

@@ -486,6 +486,7 @@
 "tour.share.p":"Na vrhu svake stranice nalaze se verzija (dodirni za novosti), dugme za dijeljenje Kapibo i, ako je uključeno, dugme za kafu na Ko-fi. Kad skroluješ, zaglavlje se opet smanjuje.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Ako koristiš i Mochi Spesa, kupovine putuju između aplikacija: račun → smočnica, obavljena kupovina → budžet. Ovdje izaberi da li da pitam svaki put.",
+"news.164":"Računi fotografirani u ruci, nakrivljeni ili savijeni: Kapibo rekonstruira redove prema položaju cijena i odbacuje nemoguće rubove papira.",
 "news.163":"Mnogo precizniji računi: Kapibo koristi skener Schiaccia PDF (rubovi papira, sjene, nabori), čita više puta i spaja očitanja dok se stavke ne slože s ukupnim iznosom. Prikazuje se i količina (npr. ×3).",
 "news.162":"Fotografije računa se bolje čitaju: Kapi izreže papir s pozadine, koristi punu rezoluciju i ponovo čita ako se zbir ne slaže.",
 "news.161":"Računi: bilježi svaku stavku ili samo ukupan iznos. Kategorije se predlažu na osnovu proizvoda i trgovine zajedno (npr. hrana iz IKEA → namirnice), a Kapi uči iz tvojih ispravki. Čišći nazivi stavki.",

@@ -47,9 +47,13 @@ export async function recognize(src, { lang = "eng", mode = "text", onStatus, sc
   const cv = src instanceof HTMLCanvasElement ? src : await prepare(src, mode, scale);
   const w = await getWorker(lang, onStatus);
   await w.setParameters(mode === "digits" ? { tessedit_char_whitelist: "0123456789.,", tessedit_pageseg_mode: "7" } : { tessedit_char_whitelist: "", tessedit_pageseg_mode: psm, preserve_interword_spaces: "1" });
-  const r = await w.recognize(cv);
+  const r = await w.recognize(cv, {}, { text: true, blocks: mode !== "digits" });
   touch();
-  return { text: r.data.text, conf: r.data.confidence, canvas: cv };
+  // righe con le parole e le loro posizioni (per gli scontrini arricciati: vedi layoutText in parsers/receipt.js)
+  const lines = [];
+  for (const b of r.data.blocks || []) for (const p of b.paragraphs || []) for (const l of p.lines || [])
+    lines.push({ bbox: l.bbox, words: (l.words || []).map(w => ({ text: w.text, bbox: w.bbox })) });
+  return { text: r.data.text, conf: r.data.confidence, canvas: cv, lines, width: cv.width };
 }
 
 // ---------- foglio da una foto: la scansione di Schiaccia PDF (R-APP-21) ----------

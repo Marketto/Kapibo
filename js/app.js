@@ -356,13 +356,18 @@ async function startScan(kind, cam) {
     else if (pg && kind === "receipt") {
       // foglio di Schiaccia + più letture (ingrandimento e modo di dividere le righe diversi), unite riga per riga:
       // ci si ferma appena la somma delle righe torna con il totale
-      const { parseReceipt, mergeReceipts } = await import("./parsers/receipt.js");
+      const { parseReceipt, mergeReceipts, layoutText } = await import("./parsers/receipt.js");
       const k = Math.min(2, Math.max(1, 1150 / pg.width)), texts = [], parsed = [];
-      for (const [kk, psm] of [[k, "6"], [k, "4"], [k * 1.33, "6"]]) {
-        const tx = (await ocr.recognize(ocr.variant(pg, kk), { lang: lng, onStatus, psm })).text;
-        texts.push(tx); parsed.push(parseReceipt(tx)); merged = mergeReceipts(parsed);
+      // letture in ordine di utilità; l'ultima ripassa la pagina nella pulizia della luce di Kapibo (ombre nette)
+      for (const [kk, psm, clean] of [[k, "6"], [k, "4"], [k * 1.33, "6"], [k, "4", 1]]) {
+        const src = clean ? await ocr.prepare(ocr.variant(pg, kk), "text", 1, false) : ocr.variant(pg, kk);
+        const o = await ocr.recognize(src, { lang: lng, onStatus, psm }), tx = o.text;
+        // due voti per lettura: le righe come le dà Tesseract e le righe ricostruite dalle posizioni (scontrini arricciati)
+        texts.push(tx); parsed.push(parseReceipt(tx), parseReceipt(layoutText(o.lines, o.width))); merged = mergeReceipts(parsed);
         if (merged.total != null && Math.abs(merged.total - merged.sum) < 0.02) break;
       }
+      // i conti non tornano ancora: anche la foto preparata da Kapibo (se il foglio era stato trovato male)
+      if (merged.total == null || Math.abs(merged.total - merged.sum) >= 0.02) { const o = await ocr.recognize(file, { lang: lng, onStatus }); texts.push(o.text); parsed.push(parseReceipt(o.text), parseReceipt(layoutText(o.lines, o.width))); merged = mergeReceipts(parsed); }
       text = texts[0];
     } else if (pg) text = (await ocr.recognize(ocr.variant(pg, Math.min(2, Math.max(1, 1400 / pg.width))), { lang: lng, onStatus })).text;
     else text = (await ocr.recognize(file, { lang: lng, mode: kind === "meter" ? "digits" : "text", onStatus })).text;
