@@ -2,6 +2,7 @@
 import { t, setLang, detect, lang, locale, LANGS, monthLabel, apply } from "./i18n.js";
 import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthOf, today, uid, live, normalize, merge } from "./store.js";
 import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
+import * as bridge from "./bridge.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
 import { series, catAverages, tips, usage, unitPrice, voucherBalance, billCostByMonth, billMonths, catTrends, productTrends, trendEnd, trendTips, TREND_WINDOWS, yoy, meterYoy } from "./stats.js";
@@ -88,6 +89,8 @@ async function boot() {
   render();
   await legal.gate(kapi.KAPI_SVG);
   startTour(false);
+  setTimeout(checkMochi, 1200); bridge.listen("kapibo", checkMochi);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") setTimeout(checkMochi, 600); });
   inst.onChange(() => tab === "more" && render());
   setTimeout(gd.preload, 3000);
   if (sync.connected().length) doSync();
@@ -442,6 +445,35 @@ function saveReceipt() {
   scanState = null; cur = m; tab = "month"; kapi.confetti(); go("month");
   afterSave({ say: [sum > 100 ? "receiptBig" : "receipt", { n: on.length, sum: money(sum) }, 1], before, cats: Object.keys(g), m });
   toast(t("s.saved", { n: Object.keys(g).length }));
+  if (!r.fromMochi && bridge.installed("mochi")) setTimeout(() => sendToMochi(on, r, d), 1600);
+}
+
+// ---------- Mochi Spesa (stesso dominio, nessun server) ----------
+// Preferenza per dispositivo: "ask" (chiedi ogni volta), "always", "never".
+const mochiMode = () => lsGet("kapibo.mochi") || "ask";
+async function askMochi(title, text) {
+  const mode = mochiMode(); if (mode === "never") return false; if (mode === "always") return true;
+  const r = await dialog(title, `<p>${esc(text)}</p><p class="hint">${esc(t("mochi.hint"))}</p>`, { ok: t("mochi.yes"), cancel: t("mochi.no"), extra: `<button class="btn ghost" value="never">${esc(t("mochi.never"))}</button>` });
+  if (r?._btn === "never") { lsSet("kapibo.mochi", "never"); toast(t("mochi.neverToast")); return false; }
+  return !!r && !r._btn;
+}
+async function sendToMochi(items, r, d) {
+  if (!(await askMochi(t("mochi.sendT"), t("mochi.sendP", { n: items.length })))) return;
+  if (bridge.send("mochi", { from: "kapibo", store: r.store || "", date: d, items: items.map(i => ({ name: i.name, qty: i.qty || 1, amount: i.amount })) })) toast(t("mochi.sent", { n: items.length }));
+}
+let mochiBusy = false;
+async function checkMochi() {
+  if (mochiBusy || scanState || document.querySelector("dialog[open], .tour")) return;
+  const [m] = bridge.peek("kapibo"); if (!m) return;
+  if (mochiMode() === "never") { bridge.take("kapibo"); return; }
+  mochiBusy = true;
+  try {
+    const ok = await askMochi(t("mochi.getT"), t("mochi.getP", { n: m.items.length }));
+    bridge.take("kapibo", [m.id]);
+    if (!ok) return;
+    scanState = { kind: "receipt", busy: false, text: "", res: { items: m.items.map(i => ({ name: i.name, amount: round2(i.amount || 0), qty: i.qty })), total: null, date: m.date || today(), store: m.store || "", vouchers: 0, fromMochi: true } };
+    prepReceipt(); go("scan"); toast(t("mochi.prices"));
+  } finally { mochiBusy = false; }
 }
 
 function reviewPayslip() {
@@ -661,6 +693,8 @@ function viewMore() {
     <div class="grid2"><label class="f">${ic("coin")} ${t("o.currency")}<select id="oCur">${["EUR", "CHF", "GBP", "USD", "PLN", "CZK", "HUF", "RON", "SEK", "DKK", "NOK", "BGN", "ISK", "RSD", "MKD", "ALL", "BAM", "UAH", "RUB", "TRY", "CNY", "JPY", "KRW", "AED", "SAR", "EGP", "MAD"].map(c => `<option ${c === st.currency ? "selected" : ""}>${c}</option>`).join("")}</select></label>
     <label class="f">${ic("ticket")} ${t("o.voucher")}<input id="oVouch" inputmode="decimal" value="${fmtNum(st.voucher || 8, locale())}"></label></div>
     <label class="f sw"><input type="checkbox" class="chk" id="oBuzz" ${st.buzz ? "checked" : ""}> ${t("o.buzz")}</label>
+    <label class="f">${ic("home")} ${t("o.mochi")}<select id="oMochi">${["ask", "always", "never"].map(v => `<option value="${v}" ${mochiMode() === v ? "selected" : ""}>${t("o.mochi." + v)}</option>`).join("")}</select></label>
+    <p class="hint">${t("o.mochiHint")}</p>
     ${vb ? `<p class="muted">${t("o.vBalance", { v: money(vb) })}</p>` : ""}</div>
   ${albumCard()}
   <div class="card"><h2>${ic("sheet")} ${t("o.import")}</h2><p class="muted">${t("o.importHint")}</p><p class="hint">${t("o.impHint2")}</p><div class="btns"><button class="btn" data-act="import">${ic("sheet")} ${t("o.importBtn")}</button>${gd.canPick() ? `<button class="btn soft" data-act="importDrive">${ic("cloud")} ${t("o.importDrive")}</button>` : ""}</div></div>
@@ -688,6 +722,7 @@ function albumCard() {
 document.addEventListener("change", async e => {
   if (e.target.id === "oLang") { lsSet("kapibo.lang", e.target.value); await setLang(e.target.value); render(); ch.friend.label(); ch.greet(); }
   if (e.target.id === "oBuzz") { store.setSettings({ buzz: e.target.checked }); if (e.target.checked) navigator.vibrate?.(12); }
+  if (e.target.id === "oMochi") lsSet("kapibo.mochi", e.target.value);
   if (e.target.id === "oCur") store.setSettings({ currency: e.target.value });
   if (e.target.id === "oVouch") { const v = num(e.target.value); if (v) store.setSettings({ voucher: v }); }
 });
@@ -785,7 +820,7 @@ function startTour(all) {
   const seen = all ? "" : tour.seen(), steps = tour.pick(seen, APP_VERSION), back = tab;
   const greet = () => setTimeout(() => (S().entries.length ? ch.greet() : kapi.say("kapi.welcome", { ms: 6000 })), 400);
   if (!steps.length) { if (seen && tour.cmp(seen, APP_VERSION) < 0) toast(t("upd.done", { v: APP_VERSION })); tour.markSeen(APP_VERSION); return greet(); }
-  tour.run(steps, { go: n => { if (n !== tab) go(n); }, kapiSvg: kapi.KAPI_SVG, onEnd: () => { tour.markSeen(APP_VERSION); if (tab !== back) go(back); kapi.mood("happy"); greet(); } });
+  tour.run(steps, { go: n => { if (n !== tab) go(n); }, kapiSvg: kapi.KAPI_SVG, onEnd: () => { tour.markSeen(APP_VERSION); if (tab !== back) go(back); kapi.mood("happy"); greet(); setTimeout(checkMochi, 1500); } });
 }
 
 // ---------- installazione ----------

@@ -96,3 +96,31 @@ test("contatore", () => {
   assert.equal(parseMeter("03280,051").value, 3280.051);
   assert.equal(parseMeter("03280,05\nGAS 03280,051 m3").value, 3280.051);
 });
+
+test("scontrino: catena dal sito, quantità 'PZ x' sopra il prodotto", () => {
+  const r = parseReceipt(`*EURO* *SN*
+VIA INVENTATA 9 - CITTA' FINTA
+www.eurospin.it
+CASSA 2
+DOCUMENTO COMMERCIALE
+DESCRIZIONE PREZZO(€) IVA
+SHOPPER CARTA 0.15 L
+3 PZ x 1.20 EUR/PZ
+ACQUA NATURALE 1,5L 3.60 L
+TOTALE COMPLESSIVO 3.75
+PAGAMENTO ELETTRONICO 3.75
+02/01/26 10:00`);
+  assert.equal(r.store, "Eurospin");
+  assert.equal(r.items.length, 2);
+  assert.equal(r.items[1].qty, 3);
+  assert.equal(r.items[1].amount, 3.6);
+  assert.equal(r.sum, 3.75);
+  assert.equal(r.total, 3.75);
+});
+
+test("scontrino: catena scritta nel testo", async () => {
+  const { findChain } = await import("../js/parsers/receipt.js");
+  assert.equal(findChain("ESSELUNGA S.p.A.\nVIA FINTA 1"), "Esselunga");
+  assert.equal(findChain("Grazie e arrivederci\nwww.negoziofinto.it"), "Negoziofinto");
+  assert.equal(findChain("SUPERMERCATO FANTASIA"), null);
+});
