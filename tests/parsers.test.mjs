@@ -124,3 +124,40 @@ test("scontrino: catena scritta nel testo", async () => {
   assert.equal(findChain("Grazie e arrivederci\nwww.negoziofinto.it"), "Negoziofinto");
   assert.equal(findChain("SUPERMERCATO FANTASIA"), null);
 });
+
+test("scontrino: nome sopra il prezzo, codici articolo, simboli nei nomi", () => {
+  const r = parseReceipt(`NEGOZIO DI MOBILI FINTO
+VIA INVENTATA 1
+DOCUMENTO COMMERCIALE
+Art/Ean 10000001
+6 polp verdure/pure     6,00  1
+ Salsa alla panna,
+Art/Ean C0000002
+Aranciata
+   3 x   2,00           6,00  1
+Art/Ean 10000003
+| wrap pollo »          4,50  1
+Art/Ean 10000004
+Torta mele
+                        3,20  1
+Un buono da gustare!
+TOTALE COMPLESSIVO     19,70
+di cui IVA              1,79`);
+  assert.deepEqual(r.items.map(i => [i.name, i.amount, i.qty || 1]), [["6 Polp Verdure/pure", 6, 1], ["Aranciata", 6, 3], ["Wrap Pollo", 4.5, 1], ["Torta Mele", 3.2, 1]]);
+  assert.equal(r.sum, 19.7);
+  assert.equal(r.total, 19.7);
+});
+
+test("categorie: prodotti e negozio insieme", async () => {
+  const { guessReceipt, storeCat, storeKey } = await import("../js/categories.js");
+  const food = [{ name: "6 Polp Verdure/pure", amount: 6 }, { name: "Aranciata", amount: 6 }, { name: "Wrap Pollo", amount: 4.5 }, { name: "Xyzq Abc", amount: 3.2 }];
+  const a = guessReceipt(food, "IKEA");
+  assert.deepEqual(a.cats.map(c => c[0]), ["food", "food", "food", "food"]); // la riga ignota segue la maggioranza
+  assert.equal(a.main, "food");
+  const b = guessReceipt([{ name: "Xyzq", amount: 30 }, { name: "Kallax Q", amount: 50 }], "IKEA");
+  assert.deepEqual(b.cats.map(c => c[0]), ["home", "home"]); // nulla di riconosciuto: vale il negozio
+  assert.equal(storeCat("Supermercato Finto"), "food");
+  assert.equal(storeCat("Eurospin"), "food");
+  const rules = { [storeKey("Bottega Finta")]: ["gifts"] };
+  assert.equal(guessReceipt([{ name: "Xyzq", amount: 5 }], "Bottega Finta", rules).main, "gifts");
+});

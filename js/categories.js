@@ -38,7 +38,7 @@ export const DEFAULT_CATS = [
 
 // Parole chiave (normalizzate). Prima l'italiano, poi termini comuni in altre lingue e nomi di negozi/fornitori.
 const KW = {
-  food: "supermercato supermarket ipermercato minimarket market alimentari discount gastronomia salumeria panetteria macelleria pescheria fruttivendolo latte pane pasta riso uova uovo yogurt formaggio mozzarella parmigiano grana prosciutto salame carne pollo tacchino manzo maiale pesce tonno salmone frutta verdura mela mele banana banane arance pomodori pomodoro insalata patate cipolle zucchine carote biscotti cereali farina zucchero sale olio aceto caffe acqua minerale bibita succo birra vino cioccolato gelato surgelati pizza merendine crackers fette burro panna legumi ceci fagioli lenticchie spezie sugo passata pesto snack dolci torta croissant brioche bio frutta_secca noci mandorle milk bread eggs cheese meat chicken fish fruit vegetables coffee tea juice beer wine water rice brot milch kase fleisch obst gemuse pain lait fromage viande leche pan queso carne".split(" "),
+  food: "supermercato supermarket ipermercato minimarket market alimentari discount gastronomia salumeria panetteria macelleria pescheria fruttivendolo latte pane pasta riso uova uovo yogurt formaggio mozzarella parmigiano grana prosciutto salame carne pollo tacchino manzo maiale pesce tonno salmone frutta verdura mela mele banana banane arance pomodori pomodoro insalata patate cipolle zucchine carote biscotti cereali farina zucchero sale olio aceto caffe acqua minerale bibita succo birra vino cioccolato gelato surgelati pizza merendine crackers fette burro panna legumi ceci fagioli lenticchie spezie sugo passata pesto snack dolci torta croissant brioche bio frutta_secca noci mandorle milk bread eggs cheese meat chicken fish fruit vegetables coffee tea juice beer wine water rice brot milch kase fleisch obst gemuse pain lait fromage viande leche pan queso carne polpette polpetta polp pure bevanda bevande bibite succhi aranciata limonata chinotto crodino sanbitter aperol cola spumante prosecco wrap hummus frittura fritto gamberi gamberetti crostata dolce cornetto cappuccino espresso panino panini tramezzino piadina focaccia hotdog hot_dog patatine piselli marmellata confettura salsa salse ketchup maionese senape salmone_affumicato aringhe uova_sode menu pasto pranzo cena colazione".split(" "),
   clean: "detersivo detergente ammorbidente candeggina sgrassatore anticalcare pavimenti piatti lavastoviglie pastiglie spugna spugne panno panni carta_cucina scottex rotoli sacchetti sacchi_immondizia stracci scopa mocio lavatrice bucato dash dixan svelto finish cif viakal ace swiffer detergent dish softener bleach waschmittel lessive".split(" "),
   hygiene: "shampoo balsamo bagnoschiuma docciaschiuma sapone dentifricio spazzolino collutorio deodorante rasoio lamette schiuma_barba assorbenti tamponi pannolini salviette cotone cotton_fioc crema_viso corpo carta_igienica fazzoletti trucco mascara rossetto profumo nivea colgate gillette toothpaste soap deodorant razor diapers tissues".split(" "),
   home: "lampadina lampadine pile batterie candela candele vaso piante pianta fiori bricolage attrezzi utensili cucina pentola padella bicchieri piatti posate tovaglia asciugamani lenzuola cuscino tenda ikea leroy brico obi tigota casa home".split(" "),
@@ -95,6 +95,31 @@ export function guessCats(name, rules = {}, fallback = "other") {
     if (w.length >= 4) for (const [k, cat] of KW_INDEX.single) if (k.length >= 5 && k.startsWith(w)) return [cat];
   }
   return [fallback];
+}
+
+/** Categoria tipica di un negozio: quella imparata, "alimentari" per i supermercati, altrimenti dalle parole chiave (IKEA → casa). */
+export const storeKey = s => "negozio " + norm(s);
+export function storeCat(store, rules = {}) {
+  const n = norm(store); if (!n) return null;
+  if (rules[storeKey(store)]) return rules[storeKey(store)][0];
+  if (isGrocer(n)) return "food";
+  return guessCats(n, {}, null)[0];
+}
+
+/**
+ * Categorie per le righe di uno scontrino, guardando insieme prodotti e negozio.
+ * 1) regola imparata o parola chiave del prodotto; 2) i prodotti non riconosciuti prendono la categoria
+ * prevalente fra quelli riconosciuti (se sono almeno la metà), altrimenti quella del negozio.
+ * Esempio: da IKEA solo cibo → le righe ignote vanno in alimentari, non in casa.
+ * @returns {{ cats: string[][], main: string }} main = categoria suggerita per "solo totale"
+ */
+export function guessReceipt(items, store, rules = {}) {
+  const known = items.map(it => (it.cats?.length ? it.cats : guessCats(it.name, rules, null).filter(Boolean)));
+  const weight = cs => { const w = {}; cs.forEach((c, i) => c.length && c.forEach(x => (w[x] = (w[x] || 0) + (Math.abs(items[i].amount) || 1) / c.length))); return Object.entries(w).sort((a, b) => b[1] - a[1])[0]?.[0] || null; };
+  const major = weight(known), share = known.filter(c => c.length).length / (items.length || 1), sc = storeCat(store, rules);
+  const fb = (share >= 0.5 && major) || sc || major || "other";
+  const cats = known.map(c => (c.length ? c : [fb]));
+  return { cats, main: rules[storeKey(store)]?.[0] && share < 0.5 ? rules[storeKey(store)][0] : weight(cats) || fb };
 }
 
 export const isGrocer = s => { const n = norm(s); return GROCERS.some(g => n.includes(g)); };

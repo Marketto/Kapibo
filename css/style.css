@@ -371,3 +371,6 @@ table.t th, table.t th.n { white-space: normal; vertical-align: bottom; }
 /* se una tabella resta comunque larga, un'ombra sul bordo dice che si può scorrere */
 .tw { background: linear-gradient(to right, var(--c-card) 30%, transparent) left / 20px 100% no-repeat local, linear-gradient(to left, var(--c-card) 30%, transparent) right / 20px 100% no-repeat local, radial-gradient(farthest-side at 0 50%, rgba(0,0,0,.14), transparent) left / 10px 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.14), transparent) right / 10px 100% no-repeat scroll; }
 @media (max-width: 340px) { table.t { font-size: .75rem; } table.t th, table.t td { padding-inline: 2px; } }
+/* scelta "voci singole / solo totale" nello scontrino */
+.seg { display: flex; gap: 8px; margin: 10px 0; }
+.seg .chip { flex: 1 1 0; justify-content: center; min-height: 44px; }

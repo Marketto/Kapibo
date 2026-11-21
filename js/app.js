@@ -1,7 +1,7 @@
 // Kapibo — interfaccia. Sezioni: avvio · utilità · mese · scansione · consumi · grafici · altro · dialoghi · sync.
 import { t, setLang, detect, lang, locale, LANGS, monthLabel, apply } from "./i18n.js";
 import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthOf, today, uid, live, normalize, merge } from "./store.js";
-import { guessCats, catName, catIcon, norm, isGrocer } from "./categories.js";
+import { guessCats, guessReceipt, storeKey, catName, catIcon, norm, isGrocer } from "./categories.js";
 import * as bridge from "./bridge.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
 import * as kapi from "./mascot.js";
@@ -362,6 +362,7 @@ async function startScan(kind, cam) {
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
     kapi.mood("wow");
+    if (kind === "receipt") setTimeout(askReceiptMode, 300);
     if (hasResult()) {
       const n = (S().settings.scans || 0) + 1; store.setSettings({ scans: n });
       if (n === 1) ch.cheer("firstScan", {}, { big: true }); else kapi.say("kapi.found");
@@ -375,9 +376,27 @@ async function startScan(kind, cam) {
 const hasResult = () => { const r = scanState?.res; if (!r) return false; return !!(r.items?.length || r.net || r.rows?.length || r.amount || r.value); };
 
 function prepReceipt() {
-  const r = scanState.res, rules = store.rulesMap(), grocer = isGrocer(r.store || "") || isGrocer(scanState.text.slice(0, 200));
-  r.items = r.items.map((it, i) => ({ ...it, i, on: true, cats: it.cats?.length ? it.cats : guessCats(it.name, rules, grocer ? "food" : "other") }));
-  r.date ||= today();
+  const r = scanState.res, rules = store.rulesMap(), shop = r.store || (isGrocer(scanState.text.slice(0, 200)) ? "supermercato" : "");
+  const g = guessReceipt(r.items, shop, rules);
+  r.items = r.items.map((it, i) => ({ ...it, i, on: true, cats: it.cats?.length ? it.cats : g.cats[i] }));
+  r.main = g.main; r.mode = "items"; r.date ||= today();
+}
+// "Solo il totale": una riga sola con la categoria suggerita da prodotti e negozio; le voci restano da parte
+function setReceiptMode(mode) {
+  const r = scanState.res; if (r.mode === mode) return;
+  if (mode === "total") {
+    r.lines = r.items;
+    const on = r.lines.filter(i => i.on), cat = guessReceipt(on, r.store || "", store.rulesMap()).main;
+    r.items = [{ i: "tot", name: r.store || t("s.k.receipt"), amount: r.total ?? round2(on.reduce((a, b) => a + b.amount, 0)), on: true, cats: [cat || r.main || "other"], total: true }];
+  } else { r.items = r.lines || r.items; delete r.lines; }
+  r.mode = mode;
+}
+async function askReceiptMode() {
+  const r = scanState?.res; if (!r || scanState.kind !== "receipt") return;
+  if (!r.items.length) { if (r.total != null) { setReceiptMode("total"); render(); } return; }
+  const tot = r.total ?? round2(r.items.reduce((a, b) => a + b.amount, 0));
+  const res = await dialog(t("s.modeT"), `<p>${esc(t("s.modeP", { n: r.items.length, tot: money(tot) }))}</p>`, { ok: t("s.modeItems"), cancel: null, extra: `<button class="btn soft" value="total">${esc(t("s.modeTotal"))}</button>` });
+  if (res?._btn === "total") { setReceiptMode("total"); render(); }
 }
 
 function scanView() {
@@ -396,7 +415,9 @@ function reviewReceipt() {
   return `<div class="card"><h2>${ic("receipt")} ${t("s.k.receipt")}</h2>
     ${scanState.url ? `<img class="preview" src="${scanState.url}" alt="${esc(t("s.photoAlt"))}">` : ""}
     <div class="grid2"><label class="f">${t("e.date")}<input type="date" id="rDate" value="${r.date}"></label><label class="f">${t("s.store")}<input id="rStore" value="${esc(r.store || "")}"></label></div>
-    ${r.total != null ? (Math.abs(diff) < 0.02 ? `<p class="okbox">${ic("check")} ${t("s.totalOk", { tot: money(r.total) })}</p>` : `<p class="warn">${t("s.totalDiff", { tot: money(r.total), diff: money(diff) })}</p>`) : ""}
+    <div class="seg" role="group" aria-label="${esc(t("s.modeT"))}">${["items", "total"].map(m => `<button type="button" class="chip" data-mode="${m}" aria-pressed="${r.mode === m}">${ic(m === "items" ? "sheet" : "coin")} ${t(m === "items" ? "s.modeItems" : "s.modeTotal")}</button>`).join("")}</div>
+    ${r.mode === "total" && r.lines?.length ? `<details class="muted"><summary>${t("s.modeLines", { n: r.lines.filter(i => i.on).length })}</summary><p>${r.lines.filter(i => i.on).map(i => esc(i.name)).join(", ")}</p></details>` : ""}
+    ${r.total != null && r.mode !== "total" ? (Math.abs(diff) < 0.02 ? `<p class="okbox">${ic("check")} ${t("s.totalOk", { tot: money(r.total) })}</p>` : `<p class="warn">${t("s.totalDiff", { tot: money(r.total), diff: money(diff) })}</p>`) : ""}
     <p class="muted">${t("s.tapHint")}</p>
     <div id="rItems">${r.items.map(itemRow).join("")}</div>
     <button class="btn soft small" id="rAdd" type="button">${ic("plus")} ${t("s.addLine")}</button>
@@ -417,6 +438,7 @@ function receiptGroups(on) {
 function bindReceipt() {
   const r = scanState.res, box = $("#rItems"); if (!box) return;
   const refresh = () => { const y = scrollY; render(); scrollTo(0, y); };
+  document.querySelectorAll("[data-mode]").forEach(b => (b.onclick = () => { setReceiptMode(b.dataset.mode); refresh(); }));
   box.onchange = e => {
     const row = e.target.closest(".ritem"), it = r.items.find(x => x.i == row.dataset.i);
     if (e.target.type === "checkbox") { it.on = e.target.checked; return refresh(); }
@@ -437,15 +459,18 @@ function bindReceipt() {
 }
 function saveReceipt() {
   const r = scanState.res, on = r.items.filter(i => i.on && i.amount), d = r.date || today(), m = monthOf(d), doc = uid(), before = nLive();
-  const g = {};
-  for (const it of on) { for (const c of it.cats) { g[c] ||= { amt: 0, items: [] }; g[c].amt += it.amount / it.cats.length; g[c].items.push({ n: it.name, a: round2(it.amount / it.cats.length) }); } store.learn(it.name, it.cats); }
+  const g = {}, lines = r.mode === "total" ? (r.lines || []).filter(i => i.on && i.amount) : null;
+  for (const it of on) { for (const c of it.cats) { g[c] ||= { amt: 0, items: [] }; g[c].amt += it.amount / it.cats.length; if (lines?.length) g[c].items.push(...lines.map(l => ({ n: l.name, a: l.amount }))); else g[c].items.push({ n: it.name, a: round2(it.amount / it.cats.length) }); } }
+  // impara solo dalle correzioni: categoria cambiata per un prodotto, o per il negozio ("solo totale")
+  for (const it of [...on, ...(r.lines || [])]) if (it.changed && !it.total) store.learn(it.name, it.cats);
+  if (r.store && r.mode === "total" && on[0]?.changed) store.learn(storeKey(r.store), on[0].cats);
   store.putMany("entries", Object.entries(g).map(([cat, x]) => ({ d, m, cat, amt: round2(x.amt), items: x.items, note: r.store || t("s.k.receipt"), src: "receipt", doc })));
   if (r.vouchers) { const mm = S().months[m] || {}; store.setMonth(m, { vUsed: round2((mm.vUsed || 0) + r.vouchers) }); }
   const sum = round2(on.reduce((a, i) => a + i.amount, 0));
   scanState = null; cur = m; tab = "month"; kapi.confetti(); go("month");
   afterSave({ say: [sum > 100 ? "receiptBig" : "receipt", { n: on.length, sum: money(sum) }, 1], before, cats: Object.keys(g), m });
   toast(t("s.saved", { n: Object.keys(g).length }));
-  if (!r.fromMochi && bridge.installed("mochi")) setTimeout(() => sendToMochi(on, r, d), 1600);
+  if (!r.fromMochi && bridge.installed("mochi")) setTimeout(() => sendToMochi(lines?.length ? lines : on, r, d), 1600);
 }
 
 // ---------- Mochi Spesa (stesso dominio, nessun server) ----------
