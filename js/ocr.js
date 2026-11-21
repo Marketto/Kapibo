@@ -43,16 +43,40 @@ async function getWorker(lang, onStatus) {
 function touch() { clearTimeout(idle); idle = setTimeout(async () => { if (worker) { const w = worker; worker = null; workerKey = ""; (await w).terminate(); } }, 60000); }
 
 /** OCR di un'immagine (File/Blob/canvas). mode "digits" per i contatori. */
-export async function recognize(src, { lang = "eng", mode = "text", onStatus, scale = 1 } = {}) {
+export async function recognize(src, { lang = "eng", mode = "text", onStatus, scale = 1, psm = "6" } = {}) {
   const cv = src instanceof HTMLCanvasElement ? src : await prepare(src, mode, scale);
   const w = await getWorker(lang, onStatus);
-  await w.setParameters(mode === "digits" ? { tessedit_char_whitelist: "0123456789.,", tessedit_pageseg_mode: "7" } : { tessedit_char_whitelist: "", tessedit_pageseg_mode: "6", preserve_interword_spaces: "1" });
+  await w.setParameters(mode === "digits" ? { tessedit_char_whitelist: "0123456789.,", tessedit_pageseg_mode: "7" } : { tessedit_char_whitelist: "", tessedit_pageseg_mode: psm, preserve_interword_spaces: "1" });
   const r = await w.recognize(cv);
   touch();
   return { text: r.data.text, conf: r.data.confidence, canvas: cv };
 }
 
-// ---------- preparazione della foto ----------
+// ---------- foglio da una foto: la scansione di Schiaccia PDF (R-APP-21) ----------
+// Bordi del foglio (anche azzurro, storto o in prospettiva), pieghe, ombre, orientamento: window.Scansione da
+// /pdf-tiny-tools/scansione.js sullo stesso dominio. Se non c'è (sviluppo, CDN) si usa la preparazione qui sotto.
+let scanP = null;
+export function scansione() {
+  return (scanP ||= (async () => {
+    if (!(await sharedOk())) return null;
+    if (!window.CONFIG) await loadScript(new URL("/pdf-tiny-tools/config.js", location.origin).href);
+    await loadScript(new URL("/pdf-tiny-tools/scansione.js", location.origin).href);
+    return window.Scansione?.pagina ? window.Scansione : null;
+  })().catch(() => null));
+}
+/** La pagina raddrizzata e pulita (canvas), o null se la scansione di Schiaccia non c'è o non riesce. */
+export async function page(file, { max = 4000 } = {}) {
+  const S = await scansione(); if (!S) return null;
+  try { return (await S.pagina(file, { max, stile: "doc" })).canvas; } catch { return null; }
+}
+/** Copia per l'OCR: ingrandita di k (testo stretto degli scontrini), in grigio e con più contrasto. */
+export function variant(cv, k = 1) {
+  const c = document.createElement("canvas"); c.width = Math.round(cv.width * k); c.height = Math.round(cv.height * k);
+  const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.filter = "grayscale(1) contrast(1.4)"; g.drawImage(cv, 0, 0, c.width, c.height); g.filter = "none";
+  return c;
+}
+
+// ---------- preparazione della foto (riserva, senza Schiaccia) ----------
 export async function toCanvas(file, max = 2400, { crop = false, scale = 1 } = {}) {
   const bmp = await createImageBitmap(file, { imageOrientation: "from-image" }).catch(async () => {
     const img = new Image(); img.src = URL.createObjectURL(file); await img.decode(); return img;
@@ -102,8 +126,8 @@ export function paperBox(d, w, h, fx = 1, fy = 1) {
 }
 
 /** Grigio, luce del foglio uniforme (massimo per riquadri 16×16, sfumato), contrasto, raddrizzamento. */
-export async function prepare(file, mode = "text", scale = 1) {
-  let c = await toCanvas(file, mode === "digits" ? 1600 : 2400, { crop: mode !== "digits", scale });
+export async function prepare(file, mode = "text", scale = 1, crop = mode !== "digits") {
+  let c = await toCanvas(file, mode === "digits" ? 1600 : 2400, { crop, scale });
   const g = c.getContext("2d", { willReadFrequently: true }), w = c.width, h = c.height;
   const img = g.getImageData(0, 0, w, h), d = img.data, n = w * h, L = new Float32Array(n);
   for (let i = 0; i < n; i++) L[i] = d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11;

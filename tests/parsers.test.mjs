@@ -182,3 +182,13 @@ test("ocr: ritaglio del foglio chiaro su un fondo colorato", async () => {
   for (let i = 0; i < w * h; i++) [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]] = [220, 225, 230];
   assert.equal(paperBox(d, w, h), null);
 });
+
+test("scontrino: più letture unite riga per riga finché la somma torna", async () => {
+  const { mergeReceipts } = await import("../js/parsers/receipt.js");
+  const a = parseReceipt("NEGOZIO\nVIA FINTA\nX\nPane comune     1,20 1\nBiscotti avena  4,50 1\nLatte intero    1,10 1\nTOTALE COMPLESSIVO 3,80");
+  const b = parseReceipt("NEGOZIO\nVIA FINTA\nX\nPane comune     1,20 1\nBiscotti avena  1,50 4\nTOTALE COMPLESSIVO 3,80");
+  const m = mergeReceipts([a, b]);
+  assert.deepEqual(m.items.map(i => [i.name, i.amount]), [["Pane Comune", 1.2], ["Biscotti Avena", 1.5], ["Latte Intero", 1.1]]);
+  assert.equal(m.sum, 3.8);
+  assert.equal(mergeReceipts([b, a]).sum, 3.8);
+});

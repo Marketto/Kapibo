@@ -350,27 +350,33 @@ async function startScan(kind, cam) {
   const ocr = await import("./ocr.js");
   const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (scanState) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
   try {
-    let text, altTotal = null;
+    let text, merged = null;
+    const pg = file.type !== "application/pdf" && kind !== "meter" ? await ocr.page(file) : null;
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
-    else text = (await ocr.recognize(file, { lang: lng, mode: kind === "meter" ? "digits" : "text", onStatus })).text;
-    // scontrini: se totale e somma delle righe non tornano, seconda lettura un po' ingrandita; si tiene la migliore
-    if (kind === "receipt" && file.type !== "application/pdf") {
-      const { parseReceipt } = await import("./parsers/receipt.js");
-      const ok = r => r.total != null && Math.abs(r.total - r.sum) < 0.02, a = parseReceipt(text);
-      if (!ok(a)) {
-        const t2 = (await ocr.recognize(file, { lang: lng, onStatus, scale: 1.6 })).text, b = parseReceipt(t2);
-        // vince la lettura in cui righe e totale tornano; altrimenti quella con più righe, col totale preso dall'altra se manca
-        const best = ok(b) ? b : ok(a) ? a : b.items.length > a.items.length ? b : a;
-        if (best === b) text = t2;
-        altTotal = best.total ?? (best === a ? b : a).total;
+    else if (pg && kind === "receipt") {
+      // foglio di Schiaccia + più letture (ingrandimento e modo di dividere le righe diversi), unite riga per riga:
+      // ci si ferma appena la somma delle righe torna con il totale
+      const { parseReceipt, mergeReceipts } = await import("./parsers/receipt.js");
+      const k = Math.min(2, Math.max(1, 1150 / pg.width)), texts = [], parsed = [];
+      for (const [kk, psm] of [[k, "6"], [k, "4"], [k * 1.33, "6"]]) {
+        const tx = (await ocr.recognize(ocr.variant(pg, kk), { lang: lng, onStatus, psm })).text;
+        texts.push(tx); parsed.push(parseReceipt(tx)); merged = mergeReceipts(parsed);
+        if (merged.total != null && Math.abs(merged.total - merged.sum) < 0.02) break;
       }
+      text = texts[0];
+    } else if (pg) text = (await ocr.recognize(ocr.variant(pg, Math.min(2, Math.max(1, 1400 / pg.width))), { lang: lng, onStatus })).text;
+    else text = (await ocr.recognize(file, { lang: lng, mode: kind === "meter" ? "digits" : "text", onStatus })).text;
+    // senza Schiaccia: scontrino con totale e righe che non tornano → seconda lettura ingrandita, unita alla prima
+    if (kind === "receipt" && !pg && file.type !== "application/pdf") {
+      const { parseReceipt, mergeReceipts } = await import("./parsers/receipt.js");
+      const a = parseReceipt(text);
+      if (a.total == null || Math.abs(a.total - a.sum) >= 0.02) merged = mergeReceipts([a, parseReceipt((await ocr.recognize(file, { lang: lng, onStatus, scale: 1.6 })).text)]);
     }
     // contatori: due letture (solo cifre e normale), il parser sceglie il numero più completo
     if (kind === "meter" && file.type !== "application/pdf") text += "\n" + (await ocr.recognize(file, { lang: lng, mode: "text", onStatus })).text;
     const P = await import(`./parsers/${kind}.js`);
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
-    let res = P[fn](text);
-    if (kind === "receipt" && res.total == null && altTotal != null) res.total = altTotal;
+    let res = merged || P[fn](text);
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
@@ -442,7 +448,7 @@ const itemRow = it => `<div class="ritem ${it.on ? "" : "off"}" data-i="${it.i}"
   <input type="checkbox" class="chk" ${it.on ? "checked" : ""} aria-label="${esc(t("s.include", { name: it.name }))}">
   <input class="inp" data-f="name" value="${esc(it.name)}" aria-label="${esc(t("s.itemName"))}">
   <input class="inp" data-f="amount" inputmode="decimal" value="${fmtNum(it.amount, locale())}" aria-label="${esc(t("e.amount"))}">
-  <div class="chips">${it.cats.map(c => { const k = catById(c); return `<button type="button" class="chip" data-cat-edit aria-pressed="true">${catIcon(k)} ${esc(cname(k))}</button>`; }).join("")}
+  <div class="chips">${it.qty > 1 ? `<span class="chip qty" title="${esc(t("s.qty"))}">×${fmtNum(it.qty, locale(), 3)}</span>` : ""}${it.cats.map(c => { const k = catById(c); return `<button type="button" class="chip" data-cat-edit aria-pressed="true">${catIcon(k)} ${esc(cname(k))}</button>`; }).join("")}
   <button type="button" class="chip add" data-cat-edit aria-label="${esc(t("s.changeCat"))}">${ic("edit")}</button></div></div>`;
 function receiptGroups(on) {
   const g = {}; for (const it of on) for (const c of it.cats) g[c] = round2((g[c] || 0) + it.amount / it.cats.length);
@@ -473,7 +479,7 @@ function bindReceipt() {
 function saveReceipt() {
   const r = scanState.res, on = r.items.filter(i => i.on && i.amount), d = r.date || today(), m = monthOf(d), doc = uid(), before = nLive();
   const g = {}, lines = r.mode === "total" ? (r.lines || []).filter(i => i.on && i.amount) : null;
-  for (const it of on) { for (const c of it.cats) { g[c] ||= { amt: 0, items: [] }; g[c].amt += it.amount / it.cats.length; if (lines?.length) g[c].items.push(...lines.map(l => ({ n: l.name, a: l.amount }))); else g[c].items.push({ n: it.name, a: round2(it.amount / it.cats.length) }); } }
+  for (const it of on) { for (const c of it.cats) { g[c] ||= { amt: 0, items: [] }; g[c].amt += it.amount / it.cats.length; if (lines?.length) g[c].items.push(...lines.map(l => ({ n: l.name, a: l.amount, ...(l.qty > 1 ? { q: l.qty } : {}) }))); else g[c].items.push({ n: it.name, a: round2(it.amount / it.cats.length), ...(it.qty > 1 ? { q: it.qty } : {}) }); } }
   // impara solo dalle correzioni: categoria cambiata per un prodotto, o per il negozio ("solo totale")
   for (const it of [...on, ...(r.lines || [])]) if (it.changed && !it.total) store.learn(it.name, it.cats);
   if (r.store && r.mode === "total" && on[0]?.changed) store.learn(storeKey(r.store), on[0].cats);

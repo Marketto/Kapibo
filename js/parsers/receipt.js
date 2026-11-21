@@ -25,12 +25,13 @@ export function parseReceipt(text) {
   let total = null, vouchers = 0, date = null, store = findChain(text), stop = false, pendingQty = null, lastName = null;
   const push = (name, amount, qty) => {
     if (amount <= 0 || amount > 5000) return;
-    const it = { name: titleCase(cleanName(name) || "?"), amount: round2(amount) };
+    const it = { name: titleCase(tidy(cleanName(name)) || cleanName(name) || "?"), amount: round2(amount) };
     if (qty) { it.qty = qty; it.qtyDone = 1; } else if (pendingQty) { it.qty = pendingQty; it.qtyDone = 1; pendingQty = null; }
     items.push(it); lastName = null;
   };
   for (let i = 0; i < L.length; i++) {
-    const l = L[i];
+    // OCR: il codice IVA dopo il prezzo attaccato al prezzo ("7,001" = 7,00 + 1); non per pesi e quantità ("0,512 kg x")
+    const l = /\b(?:kg|g|lt?)\b|[x×*]/i.test(L[i]) ? L[i] : L[i].replace(/(\d[.,]\d{2})\d(?=[^\d]*$)/, "$1 ");
     // codici articolo (IKEA "Art/Ean 123", "Cod. 456"): non sono prodotti e non interrompono il nome sopra
     if (CODE.test(l)) continue;
     if (!date) date = findDate(l);
@@ -77,5 +78,57 @@ export function parseReceipt(text) {
 
 // "|", "»", "_", "~", "=" e altri segni lasciati dall'OCR o dalla stampa
 export const cleanName = s => String(s || "").replace(/[^\p{L}\p{N}\s.,'’/%&()+-]+/gu, " ").replace(/\s+([.,])/g, "$1").replace(/^[\s\p{P}\d]{0,3}(?=\p{L})/u, m => (/\d/.test(m) ? m.replace(/[^\d ]/g, "") : "")).replace(/[\s\p{P}]+$/u, "").replace(/\s+/g, " ").trim();
+// segni sparsi del bordo letti come lettere: "I Pat piccole È", "Crodino I"
+const tidy = s => s.replace(/^(?:[|Il!1]\s+)+(?=\p{L}{2})/u, "").replace(/(?:\s+(?:[^\p{Ll}\d\s]|\p{Lu}\p{Ll}?))+$/u, m => (/^\s+\p{Lu}\p{Ll}$/u.test(m) ? m : "")).trim();
 const titleCase = s => s.toLowerCase().replace(/(^|\s)(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
 export { norm };
+
+/**
+ * Unisce più letture dello stesso scontrino (OCR con impostazioni diverse): ogni lettura sbaglia righe diverse.
+ * Le righe si allineano per nome; per ognuna vince l'importo più votato; se la somma non torna col totale,
+ * prova le alternative viste (e le righe viste una volta sola) finché torna. Restituisce il risultato di parseReceipt.
+ */
+export function mergeReceipts(list) {
+  list = list.filter(r => r && r.items);
+  if (!list.length) return null;
+  const ok = r => r.total != null && Math.abs(r.total - r.sum) < 0.02;
+  const good = list.find(ok); if (good) return good;
+  const key = n => norm(n).split(" ").filter(w => w.length > 2 && !/\d/.test(w)).slice(0, 3);
+  const sim = (a, b) => { const A = key(a), B = key(b); if (!A.length || !B.length) return 0; const hit = A.filter(w => B.some(v => v === w || (w.length > 4 && v.length > 4 && (v.startsWith(w.slice(0, 4)) || w.startsWith(v.slice(0, 4)))))).length; return hit / Math.max(A.length, B.length); };
+  // allineamento (come diff) di ogni lettura sulla lista unita
+  const base = [...list].sort((a, b) => b.items.length - a.items.length)[0];
+  let slots = base.items.map(it => ({ name: it.name, amts: [it.amount], qty: it.qty, seen: 1 }));
+  for (const r of list) {
+    if (r === base) continue;
+    const A = slots, B = r.items, n = A.length, m = B.length, D = Array.from({ length: n + 1 }, () => new Float32Array(m + 1));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) { const s = sim(A[i].name, B[j].name); D[i][j] = Math.max(D[i + 1][j], D[i][j + 1], s >= 0.5 ? D[i + 1][j + 1] + s : -1); }
+    const out = []; let i = 0, j = 0;
+    while (i < n || j < m) {
+      const s = i < n && j < m ? sim(A[i].name, B[j].name) : 0;
+      if (i < n && j < m && s >= 0.5 && D[i][j] === D[i + 1][j + 1] + s) { A[i].amts.push(B[j].amount); A[i].seen++; if (!A[i].qty && B[j].qty) A[i].qty = B[j].qty; if (B[j].name.length < A[i].name.length) A[i].name = B[j].name; out.push(A[i]); i++; j++; }
+      else if (j >= m || (i < n && D[i + 1][j] >= D[i][j + 1])) { out.push(A[i]); i++; }
+      else { out.push({ name: B[j].name, amts: [B[j].amount], qty: B[j].qty, seen: 1 }); j++; }
+    }
+    slots = out;
+  }
+  const totals = list.map(r => r.total).filter(x => x != null), total = totals.length ? mode(totals) : null;
+  for (const s of slots) { const c = {}; s.amts.forEach(a => (c[a] = (c[a] || 0) + 1)); s.cands = Object.entries(c).sort((a, b) => b[1] - a[1]).map(([a]) => +a); s.pick = s.cands[0]; s.on = true; }
+  const sum = () => round2(slots.reduce((a, s) => a + (s.on ? s.pick : 0), 0));
+  if (total != null && Math.abs(sum() - total) >= 0.02) {
+    // ricerca piccola: alternative degli importi e righe viste una sola volta (quando le letture sono più di una)
+    const vars = slots.filter(s => s.cands.length > 1 || (s.seen === 1 && list.length > 1)).slice(0, 12);
+    const opts = vars.map(s => [...s.cands.map(a => ({ on: true, a })), ...(s.seen === 1 && list.length > 1 ? [{ on: false, a: s.pick }] : [])]);
+    let best = null; const fixed = round2(slots.filter(s => !vars.includes(s)).reduce((a, s) => a + s.pick, 0));
+    const rec = (k, acc, ch) => {
+      if (best && best.cost === 0) return;
+      if (k === vars.length) { if (Math.abs(round2(acc) - total) < 0.02) { const cost = ch.reduce((a, c, i) => a + (opts[i].indexOf(c) ? 1 : 0), 0); if (!best || cost < best.cost) best = { cost, ch: [...ch] }; } return; }
+      for (const o of opts[k]) { ch.push(o); rec(k + 1, acc + (o.on ? o.a : 0), ch); ch.pop(); }
+    };
+    if (opts.reduce((a, o) => a * o.length, 1) <= 50000) rec(0, fixed, []);
+    if (best) best.ch.forEach((c, i) => { vars[i].on = c.on; vars[i].pick = c.a; });
+  }
+  const items = slots.filter(s => s.on).map(s => ({ name: s.name, amount: s.pick, ...(s.qty ? { qty: s.qty } : {}) }));
+  const r0 = list.find(r => r.total === total) || base;
+  return { ...r0, items, total, sum: round2(items.reduce((a, b) => a + b.amount, 0)), merged: list.length };
+}
+const mode = a => { const c = {}; a.forEach(x => (c[x] = (c[x] || 0) + 1)); return +Object.entries(c).sort((x, y) => y[1] - x[1])[0][0]; };

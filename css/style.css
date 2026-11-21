@@ -374,3 +374,4 @@ table.t th, table.t th.n { white-space: normal; vertical-align: bottom; }
 /* scelta "voci singole / solo totale" nello scontrino */
 .seg { display: flex; gap: 8px; margin: 10px 0; }
 .seg .chip { flex: 1 1 0; justify-content: center; min-height: 44px; }
+.ritem .qty { font-variant-numeric: tabular-nums; font-weight: 800; cursor: default; }
