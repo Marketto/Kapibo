@@ -489,6 +489,7 @@
 "tour.share.p":"Na vrhu svake stranice nalaze se verzija (dodirni za novosti), gumb za dijeljenje Kapibo i, ako je uključen, gumb za kavu na Ko-fi. Kad se pomakneš, zaglavlje se opet smanji.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Ako koristiš i Mochi Spesa, kupnje putuju između aplikacija: račun → smočnica, obavljena kupnja → proračun. Ovdje odaberi hoću li pitati svaki put.",
+"news.167":"Kapibo i Schiaccia PDF sada dijele isti mehanizam za čitanje i skener: manje memorije na telefonu, a poboljšanja stižu u oba.",
 "news.166":"Zgužvani računi: Kapibo čita nazive i cijene u odvojenim stupcima, ispravlja svaki dio papira i spaja ih redom. Odbacuje nemoguće retke (skuplje od ukupnog iznosa) i prepoznaje trgovinu čak i kad je logotip loše pročitan.",
 "news.165":"Skeniranje: dodirom na dokument odmah biraš želiš li snimiti fotografiju ili upotrijebiti postojeću fotografiju ili PDF.",
 "news.164":"Računi fotografirani u ruci, nakošeni ili savijeni: Kapibo rekonstruira retke prema položaju cijena i odbacuje nemoguće rubove papira.",

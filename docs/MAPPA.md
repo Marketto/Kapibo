@@ -7,7 +7,8 @@
 | `js/categories.js` | Categorie predefinite e parole chiave | `DEFAULT_CATS`, `guessCats`, `isGrocer`, `norm` |
 | `js/money.js` | Importi | `parseAmount`, `findAmounts`, `fmt`, `fmtNum`, `round2` |
 | `js/parsers/*.js` | Testo → dati (puri, testati) | `parseReceipt`, `parsePayslip`, `parseStatement`, `parseBill`, `parseMeter`, `util.parseMonth` |
-| `js/ocr.js` | Ponte verso Tesseract/pdf.js di pdf-tiny-tools | `recognize`, `prepare`, `pdfText`, `ocrLang` |
+| `js/ocr.js` | Ponte verso Schiaccia PDF: `scansione()` carica `window.Scansione`; motore Tesseract condiviso (riserva CDN) | `recognize`, `page`, `words`, `variant`, `prepare` (riserva), `pdfText`, `ocrLang` |
+| `js/parsers/receipt.js` | Scontrini: righe, catene, unione delle letture | `parseReceipt`, `findChain`, `layoutText`, `orderText`, `mergeReceipts` |
 | `js/importer.js` | Vecchio foglio → record | `readWorkbook`, `importSheets`, `fillMerges` |
 | `js/stats.js` | Serie, medie, consumi, consigli | `series`, `catAverages`, `usage`, `unitPrice`, `tips`, `voucherBalance` |
 | `js/charts.js` | SVG | `donut`, `hbars`, `timeline` |

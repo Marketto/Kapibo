@@ -24,7 +24,7 @@ Skill (`.claude/skills/`): `nuovo-parser`, `traduzioni`, `ui-kawaii`, `rilascio`
 - **Nessun dato personale nel repo**: niente importi reali, nomi, indirizzi, IBAN, chiavi. Solo il nickname GitHub `Marketto` e l'email dell'autore nei commit. Esempi e test usano dati inventati.
 - Ogni testo visibile passa da `t("chiave")`; nuove chiavi in `locales/it.json` e `locales/en.json`, poi `traduttore`.
 - Accessibilità: contrasto AA, target ≥ 44 px, `aria-*` corretti, `prefers-reduced-motion` rispettato, RTL per `ar`.
-- Motore OCR/PDF: quello di Schiaccia PDF (`/pdf-tiny-tools/vendor/` sullo stesso dominio), con riserva CDN. Vedi `js/ocr.js`.
+- Motore OCR/PDF e scansione: quelli di Schiaccia PDF sullo stesso dominio, senza copie. `/pdf-tiny-tools/scansione.js` (`window.Scansione`: `pagina` per bordi/prospettiva/pieghe/ombre/orientamento, `parole` per la lettura a fasce raddrizzate, `perOcr`, `ocrRecWorker` = un solo motore Tesseract) e `/pdf-tiny-tools/vendor/`; riserva CDN e preparazione propria solo se mancano. Ciò che serve a più app va in Schiaccia (`scansione.js`), qui resta solo la logica degli scontrini (`js/parsers/receipt.js`: `layoutText`, `orderText`, `mergeReceipts`). Vedi `js/ocr.js`.
 - Test: `node --test tests/*.test.mjs` deve passare prima di ogni commit.
 - Versione: `js/version.js` (semver) + voce in `CHANGELOG` (chiave `news.<versione>`).
 - Ogni funzione nuova e visibile ha un passo in `js/tour.js` (`STEPS`) con `v` = nuova versione: gli utenti aggiornati vedono solo quei passi.

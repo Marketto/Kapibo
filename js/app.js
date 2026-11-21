@@ -371,7 +371,8 @@ async function startScan(kind, cam) {
       const steps = [
         async () => { const o = await ocr.recognize(v1, { lang: lng, onStatus, psm: "6" }); texts.push(o.text); return vote(o); },
         async () => vote(await ocr.recognize(v1, { lang: lng, onStatus, psm: "4" })),
-        async () => { let ok = false; for (const o of await ocr.recognizeColumns(v1, { lang: lng, onStatus })) ok = vote(o) || ok; return ok; },
+        // nomi e prezzi in colonne separate, a fasce raddrizzate sui fogli piegati (Schiaccia: Scansione.parole)
+        async () => vote(await ocr.words(v1, { lang: lng, columns: [[0, 0.65], [0.55, 1]] })),
         async () => vote(await ocr.recognize(ocr.variant(pg, k * 1.33), { lang: lng, onStatus, psm: "6" })),
         async () => vote(await ocr.recognize(await ocr.prepare(ocr.variant(pg, k), "text", 1, false), { lang: lng, onStatus, psm: "4" })),
       ];
