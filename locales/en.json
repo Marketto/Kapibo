@@ -489,6 +489,7 @@
 "tour.share.p":"At the top of every page you will find the version (tap for what's new), the button to share Kapibo and, if enabled, one to buy a coffee on Ko-fi. When you scroll, the header shrinks again.",
 "tour.mochi.t":"Kapibo and Mochi Spesa",
 "tour.mochi.p":"If you also use Mochi Spesa, purchases move between the apps: receipt → pantry, shopping done → budget. Choose here whether to ask every time.",
+"news.166":"Crumpled receipts: Kapibo reads names and prices in separate columns, straightens each area of the paper and pairs them in order. It discards impossible lines (pricier than the total) and recognises the store even from a badly read logo.",
 "news.165":"Scan: tapping a document lets you choose right away between taking a photo and using a photo or PDF you already have.",
 "news.164":"Receipts photographed in hand, tilted or curled: Kapibo rebuilds lines from where the prices sit and discards impossible paper edges.",
 "news.163":"Much more accurate receipts: Kapibo uses Schiaccia PDF's scanner (paper edges, shadows, folds), reads several times and merges the readings until the lines add up to the total. Quantities are shown too (e.g. ×3).",

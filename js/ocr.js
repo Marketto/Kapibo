@@ -73,6 +73,120 @@ export async function page(file, { max = 4000 } = {}) {
   const S = await scansione(); if (!S) return null;
   try { return (await S.pagina(file, { max, stile: "doc" })).canvas; } catch { return null; }
 }
+/**
+ * Angolo delle righe di testo (gradi, ±maxDeg): quello che rende le righe più nette, cioè con la massima varianza
+ * della somma dei pixel scuri per riga (profilo di proiezione). Scontrini stropicciati: anche 2–3° bastano a mescolare
+ * le righe vicine.
+ */
+export function skewAngle(cv, maxDeg = 5) {
+  const W = 500, k = Math.min(1, W / cv.width), w = Math.round(cv.width * k), h = Math.round(cv.height * k);
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(cv, 0, 0, w, h);
+  const d = g.getImageData(0, 0, w, h).data, pts = [];
+  let sum = 0; for (let i = 0; i < w * h; i++) sum += d[i * 4 + 1]; const thr = (sum / (w * h)) * 0.72;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 1] < thr) pts.push(x - w / 2, y);
+  if (pts.length < 200) return 0;
+  const score = deg => { const a = (deg * Math.PI) / 180, s = Math.sin(a), co = Math.cos(a), bins = new Float32Array(h * 2 + 2); for (let i = 0; i < pts.length; i += 2) { const yy = Math.round(pts[i + 1] * co - pts[i] * s + h / 2); if (yy >= 0 && yy < bins.length) bins[yy]++; } let m = 0, v = 0; for (const b of bins) m += b; m /= bins.length; for (const b of bins) v += (b - m) ** 2; return v; };
+  let best = 0, bs = score(0);
+  for (let a = -maxDeg; a <= maxDeg; a += 0.5) { const sc = score(a); if (sc > bs) { bs = sc; best = a; } }
+  for (let a = best - 0.4; a <= best + 0.4; a += 0.1) { const sc = score(a); if (sc > bs) { bs = sc; best = a; } }
+  return Math.round(best * 10) / 10;
+}
+/**
+ * Strisce delle righe di testo: dove la somma dei pixel scuri per riga supera la soglia. Le righe troppo alte
+ * (due righe attaccate) si tagliano nel punto più chiaro. Restituisce [{ y0, y1 }] in pixel del canvas.
+ */
+export function textRows(cv) {
+  const w = cv.width, h = cv.height, g = cv.getContext("2d", { willReadFrequently: true }), d = g.getImageData(0, 0, w, h).data;
+  let sum = 0; const step = 4; for (let i = 0; i < w * h; i += step) sum += d[i * 4 + 1];
+  const thr = (sum / (w * h / step)) * 0.6, prof = new Float32Array(h);
+  for (let y = 0; y < h; y++) { let n = 0; for (let x = 0; x < w; x += 2) if (d[(y * w + x) * 4 + 1] < thr) n++; prof[y] = n; }
+  const sm = prof.map((_, y) => (prof[y - 1] || 0) * 0.25 + prof[y] * 0.5 + (prof[y + 1] || 0) * 0.25);
+  const on = Math.max(2, (w / 2) * 0.006), rows = [];
+  for (let y = 0, s0 = -1; y <= h; y++) {
+    const ink = y < h && sm[y] > on;
+    if (ink && s0 < 0) s0 = y; else if (!ink && s0 >= 0) { if (y - s0 > 6) rows.push({ y0: s0, y1: y }); s0 = -1; }
+  }
+  // altezza tipica di una riga: le strisce alte quasi il doppio sono due righe, si tagliano nel minimo centrale
+  const hs = rows.map(r => r.y1 - r.y0).sort((a, b) => a - b), med = hs[Math.floor(hs.length / 2)] || 0, out = [];
+  for (const r of rows) {
+    const n = med ? Math.round((r.y1 - r.y0) / med) : 1;
+    if (n >= 2 && r.y1 - r.y0 > med * 1.6) {
+      let a = r.y0; for (let k = 1; k < n; k++) { const c = r.y0 + Math.round(((r.y1 - r.y0) * k) / n), lo = c - Math.round(med * 0.35), hi = c + Math.round(med * 0.35); let m = c; for (let y = lo; y <= hi; y++) if (sm[y] < sm[m]) m = y; out.push({ y0: a, y1: m }); a = m; }
+      out.push({ y0: a, y1: r.y1 });
+    } else out.push(r);
+  }
+  return out;
+}
+/** Legge riga per riga (Tesseract "una sola riga"): per gli scontrini con righe fitte e carta stropicciata. */
+export async function recognizeRows(cv, { lang = "eng", onStatus } = {}) {
+  const rows = textRows(cv), w = await getWorker(lang, onStatus), out = [];
+  await w.setParameters({ tessedit_char_whitelist: "", tessedit_pageseg_mode: "7", preserve_interword_spaces: "1" });
+  for (const r of rows) {
+    const pad = Math.round((r.y1 - r.y0) * 0.35), y0 = Math.max(0, r.y0 - pad), y1 = Math.min(cv.height, r.y1 + pad);
+    const c = document.createElement("canvas"); c.width = cv.width; c.height = y1 - y0; c.getContext("2d").drawImage(cv, 0, y0, cv.width, y1 - y0, 0, 0, cv.width, y1 - y0);
+    out.push((await w.recognize(c)).data.text.replace(/\s*\n\s*/g, " ").trim());
+  }
+  touch();
+  return out.filter(Boolean).join("\n");
+}
+
+/** Inclinazioni del testo in fasce orizzontali della pagina (carta stropicciata: ogni zona pende a modo suo). */
+export function bandAngles(cv, n = 4) {
+  const out = new Set([skewAngle(cv)]);
+  for (let i = 0; i < n; i++) {
+    const y0 = Math.round((cv.height * i) / n), hh = Math.round(cv.height / n * 1.3), c = document.createElement("canvas");
+    c.width = cv.width; c.height = Math.min(hh, cv.height - y0); c.getContext("2d").drawImage(cv, 0, y0, cv.width, c.height, 0, 0, cv.width, c.height);
+    out.add(Math.round(skewAngle(c, 7) * 2) / 2);
+  }
+  return [...out];
+}
+
+/** Da un punto del canvas ruotato (rotate(cv, deg)) al punto corrispondente nel canvas di partenza. */
+export function unrotate(x, y, cv, deg, rc) {
+  const a = (deg * Math.PI) / 180, dx = x - rc.width / 2, dy = y - rc.height / 2;
+  return [dx * Math.cos(a) - dy * Math.sin(a) + cv.width / 2, dx * Math.sin(a) + dy * Math.cos(a) + cv.height / 2];
+}
+/**
+ * Lettura per colonne: nomi (a sinistra) e prezzi (a destra) letti separatamente, ognuno raddrizzato con la propria
+ * inclinazione, e riportati sulla pagina di partenza. Restituisce { lines, width } per layoutText: la piega della carta
+ * fa pendere i nomi ma non la colonna dei prezzi.
+ */
+export async function recognizeColumns(cv, { lang = "eng", onStatus, split = 0.55 } = {}) {
+  const W = cv.width, H = cv.height, xs = Math.round(W * split);
+  const crop = (x0, x1) => { const c = document.createElement("canvas"); c.width = x1 - x0; c.height = H; c.getContext("2d").drawImage(cv, x0, 0, x1 - x0, H, 0, 0, x1 - x0, H); return c; };
+  const read = async (c, x0, deg) => {
+    const rc = rotate(c, deg), o = await recognize(rc, { lang, onStatus, psm: "6" });
+    return o.lines.map(l => ({ words: l.words.map(w => {
+      const [ax, ay] = unrotate(w.bbox.x0, w.bbox.y0, c, deg, rc), [bx, by] = unrotate(w.bbox.x1, w.bbox.y1, c, deg, rc);
+      return { text: w.text, bbox: { x0: Math.min(ax, bx) + x0, y0: Math.min(ay, by), x1: Math.max(ax, bx) + x0, y1: Math.max(ay, by) } };
+    }) }));
+  };
+  // prezzi: colonna di destra, di solito dritta; nomi: una lettura per ogni inclinazione trovata nelle fasce
+  const right = await read(crop(xs, W), xs, skewAngle(crop(xs, W), 7)), lx1 = Math.min(W, Math.round(W * (split + 0.1)));
+  // nomi: fascia per fascia, ognuna raddrizzata con il suo angolo; di ogni fascia si tengono le righe del suo centro
+  const n = Math.max(3, Math.min(10, Math.round(H / 260))), hb = H / n, left = [];
+  for (let i = 0; i < n; i++) {
+    const y0 = Math.max(0, Math.round(i * hb - hb * 0.2)), y1 = Math.min(H, Math.round((i + 1) * hb + hb * 0.2));
+    const c = document.createElement("canvas"); c.width = lx1; c.height = y1 - y0; c.getContext("2d").drawImage(cv, 0, y0, lx1, y1 - y0, 0, 0, lx1, y1 - y0);
+    for (const l of await read(c, 0, skewAngle(c, 7))) {
+      const ws = l.words.map(w => ({ ...w, bbox: { ...w.bbox, y0: w.bbox.y0 + y0, y1: w.bbox.y1 + y0 } }));
+      const cy = ws.reduce((a, w) => a + (w.bbox.y0 + w.bbox.y1) / 2, 0) / (ws.length || 1);
+      if (ws.length && cy >= i * hb && cy < (i + 1) * hb) left.push({ words: ws });
+    }
+  }
+  return [{ lines: [...left, ...right], width: W, deg: "fasce" }];
+}
+
+/** Ruota il canvas di -deg (sfondo bianco), per rendere orizzontali le righe. */
+export function rotate(cv, deg) {
+  if (!deg) return cv;
+  const a = (-deg * Math.PI) / 180, s = Math.abs(Math.sin(a)), co = Math.abs(Math.cos(a));
+  const c = document.createElement("canvas"); c.width = Math.round(cv.width * co + cv.height * s); c.height = Math.round(cv.width * s + cv.height * co);
+  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.translate(c.width / 2, c.height / 2); g.rotate(a); g.imageSmoothingQuality = "high"; g.drawImage(cv, -cv.width / 2, -cv.height / 2);
+  return c;
+}
+
 /** Copia per l'OCR: ingrandita di k (testo stretto degli scontrini), in grigio e con più contrasto. */
 export function variant(cv, k = 1) {
   const c = document.createElement("canvas"); c.width = Math.round(cv.width * k); c.height = Math.round(cv.height * k);

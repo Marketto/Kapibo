@@ -489,6 +489,7 @@
 "tour.share.p":"Kiekvieno puslapio viršuje rasi versiją (palieski, kad pamatytum naujienas), Kapibo dalijimosi mygtuką ir, jei įjungta, kavos mygtuką Ko-fi. Slenkant antraštė vėl sumažėja.",
 "tour.mochi.t":"Kapibo ir Mochi Spesa",
 "tour.mochi.p":"Jei naudoji ir Mochi Spesa, pirkiniai keliauja tarp programėlių: kvitas → sandėliukas, apsipirkimas → biudžetas. Čia pasirink, ar klausti kaskart.",
+"news.166":"Susiglamžę kvitai: Kapibo skaito pavadinimus ir kainas atskiruose stulpeliuose, ištiesina kiekvieną popieriaus dalį ir poruoja jas iš eilės. Atmeta neįmanomas eilutes (brangesnes nei bendra suma) ir atpažįsta parduotuvę net blogai nuskaičius logotipą.",
 "news.165":"Skenavimas: palietęs dokumentą iškart pasirenki, ar fotografuoti, ar naudoti turimą nuotrauką ar PDF.",
 "news.164":"Rankoje nufotografuoti, pakrypę ar susiraukšlėję kvitai: Kapibo atkuria eilutes pagal kainų padėtį ir atmeta neįmanomus popieriaus kraštus.",
 "news.163":"Kur kas tikslesni kvitai: Kapibo naudoja Schiaccia PDF skenerį (popieriaus kraštai, šešėliai, lenkimai), skaito kelis kartus ir sujungia rezultatus, kol eilutės sutampa su suma. Rodomas ir kiekis (pvz., ×3).",

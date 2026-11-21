@@ -489,6 +489,7 @@
 "tour.share.p":"Katras lapas augšā atradīsi versiju (pieskaries, lai redzētu jaunumus), pogu Kapibo kopīgošanai un, ja iespējots, kafijas pogu vietnē Ko-fi. Ritinot galvene atkal sašaurinās.",
 "tour.mochi.t":"Kapibo un Mochi Spesa",
 "tour.mochi.p":"Ja lieto arī Mochi Spesa, pirkumi ceļo starp lietotnēm: čeks → pieliekamais, iepirkšanās → budžets. Izvēlies šeit, vai jautāt katru reizi.",
+"news.166":"Saburzīti čeki: Kapibo nolasa nosaukumus un cenas atsevišķās kolonnās, iztaisno katru papīra daļu un savieno tās pēc kārtas. Tas atmet neiespējamās rindas (dārgākas par kopsummu) un atpazīst veikalu pat no slikti nolasīta logotipa.",
 "news.165":"Skenēšana: pieskaroties dokumentam, uzreiz izvēlies, vai uzņemt foto, vai izmantot esošu foto vai PDF.",
 "news.164":"Rokā fotografēti, šķībi vai sarullēti čeki: Kapibo atjauno rindas pēc cenu vietas un noraida neiespējamās papīra malas.",
 "news.163":"Daudz precīzāki čeki: Kapibo izmanto Schiaccia PDF skeneri (papīra malas, ēnas, krokas), nolasa vairākas reizes un apvieno nolasījumus, līdz rindas sakrīt ar kopsummu. Tiek rādīts arī daudzums (piem., ×3).",

@@ -489,6 +489,7 @@
 "tour.share.p":"Nahoře na každé stránce najdeš verzi (klepnutím zobrazíš novinky), tlačítko pro sdílení Kapibo a, je-li zapnuté, tlačítko pro kávu na Ko-fi. Při posouvání se záhlaví opět zmenší.",
 "tour.mochi.t":"Kapibo a Mochi Spesa",
 "tour.mochi.p":"Pokud používáš i Mochi Spesa, nákupy putují mezi aplikacemi: účtenka → spíž, hotový nákup → rozpočet. Tady vyber, jestli se mám ptát pokaždé.",
+"news.166":"Pomačkané účtenky: Kapibo čte názvy a ceny v oddělených sloupcích, narovná každou část papíru a spáruje je popořadě. Zahodí nemožné řádky (dražší než celkem) a pozná obchod i ze špatně přečteného loga.",
 "news.165":"Skenování: po klepnutí na dokument hned vybereš, zda vyfotit, nebo použít existující fotku či PDF.",
 "news.164":"Účtenky vyfocené v ruce, nakřivo nebo zkroucené: Kapibo složí řádky podle polohy cen a vyřadí nemožné okraje papíru.",
 "news.163":"Mnohem přesnější účtenky: Kapibo používá skener Schiaccia PDF (okraje papíru, stíny, záhyby), čte vícekrát a spojuje čtení, dokud řádky nesedí s celkem. Zobrazuje se i množství (např. ×3).",

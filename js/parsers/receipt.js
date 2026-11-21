@@ -3,19 +3,24 @@ import { findAmounts, round2 } from "../money.js";
 import { lines, hasAny, findDate, norm } from "./util.js";
 
 const TOTAL = ["totale", "totale complessivo", "total", "totaal", "summe", "gesamt", "gesamtbetrag", "zu zahlen", "importe", "a pagar", "somme", "montant", "razem", "suma", "celkem", "osszesen", "yhteensa", "summa", "totalt", "итог", "итого", "всего", "сума", "σύνολο", "合計", "合计", "总计", "합계", "المجموع", "toplam", "iomlan"];
-const SKIP = ["subtotale", "subtotal", "iva", "di cui iva", "imponibile", "vat", "mwst", "tva", "ндс", "pagamento", "contante", "contanti", "resto", "carta di credito", "carta credito", "carta di debito", "pagato con carta", "bancomat", "pos", "credito", "debito", "elettronico", "visa", "mastercard", "maestro", "change", "cash", "rückgeld", "wechselgeld", "monnaie", "cambio", "documento commerciale", "scontrino", "cassa", "cassiere", "operatore", "transazione", "punti", "saldo punti", "fidaty", "tessera", "partita iva", "p iva", "piva", "tel", "via", "grazie", "arrivederci", "rt", "n doc", "doc n", "importo pagato", "totale euro", "non riscosso", "sconto in fattura"];
+const SKIP = ["subtotale", "subtotal", "articoli", "totale articoli", "n. pezzi", "pezzi", "iva", "di cui iva", "imponibile", "vat", "mwst", "tva", "ндс", "pagamento", "contante", "contanti", "resto", "carta di credito", "carta credito", "carta di debito", "pagato con carta", "bancomat", "pos", "credito", "debito", "elettronico", "visa", "mastercard", "maestro", "change", "cash", "rückgeld", "wechselgeld", "monnaie", "cambio", "documento commerciale", "scontrino", "cassa", "cassiere", "operatore", "transazione", "punti", "saldo punti", "fidaty", "tessera", "partita iva", "p iva", "piva", "tel", "via", "grazie", "arrivederci", "rt", "n doc", "doc n", "importo pagato", "totale euro", "non riscosso", "sconto in fattura"];
 const VOUCHER = ["buoni pasto", "buono pasto", "ticket restaurant", "ticket", "edenred", "pluxee", "sodexo", "day", "up day", "yes ticket", "meal voucher", "tickets restaurant", "essen", "gutschein"];
 const DISCOUNT = ["sconto", "sc ", "promo", "offerta", "coupon", "risparmio", "rabatt", "remise", "descuento", "discount", "скидка", "割引", "할인"];
-const CODE = /^\W*(?:art\.?\s*\/?\s*ean|ean|cod(?:ice)?\.?|plu|sku|rif\.?)\b\s*[:.]?\s*[\w-]*\d{4,}/i;
+const CODE = /^\W*art\s*\/|^\W*(?:art\.?\s*\/?\s*ean|ean|cod(?:ice)?\.?|plu|sku|rif\.?)\b\s*[:.]?\s*[\w-]*\d{4,}/i;
 // "2 x 0,89", "5 PZ x 0.89 EUR/PZ", "0,512 KG x 2,49 €/KG"
 const QTY = /^(\d+(?:[.,]\d+)?)\s*(?:pz|pezzi|pc|pcs|n|nr|st|stk|kg|g|lt?)?\.?\s*[x×*]+\s*(\d+[.,]\d{2,3})/i;
 const UNIT = /\b(?:eur|euro|€)?\s*\/?\s*(?:pz|pezzo|pezzi|kg|lt?|cad|pc|stk)\b|€|\beur(?:o)?\b/gi;
 // Catene note: il nome si cerca in tutto lo scontrino (il logo spesso non si legge), poi il sito www.<nome>.it
 const CHAINS = [["eurospin", "Eurospin"], ["esselunga", "Esselunga"], ["ipercoop", "Ipercoop"], ["coop", "Coop"], ["conad", "Conad"], ["lidl", "Lidl"], ["aldi", "Aldi"], ["carrefour", "Carrefour"], ["penny", "Penny"], ["despar", "Despar"], ["eurospar", "Eurospar"], ["interspar", "Interspar"], ["tigros", "Tigros"], ["famila", "Famila"], ["bennet", "Bennet"], ["unes", "Unes"], ["crai", "Crai"], ["todis", "Todis"], ["naturasi", "NaturaSì"], ["tuodi", "Tuodì"], ["in's mercato", "In's"], ["md spa", "MD"], ["pam panorama", "Pam"], ["panorama", "Panorama"], ["simply", "Simply"], ["sigma", "Sigma"], ["iper la grande", "Iper"], ["decathlon", "Decathlon"], ["ikea", "IKEA"], ["leroy merlin", "Leroy Merlin"], ["mediaworld", "MediaWorld"], ["unieuro", "Unieuro"], ["euronics", "Euronics"], ["tigota", "Tigotà"], ["acqua & sapone", "Acqua & Sapone"], ["acqua e sapone", "Acqua & Sapone"], ["rewe", "REWE"], ["edeka", "EDEKA"], ["mercadona", "Mercadona"], ["auchan", "Auchan"], ["leclerc", "E.Leclerc"], ["tesco", "Tesco"], ["sainsbury", "Sainsbury's"], ["emisfero", "Emisfero"], ["misfero", "Emisfero"], ["sfero", "Emisfero"], ["gros", "GROS"], ["elite", "Elite"], ["prix", "Prix"], ["deco", "Decò"], ["dpiu", "Dpiù"], ["mercato", null]].filter(c => c[1]);
+const lcs = (a, b) => { let best = 0; for (let i = 0; i < a.length; i++) for (let j = 0; j < b.length; j++) { let k = 0; while (a[i + k] && a[i + k] === b[j + k]) k++; if (k > best) best = k; } return best; };
 export function findChain(text) {
   const n = norm(text).replace(/\s+/g, " ");
   // nomi lunghi: basta l'inizio della parola ("sferoò" letto dal logo); corti: parola intera
   for (const [k, name] of CHAINS) if (new RegExp(`(^|[^a-z])${k.replace(/[&']/g, m => "\\" + m)}${k.length >= 5 ? "" : "([^a-z]|$)"}`).test(n)) return name;
+  // logo letto male ("CMISFEF" per EMISFERO): nelle prime righe, una parola che ha in comune con il nome della catena
+  // un pezzo di almeno 5 lettere, pari ad almeno il 60% del nome (solo nomi lunghi, per non sbagliare)
+  const head = norm(String(text).split("\n").slice(0, 8).join(" ")).split(/\s+/).filter(w => w.length >= 5);
+  for (const [k, name] of CHAINS) { if (k.length < 7 || /\s/.test(k)) continue; for (const w of head) { const L = lcs(w, k); if (L >= 5 && L >= k.length * 0.6) return name; } }
   const w = String(text).match(/www\s?\.\s?([a-z0-9-]{3,30})\.(?:it|com|de|fr|es|eu|co\.uk)/i);
   return w ? w[1].charAt(0).toUpperCase() + w[1].slice(1).toLowerCase() : null;
 }
@@ -115,11 +120,18 @@ export function mergeReceipts(list) {
     slots = out;
   }
   // totale: il più votato tra quelli possibili (non più piccolo della voce più cara vista in almeno due letture)
-  const big = Math.max(0, ...slots.filter(s => s.amts.length > 1).map(s => Math.min(...s.amts)));
+  const tmax = Math.max(0, ...list.map(r => r.total || 0));
+  const big = Math.max(0, ...slots.filter(s => s.amts.length > 1).map(s => Math.min(...s.amts)).filter(a => a <= tmax));
   const totals = list.map(r => r.total).filter(x => x != null && x >= big - 0.01), total = totals.length ? mode(totals) : null;
   // una "voce" che vale quanto il totale è la riga del totale finita sul nome sbagliato
   if (total != null && slots.length > 1) slots = slots.filter(s => !s.amts.every(a => Math.abs(a - total) < 0.01));
   for (const s of slots) { const c = {}; s.amts.forEach(a => (c[a] = (c[a] || 0) + 1)); s.cands = Object.entries(c).sort((a, b) => b[1] - a[1]).map(([a]) => +a); s.pick = s.cands[0]; s.on = true; }
+  // una voce più cara del totale è letta male: un'altra lettura, o la stessa senza la cifra in più ("93,25" → 9,25)
+  if (total != null) for (const s of slots) if (s.pick > total + 0.01) {
+    const ok = s.cands.filter(a => a <= total + 0.01);
+    if (ok.length) s.pick = ok[0];
+    else { const [ip, dp = "00"] = s.pick.toFixed(2).split("."), alt = [...ip].map((_, i) => +(ip.slice(0, i) + ip.slice(i + 1) + "." + dp)).filter(v => v > 0 && v <= total); if (alt.length) { s.pick = Math.max(...alt); s.cands = [s.pick, ...s.cands]; } }
+  }
   const sum = () => round2(slots.reduce((a, s) => a + (s.on ? s.pick : 0), 0));
   if (total != null && Math.abs(sum() - total) >= 0.02) {
     // ricerca piccola: alternative degli importi e righe viste una sola volta (quando le letture sono più di una)
@@ -133,6 +145,8 @@ export function mergeReceipts(list) {
     };
     if (opts.reduce((a, o) => a * o.length, 1) <= 50000) rec(0, fixed, []);
     if (best) best.ch.forEach((c, i) => { vars[i].on = c.on; vars[i].pick = c.a; });
+    // nessuna combinazione torna: con molte letture si tengono le righe viste almeno due volte e con un nome vero
+    else if (list.length >= 4) slots = slots.filter(s => s.seen >= 2 && /\p{L}{3}/u.test(s.name));
   }
   const items = slots.filter(s => s.on).map(s => ({ name: s.name, amount: s.pick, ...(s.qty ? { qty: s.qty } : {}) }));
   const r0 = list.find(r => r.total === total) || base;
@@ -161,14 +175,49 @@ export function layoutText(lines, width) {
     if (!keep.length) continue;
     const y0 = Math.min(...keep.map(w => w.bbox.y0)), y1 = Math.max(...keep.map(w => w.bbox.y1));
     const text = keep.map(w => w.text).join(" ");
-    rows.push({ text, y: (y0 + y1) / 2, h: y1 - y0, code: CODE.test(text), price: [] });
+    // retta per i centri delle parole: una riga inclinata (carta piegata) si prolunga fino alla colonna dei prezzi
+    const P = keep.map(w => [(w.bbox.x0 + w.bbox.x1) / 2, (w.bbox.y0 + w.bbox.y1) / 2]), n = P.length, mx = P.reduce((a, q) => a + q[0], 0) / n, my = P.reduce((a, q) => a + q[1], 0) / n;
+    const vx = P.reduce((a, q) => a + (q[0] - mx) ** 2, 0), slope = n > 1 && vx > 0 ? Math.max(-0.12, Math.min(0.12, P.reduce((a, q) => a + (q[0] - mx) * (q[1] - my), 0) / vx)) : 0;
+    const hh = Math.max(...keep.map(w => w.bbox.y1 - w.bbox.y0));
+    rows.push({ text, y: (y0 + y1) / 2, at: x => my + slope * (x - mx), h: hh, code: CODE.test(text), price: [] });
   }
   for (const p of prices) {
     let best = null, bd = Infinity;
-    for (const r of rows) { if (r.code) continue; const d = Math.abs(r.y - p.y); if (d < bd) { bd = d; best = r; } }
+    for (const r of rows) { if (r.code) continue; const d = Math.abs(r.at(p.x) - p.y); if (d < bd) { bd = d; best = r; } }
     if (best && bd < Math.max(best.h, 12) * 1.6) best.price.push(p);
-    else rows.push({ text: "", y: p.y, h: 0, price: [p] });
+    else rows.push({ text: "", y: p.y, at: () => p.y, h: 0, code: true, price: [p] });
   }
   rows.sort((a, b) => a.y - b.y);
   return rows.map(r => [r.text, ...r.price.sort((a, b) => a.x - b.x).map(p => p.t)].join("   ").trim()).filter(Boolean).join("\n");
+}
+
+/**
+ * Nomi e prezzi abbinati per ordine (il primo nome col primo prezzo…), tra l'intestazione e la riga del TOTALE.
+ * Per la carta stropicciata, dove la colonna dei prezzi è spostata rispetto ai nomi e la posizione inganna.
+ * Vale solo se i nomi e i prezzi sono tanti uguali; altrimenti "". lines/width come layoutText.
+ */
+export function orderText(lines, width) {
+  const AM = /^-?\d{1,4}[.,]\d{2}$/, left = [], am = [];
+  for (const l of lines || []) {
+    const ws = [];
+    for (const w of l.words || []) {
+      const t = String(w.text || "").replace(/[^\d.,-]+$/, "").replace(/^[^\d-]+/, ""), y = (w.bbox.y0 + w.bbox.y1) / 2;
+      if (w.bbox.x0 > width * 0.5) { if (AM.test(t)) am.push({ t, y }); } else ws.push(w);
+    }
+    if (ws.length) left.push({ text: ws.map(w => w.text).join(" "), y: ws.reduce((a, w) => a + (w.bbox.y0 + w.bbox.y1) / 2, 0) / ws.length });
+  }
+  left.sort((a, b) => a.y - b.y); am.sort((a, b) => a.y - b.y);
+  const ti = left.findIndex(r => hasAny(r.text, TOTAL) && !hasAny(r.text, ["subtotale", "subtotal", "articoli"]));
+  if (ti < 1) return "";
+  // intestazione delle colonne: in qualunque colonna, anche spezzata dall'OCR ("DESCRIZI ONE", "PREZZOCE)")
+  const HEAD = /descri\s?zi|prezz|price|preis|prix|precio|documento\s?comm/i;
+  let yH = null; for (const l of lines || []) { const t = (l.words || []).map(w => w.text).join(" "), y = (l.words || []).reduce((a, w) => a + (w.bbox.y0 + w.bbox.y1) / 2, 0) / ((l.words || []).length || 1); if (HEAD.test(t) && y < left[ti].y && (yH == null || y > yH)) yH = y; }
+  if (yH == null) return "";
+  const hi = left.reduce((k, r, i) => (r.y <= yH + 5 ? i : k), -1);
+  const names = left.slice(hi + 1, ti).filter(r => /\p{L}{3}/u.test(r.text) && !CODE.test(r.text) && !hasAny(r.text, SKIP) && !/^\W*artic/i.test(r.text));
+  const yT = left[ti].y, tot = am.reduce((b, a) => (!b || Math.abs(a.y - yT) < Math.abs(b.y - yT) ? a : b), null);
+  if (!tot) return "";
+  const prices = am.filter(a => a.y > yH && a.y < tot.y);
+  if (!names.length || names.length !== prices.length) return "";
+  return [...left.slice(0, hi + 1).map(r => r.text), ...names.map((r, i) => r.text + "   " + prices[i].t), "TOTALE COMPLESSIVO   " + tot.t].join("\n");
 }

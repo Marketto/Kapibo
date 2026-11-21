@@ -1,6 +1,7 @@
 // Versione dell'app (semver). Il service worker la usa per il nome della cache.
-export const APP_VERSION = "1.6.5";
+export const APP_VERSION = "1.6.6";
 export const CHANGELOG = [
+  { v: "1.6.6", key: "news.166" },
   { v: "1.6.5", key: "news.165" },
   { v: "1.6.4", key: "news.164" },
   { v: "1.6.3", key: "news.163" },

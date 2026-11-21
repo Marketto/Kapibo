@@ -192,3 +192,16 @@ test("scontrino: più letture unite riga per riga finché la somma torna", async
   assert.equal(m.sum, 3.8);
   assert.equal(mergeReceipts([b, a]).sum, 3.8);
 });
+
+test("scontrino: carta stropicciata, nomi e prezzi abbinati per ordine; voce oltre il totale corretta", async () => {
+  const { orderText, mergeReceipts } = await import("../js/parsers/receipt.js");
+  const L = (text, x, y) => ({ words: text.split(" ").map((w, i) => ({ text: w, bbox: { x0: x + i * 60, y0: y - 10, x1: x + i * 60 + 50, y1: y + 10 } })) });
+  // i prezzi sono più in alto di mezza riga rispetto ai nomi (come su carta piegata)
+  const lines = [L("NEGOZIO FINTO", 50, 20), L("DESCRIZIONE", 20, 100), L("PREZZO", 700, 100), L("PANE COMUNE", 20, 140), L("1,20", 800, 125),
+    L("LATTE FRESCO", 20, 170), L("1,10", 800, 150), L("BISCOTTI", 20, 200), L("2,30", 800, 182), L("ARTICOLI 3", 30, 230), L("TOTALE COMPLESSIVO", 20, 270), L("4,60", 800, 262)];
+  const r = parseReceipt(orderText(lines, 1000));
+  assert.deepEqual(r.items.map(i => [i.name, i.amount]), [["Pane Comune", 1.2], ["Latte Fresco", 1.1], ["Biscotti", 2.3]]);
+  assert.equal(r.total, 4.6);
+  const a = parseReceipt("NEG\nVIA\nX\nArt/rs Xyz 7,00\nPane 1,00\nFrittura 93,25\nTOTALE 10,25"), b = parseReceipt("NEG\nVIA\nX\nPane 1,00\nFrittura 93,25\nTOTALE 10,25");
+  assert.deepEqual(mergeReceipts([a, b]).items.map(i => i.amount), [1, 9.25]);
+});
