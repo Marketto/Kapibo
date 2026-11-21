@@ -37,7 +37,11 @@ export function parseReceipt(text) {
     if (!store && i < 4 && /[a-z]{3}/i.test(l) && !/\d{3,}/.test(l)) store = l.slice(0, 40);
     const am = findAmounts(l);
     if (hasAny(l, VOUCHER) && am.length) { vouchers = round2(vouchers + Math.abs(am[am.length - 1])); continue; }
-    if (hasAny(l, TOTAL) && !hasAny(l, ["subtotale", "subtotal"])) { if (am.length && total == null) total = Math.abs(am[am.length - 1]); stop = true; continue; }
+    if (hasAny(l, TOTAL) && !hasAny(l, ["subtotale", "subtotal"])) {
+      // OCR: lo zero finale del totale letto come "%", "o", "°" ("30,9%")
+      const tam = am.length ? am : findAmounts(l.replace(/(\d[.,]\d)[%°oO](?!\w)/g, "$10"));
+      if (tam.length && total == null) total = Math.abs(tam[tam.length - 1]); stop = true; continue;
+    }
     if (stop) continue;
     if (!am.length) {
       // riga di solo nome (il prezzo è sotto, es. "Crodino" / "3 x 2,50 7,50")

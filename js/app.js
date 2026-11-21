@@ -350,14 +350,27 @@ async function startScan(kind, cam) {
   const ocr = await import("./ocr.js");
   const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (scanState) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
   try {
-    let text;
+    let text, altTotal = null;
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
     else text = (await ocr.recognize(file, { lang: lng, mode: kind === "meter" ? "digits" : "text", onStatus })).text;
+    // scontrini: se totale e somma delle righe non tornano, seconda lettura un po' ingrandita; si tiene la migliore
+    if (kind === "receipt" && file.type !== "application/pdf") {
+      const { parseReceipt } = await import("./parsers/receipt.js");
+      const ok = r => r.total != null && Math.abs(r.total - r.sum) < 0.02, a = parseReceipt(text);
+      if (!ok(a)) {
+        const t2 = (await ocr.recognize(file, { lang: lng, onStatus, scale: 1.6 })).text, b = parseReceipt(t2);
+        // vince la lettura in cui righe e totale tornano; altrimenti quella con più righe, col totale preso dall'altra se manca
+        const best = ok(b) ? b : ok(a) ? a : b.items.length > a.items.length ? b : a;
+        if (best === b) text = t2;
+        altTotal = best.total ?? (best === a ? b : a).total;
+      }
+    }
     // contatori: due letture (solo cifre e normale), il parser sceglie il numero più completo
     if (kind === "meter" && file.type !== "application/pdf") text += "\n" + (await ocr.recognize(file, { lang: lng, mode: "text", onStatus })).text;
     const P = await import(`./parsers/${kind}.js`);
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
     let res = P[fn](text);
+    if (kind === "receipt" && res.total == null && altTotal != null) res.total = altTotal;
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();

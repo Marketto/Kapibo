@@ -161,3 +161,24 @@ test("categorie: prodotti e negozio insieme", async () => {
   const rules = { [storeKey("Bottega Finta")]: ["gifts"] };
   assert.equal(guessReceipt([{ name: "Xyzq", amount: 5 }], "Bottega Finta", rules).main, "gifts");
 });
+
+test("scontrino: totale con lo zero letto come %", () => {
+  const r = parseReceipt("PANE 1,00\nLATTE 29,90\nTOTALE COMPLESSIVO     30,9%");
+  assert.equal(r.total, 30.9);
+});
+
+test("ocr: ritaglio del foglio chiaro su un fondo colorato", async () => {
+  globalThis.location ??= { origin: "http://localhost" };
+  const { paperBox } = await import("../js/ocr.js");
+  const w = 100, h = 160, d = new Uint8ClampedArray(w * h * 4);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = (y * w + x) * 4, paper = x >= 35 && x < 65 && y >= 30 && y < 130;
+    const ink = paper && y % 6 === 0 && x > 38 && x < 60;
+    [d[i], d[i + 1], d[i + 2], d[i + 3]] = ink ? [40, 40, 50, 255] : paper ? [215, 222, 232, 255] : [205, 160, 110, 255];
+  }
+  const b = paperBox(d, w, h, 10, 10);
+  assert.ok(b && b.x >= 300 && b.x <= 350 && b.w >= 300 && b.w <= 400 && b.h >= 1000 && b.h <= 1100, JSON.stringify(b));
+  // foglio che riempie la foto: nessun ritaglio
+  for (let i = 0; i < w * h; i++) [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]] = [220, 225, 230];
+  assert.equal(paperBox(d, w, h), null);
+});

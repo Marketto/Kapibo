@@ -43,29 +43,67 @@ async function getWorker(lang, onStatus) {
 function touch() { clearTimeout(idle); idle = setTimeout(async () => { if (worker) { const w = worker; worker = null; workerKey = ""; (await w).terminate(); } }, 60000); }
 
 /** OCR di un'immagine (File/Blob/canvas). mode "digits" per i contatori. */
-export async function recognize(src, { lang = "eng", mode = "text", onStatus } = {}) {
-  const cv = src instanceof HTMLCanvasElement ? src : await prepare(src, mode);
+export async function recognize(src, { lang = "eng", mode = "text", onStatus, scale = 1 } = {}) {
+  const cv = src instanceof HTMLCanvasElement ? src : await prepare(src, mode, scale);
   const w = await getWorker(lang, onStatus);
-  await w.setParameters(mode === "digits" ? { tessedit_char_whitelist: "0123456789.,", tessedit_pageseg_mode: "7" } : { tessedit_char_whitelist: "", tessedit_pageseg_mode: "6" });
+  await w.setParameters(mode === "digits" ? { tessedit_char_whitelist: "0123456789.,", tessedit_pageseg_mode: "7" } : { tessedit_char_whitelist: "", tessedit_pageseg_mode: "6", preserve_interword_spaces: "1" });
   const r = await w.recognize(cv);
   touch();
   return { text: r.data.text, conf: r.data.confidence, canvas: cv };
 }
 
 // ---------- preparazione della foto ----------
-export async function toCanvas(file, max = 2400) {
+export async function toCanvas(file, max = 2400, { crop = false, scale = 1 } = {}) {
   const bmp = await createImageBitmap(file, { imageOrientation: "from-image" }).catch(async () => {
     const img = new Image(); img.src = URL.createObjectURL(file); await img.decode(); return img;
   });
-  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
-  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
-  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  // ritaglio sul foglio: via tavolo, legno e mani, che l'OCR legge come lettere a caso
+  const r = crop ? findPaper(bmp) : null, sx = r ? r.x : 0, sy = r ? r.y : 0, sw = r ? r.w : bmp.width, sh = r ? r.h : bmp.height;
+    let k = Math.min(1, max / Math.max(sw, sh));
+  // foto ritagliata: si tiene la risoluzione piena del foglio (prima si rimpiccioliva tutta la foto a 2400 px)
+  if (crop) k = Math.min(scale, 4200 / Math.max(sw, sh), Math.sqrt(8e6 / (sw * sh)));
+  const c = document.createElement("canvas"); c.width = Math.round(sw * k); c.height = Math.round(sh * k);
+  const g = c.getContext("2d"); g.imageSmoothingQuality = "high";
+  g.drawImage(bmp, sx, sy, sw, sh, 0, 0, c.width, c.height);
   return c;
 }
 
+/** Riquadro del foglio (chiaro e poco colorato) più grande nella foto, o null se occupa già quasi tutta l'immagine. */
+export function findPaper(bmp) {
+  const W = 240, k = W / Math.max(bmp.width, bmp.height), w = Math.max(8, Math.round(bmp.width * k)), h = Math.max(8, Math.round(bmp.height * k));
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(bmp, 0, 0, w, h);
+  const d = g.getImageData(0, 0, w, h).data;
+  return paperBox(d, w, h, bmp.width / w, bmp.height / h);
+}
+export function paperBox(d, w, h, fx = 1, fy = 1) {
+  const n = w * h, V = new Float32Array(n), Sat = new Float32Array(n);
+  let vmax = 0;
+  for (let i = 0; i < n; i++) { const r = d[i * 4], gg = d[i * 4 + 1], b = d[i * 4 + 2], mx = Math.max(r, gg, b), mn = Math.min(r, gg, b); V[i] = mx; Sat[i] = mx ? (mx - mn) / mx : 0; if (mx > vmax) vmax = mx; }
+  const m = new Uint8Array(n); for (let i = 0; i < n; i++) m[i] = Sat[i] < 0.26 && V[i] > vmax * 0.42 ? 1 : 0;
+  // componente connessa più grande
+  const lab = new Int32Array(n).fill(-1), st = []; let best = null;
+  for (let i = 0; i < n; i++) {
+    if (!m[i] || lab[i] >= 0) continue;
+    let cnt = 0, x0 = w, y0 = h, x1 = 0, y1 = 0; st.push(i); lab[i] = i;
+    while (st.length) {
+      const j = st.pop(), x = j % w, y = (j / w) | 0; cnt++;
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+      for (const q of [j - 1, j + 1, j - w, j + w]) { if (q < 0 || q >= n || lab[q] >= 0 || !m[q] || (q % w === 0 && j % w === w - 1) || (j % w === 0 && q % w === w - 1)) continue; lab[q] = i; st.push(q); }
+    }
+    if (!best || cnt > best.cnt) best = { cnt, x0, y0, x1, y1 };
+  }
+  if (!best) return null;
+  const bw = best.x1 - best.x0 + 1, bh = best.y1 - best.y0 + 1, area = (bw * bh) / n;
+  if (area < 0.06 || area > 0.85 || best.cnt < bw * bh * 0.45) return null;
+  const mx = Math.round(bw * 0.03) + 1, my = Math.round(bh * 0.015) + 1;
+  const x = Math.max(0, best.x0 - mx), y = Math.max(0, best.y0 - my), X = Math.min(w, best.x1 + 1 + mx), Y = Math.min(h, best.y1 + 1 + my);
+  return { x: Math.round(x * fx), y: Math.round(y * fy), w: Math.round((X - x) * fx), h: Math.round((Y - y) * fy) };
+}
+
 /** Grigio, luce del foglio uniforme (massimo per riquadri 16×16, sfumato), contrasto, raddrizzamento. */
-export async function prepare(file, mode = "text") {
-  let c = await toCanvas(file, mode === "digits" ? 1600 : 2400);
+export async function prepare(file, mode = "text", scale = 1) {
+  let c = await toCanvas(file, mode === "digits" ? 1600 : 2400, { crop: mode !== "digits", scale });
   const g = c.getContext("2d", { willReadFrequently: true }), w = c.width, h = c.height;
   const img = g.getImageData(0, 0, w, h), d = img.data, n = w * h, L = new Float32Array(n);
   for (let i = 0; i < n; i++) L[i] = d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11;
