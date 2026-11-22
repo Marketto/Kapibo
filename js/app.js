@@ -182,6 +182,7 @@ async function onAction(e) {
     edit: () => entryDialog(S().entries.find(x => x.id === id)),
     meta: monthDialog, album: () => go("more", "#stickers"),
     cat: () => catDetail(id),
+    scanAgain: () => { if (scanState?.file) runScan(scanState.kind, scanState.file, 0); },
     kind: async () => {
       // dai tipi grandi: si sceglie sempre se scattare o prendere una foto già fatta / un PDF
       if (b.dataset.cam !== "1" || b.dataset.direct) return startScan(b.dataset.kind, b.dataset.cam === "1");
@@ -349,15 +350,41 @@ function pickFile(cam) {
   return new Promise(res => { inp.value = ""; inp.onchange = () => res(inp.files[0] || null); inp.oncancel = () => res(null); inp.click(); });
 }
 
+// lettura che riparte: con lo schermo spento il sistema può chiudere il motore o la scheda grafica a metà lavoro;
+// al ritorno si ricomincia dalla stessa foto. Ogni lettura ha un numero: quelle abbandonate non scrivono più nulla.
+let scanGen = 0, scanHiddenAt = 0, scanDog = 0;
+const scanTick = () => { if (scanState?.busy) scanState.tick = Date.now(); };
+async function restartScan(why) {
+  const s = scanState; if (!s?.busy || !s.file) return;
+  const tries = (s.tries || 0) + 1, ocr = await import("./ocr.js");
+  ocr.reset();
+  if (tries > 2) { scanGen++; scanState = { ...s, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops"); render(); return; }
+  toast(t("s.resume")); runScan(s.kind, s.file, tries, why);
+}
+document.addEventListener("visibilitychange", () => {
+  if (!scanState?.busy) return;
+  if (document.hidden) { scanHiddenAt = Date.now(); return; }
+  if (scanHiddenAt && Date.now() - scanHiddenAt > 2500) restartScan("hidden");
+  scanHiddenAt = 0;
+});
 async function startScan(kind, cam) {
   const file = await pickFile(cam); if (!file) return;
-  scanState = { kind, busy: true, pct: 3, file, url: file.type.startsWith("image/") ? URL.createObjectURL(file) : null };
+  runScan(kind, file, 0);
+}
+async function runScan(kind, file, tries) {
+  const gen = ++scanGen;
+  if (scanState?.url && scanState.file === file) URL.revokeObjectURL(scanState.url);
+  scanState = { kind, busy: true, pct: 3, file, tries, tick: Date.now(), url: file.type.startsWith("image/") ? URL.createObjectURL(file) : null };
   kapi.mood("think"); kapi.say("kapi.think"); render();
+  // sorveglianza: un minuto senza passi avanti (con la pagina visibile) → si riparte
+  clearInterval(scanDog);
+  scanDog = setInterval(() => { if (gen !== scanGen || !scanState?.busy) return clearInterval(scanDog); if (!document.hidden && Date.now() - scanState.tick > 60000) { clearInterval(scanDog); restartScan("stall"); } }, 5000);
   const ocr = await import("./ocr.js");
-  const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (scanState) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
+  const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (gen === scanGen) scanTick(); if (scanState && gen === scanGen) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
   try {
     let text, merged = null;
     const pg = file.type !== "application/pdf" && kind !== "meter" ? await ocr.page(file) : null;
+    if (gen !== scanGen) return; scanTick(); if (pg) { scanState.pct = 20; $("#scanBar")?.style.setProperty("--w", "20%"); }
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
     else if (pg && kind === "receipt") {
       // foglio di Schiaccia + più letture (ingrandimento e modo di dividere le righe diversi), unite riga per riga:
@@ -376,7 +403,8 @@ async function startScan(kind, cam) {
         async () => vote(await ocr.recognize(ocr.variant(pg, k * 1.33), { lang: lng, onStatus, psm: "6" })),
         async () => vote(await ocr.recognize(await ocr.prepare(ocr.variant(pg, k), "text", 1, false), { lang: lng, onStatus, psm: "4" })),
       ];
-      for (const st of steps) if (await st()) break;
+      for (const st of steps) { if (gen !== scanGen) return; const ok = await st(); scanTick(); if (ok) break; }
+      if (gen !== scanGen) return;
       // i conti non tornano ancora: anche la foto preparata da Kapibo (se il foglio era stato trovato male)
       if (merged.total == null || Math.abs(merged.total - merged.sum) >= 0.02) { const o = await ocr.recognize(file, { lang: lng, onStatus }); texts.push(o.text); vote(o); }
       text = texts[0];
@@ -394,6 +422,7 @@ async function startScan(kind, cam) {
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
     let res = merged || P[fn](text);
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
+    if (gen !== scanGen) return; clearInterval(scanDog);
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
     kapi.mood("wow");
@@ -404,9 +433,10 @@ async function startScan(kind, cam) {
       unlock();
     } else kapi.say("kapi.notFound");
   } catch (err) {
+    if (gen !== scanGen) return; clearInterval(scanDog);
     console.error(err); scanState = { ...scanState, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops");
   }
-  render();
+  if (gen === scanGen) render();
 }
 const hasResult = () => { const r = scanState?.res; if (!r) return false; return !!(r.items?.length || r.net || r.rows?.length || r.amount || r.value); };
 
@@ -438,7 +468,7 @@ function scanView() {
   const st = scanState, back = `<button class="btn ghost small" data-act="scanBack">${ic("back")} ${t("ui.back")}</button>`;
   if (st.busy) return `<div class="card" aria-busy="true"><h2>${t("s.reading")}</h2><div class="progress" role="progressbar" aria-label="${esc(t("s.reading"))}"><i id="scanBar" style="--w:${st.pct}%"></i></div>
     ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted">${t("s.firstTime")}</p></div>`;
-  if (st.error) return `<div class="card"><p class="warn">${t("s.error")}</p><div class="btns">${back}<button class="btn" data-act="kind" data-kind="${st.kind}" data-cam="1">${t("s.retry")}</button></div></div>`;
+  if (st.error) return `<div class="card"><p class="warn">${t("s.error")}</p><div class="btns">${back}${st.file ? `<button class="btn" data-act="scanAgain">${t("s.retrySame")}</button>` : ""}<button class="btn soft" data-act="kind" data-kind="${st.kind}" data-cam="1">${t("s.retry")}</button></div></div>`;
   const body = { receipt: reviewReceipt, payslip: reviewPayslip, statement: reviewStatement, bill: reviewBill, meter: reviewMeter }[st.kind]();
   return `${body}<div class="card"><details><summary>${t("s.rawText")}</summary><pre style="white-space:pre-wrap;font-size:.8rem">${esc(st.text)}</pre></details>${back}</div>`;
 }

@@ -44,6 +44,12 @@ async function getWorker(lang, onStatus) {
   worker.catch(() => { worker = null; workerKey = ""; });
   return worker;
 }
+/** Chiude i motori (il nostro e quello di Schiaccia): dopo uno schermo spento si riparte puliti. */
+export function reset() {
+  clearTimeout(idle);
+  if (worker) { const w = worker; worker = null; workerKey = ""; Promise.resolve(w).then(x => x.terminate()).catch(() => {}); }
+  try { window.Scansione?.ocrFree(); } catch { /* niente */ }
+}
 function touch() { if (sharedW) return window.Scansione?.ocrTouch(); clearTimeout(idle); idle = setTimeout(async () => { if (worker) { const w = worker; worker = null; workerKey = ""; (await w).terminate(); } }, 60000); }
 
 /** OCR di un'immagine (File/Blob/canvas). mode "digits" per i contatori. */
