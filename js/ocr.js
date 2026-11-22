@@ -142,60 +142,13 @@ export function paperBox(d, w, h, fx = 1, fy = 1) {
 
 /** Grigio, luce del foglio uniforme (massimo per riquadri 16×16, sfumato), contrasto, raddrizzamento. */
 export async function prepare(file, mode = "text", scale = 1, crop = mode !== "digits") {
-  let c = await toCanvas(file, mode === "digits" ? 1600 : 2400, { crop, scale });
-  const g = c.getContext("2d", { willReadFrequently: true }), w = c.width, h = c.height;
-  const img = g.getImageData(0, 0, w, h), d = img.data, n = w * h, L = new Float32Array(n);
-  for (let i = 0; i < n; i++) L[i] = d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11;
-  if (mode !== "digits") {
-    const S = 16, bw = Math.ceil(w / S), bh = Math.ceil(h / S), bg = new Float32Array(bw * bh), tmp = new Float32Array(bw * bh);
-    for (let by = 0; by < bh; by++) for (let bx = 0; bx < bw; bx++) {
-      let mx = 0; for (let y = by * S; y < Math.min(h, by * S + S); y += 2) for (let x = bx * S; x < Math.min(w, bx * S + S); x += 2) { const v = L[y * w + x]; if (v > mx) mx = v; }
-      bg[by * bw + bx] = mx;
-    }
-    const pass = (src, dst, dx, dy, r, useMax) => { for (let y = 0; y < bh; y++) for (let x = 0; x < bw; x++) { let a = 0, k = 0; for (let s = -r; s <= r; s++) { const X = x + dx * s, Y = y + dy * s; if (X < 0 || Y < 0 || X >= bw || Y >= bh) continue; const v = src[Y * bw + X]; if (useMax) a = Math.max(a, v); else { a += v; k++; } } dst[y * bw + x] = useMax ? a : a / k; } };
-    pass(bg, tmp, 1, 0, 2, true); pass(tmp, bg, 0, 1, 2, true);
-    for (let it = 0; it < 2; it++) { pass(bg, tmp, 1, 0, 3, false); pass(tmp, bg, 0, 1, 3, false); }
-    for (let y = 0; y < h; y++) {
-      const gy = Math.min(bh - 1.001, Math.max(0, y / S - 0.5)), y0 = gy | 0, fy = gy - y0;
-      for (let x = 0; x < w; x++) {
-        const gx = Math.min(bw - 1.001, Math.max(0, x / S - 0.5)), x0 = gx | 0, fx = gx - x0, j = y0 * bw + x0;
-        const b = (bg[j] * (1 - fx) + bg[j + 1] * fx) * (1 - fy) + (bg[j + bw] * (1 - fx) + bg[j + bw + 1] * fx) * fy;
-        L[y * w + x] = Math.min(255, (L[y * w + x] * 248) / Math.max(b, 40));
-      }
-    }
-  }
-  // livelli: 1° e 99° percentile → 0..255
-  const hist = new Uint32Array(256); for (let i = 0; i < n; i++) hist[L[i] | 0]++;
-  const pct = p => { let a = 0; for (let i = 0; i < 256; i++) { a += hist[i]; if (a >= n * p) return i; } return 255; };
-  const lo = pct(0.01), hi = Math.max(lo + 1, pct(0.99));
-  for (let i = 0; i < n; i++) { const v = Math.max(0, Math.min(255, ((L[i] - lo) * 255) / (hi - lo))); d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v; }
-  g.putImageData(img, 0, 0);
-  const skew = findSkew(c);
-  return skew ? turn(c, -skew) : c;
+  const c = await toCanvas(file, mode === "digits" ? 1600 : 2400, { crop, scale });
+  // luce uniforme e inclinazione: quelle di Schiaccia PDF (Scansione.luceUniforme, findSkew); senza Schiaccia la foto così com'è
+  const S = await scansione(); if (!S) return c;
+  const u = S.luceUniforme(c, { sfondo: mode !== "digits" }), skew = S.findSkew(u);
+  return skew ? S.turnCanvas(u, 0, -skew) : u;
 }
 
-function findSkew(cv) {
-  const k = Math.min(1, 1000 / Math.max(cv.width, cv.height)), c = document.createElement("canvas");
-  c.width = Math.round(cv.width * k); c.height = Math.round(cv.height * k);
-  const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(cv, 0, 0, c.width, c.height);
-  const w = c.width, h = c.height, d = g.getImageData(0, 0, w, h).data, xs = [], ys = [];
-  let sum = 0; for (let i = 0; i < w * h; i++) sum += d[i * 4];
-  const lim = Math.min(150, sum / (w * h) - 45);
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x += 2) if (d[(y * w + x) * 4] < lim) { xs.push(x - w / 2); ys.push(y - h / 2); }
-  if (xs.length < 400) return 0;
-  const diag = Math.ceil(Math.hypot(w, h)), bins = new Float64Array(diag + 2);
-  const score = a => { const r = (a * Math.PI) / 180, sn = Math.sin(r), cs = Math.cos(r); bins.fill(0); for (let j = 0; j < xs.length; j++) { const b = Math.round(ys[j] * cs - xs[j] * sn + diag / 2); if (b >= 0 && b <= diag) bins[b]++; } let s2 = 0; for (let j = 1; j <= diag; j++) { const df = bins[j] - bins[j - 1]; s2 += df * df; } return s2; };
-  let best = 0, bs = score(0); const s0 = bs;
-  for (let a = -10; a <= 10; a += 0.5) if (a) { const sc = score(a); if (sc > bs) { bs = sc; best = a; } }
-  let b2 = best; for (let a = best - 0.5; a <= best + 0.5; a += 0.1) { const sc = score(a); if (sc > bs) { bs = sc; b2 = a; } }
-  return Math.abs(b2) >= 0.2 && bs > s0 * 1.05 ? Math.round(b2 * 10) / 10 : 0;
-}
-function turn(src, deg) {
-  const c = document.createElement("canvas"); c.width = src.width; c.height = src.height;
-  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height);
-  g.translate(c.width / 2, c.height / 2); g.rotate((deg * Math.PI) / 180); g.drawImage(src, -src.width / 2, -src.height / 2);
-  return c;
-}
 
 // ---------- PDF ----------
 let pdfjs = null;
