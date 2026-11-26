@@ -364,7 +364,9 @@ async function restartScan(why) {
 document.addEventListener("visibilitychange", () => {
   if (!scanState?.busy) return;
   if (document.hidden) { scanHiddenAt = Date.now(); return; }
-  if (scanHiddenAt && Date.now() - scanHiddenAt > 2500) restartScan("hidden");
+  // al ritorno si continua da dove si era: si ricomincia solo se in 15 secondi la lettura non fa nessun passo avanti
+  // (il sistema ha chiuso il motore mentre lo schermo era spento)
+  if (scanHiddenAt) { const s = scanState, t0 = s.tick; setTimeout(() => { if (scanState === s && s.busy && !document.hidden && s.tick === t0) restartScan("hidden"); }, s.phase === "page" ? 35000 : 15000); }
   scanHiddenAt = 0;
 });
 async function startScan(kind, cam) {
@@ -383,7 +385,10 @@ async function runScan(kind, file, tries) {
   const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (gen === scanGen) scanTick(); if (scanState && gen === scanGen) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
   try {
     let text, merged = null;
+    // la preparazione della pagina non dà segnali di avanzamento: al ritorno le si concede più tempo (Schiaccia smette da sé dopo 25 s)
+    scanState.phase = "page";
     const pg = file.type !== "application/pdf" && kind !== "meter" ? await ocr.page(file) : null;
+    if (scanState && gen === scanGen) scanState.phase = "ocr";
     if (gen !== scanGen) return; scanTick(); if (pg) { scanState.pct = 20; $("#scanBar")?.style.setProperty("--w", "20%"); }
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
     else if (pg && kind === "receipt") {
