@@ -191,7 +191,7 @@ async function onAction(e) {
         extra: `<div class="src-pick"><button class="btn" value="cam">${ic("photo")} ${esc(t("s.srcCam"))}</button><button class="btn soft" value="file">${ic("file")} ${esc(t("s.srcFile"))}</button></div>` });
       if (r?._btn === "cam" || r?._btn === "file") startScan(b.dataset.kind, r._btn === "cam");
     },
-    scanBack: () => { if (scanState?.busy) { scanGen++; clearInterval(scanDog); wakeOff(); pendingClear(); } scanState = null; render(); },
+    scanBack: scanStop,
     meter: () => meterDialog(S().meters.find(x => x.id === id)),
     reading: () => readingDialog(id),
     bill: () => billDialog(S().bills.find(x => x.id === id)),
@@ -351,25 +351,13 @@ function pickFile(cam) {
   return new Promise(res => { inp.value = ""; inp.onchange = () => res(inp.files[0] || null); inp.oncancel = () => res(null); inp.click(); });
 }
 
-// lettura che riparte: con lo schermo spento il sistema può chiudere il motore o la scheda grafica a metà lavoro;
-// al ritorno si ricomincia dalla stessa foto. Ogni lettura ha un numero: quelle abbandonate non scrivono più nulla.
-let scanGen = 0, scanHiddenAt = 0, scanDog = 0;
-const scanTick = () => { if (scanState?.busy) scanState.tick = Date.now(); };
-async function restartScan(why) {
-  const s = scanState; if (!s?.busy || !s.file) return;
-  const tries = (s.tries || 0) + 1, ocr = await import("./ocr.js");
-  ocr.reset();
-  if (tries > 2) { scanGen++; wakeOff(); pendingClear(); scanState = { ...s, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops"); render(); return; }
-  toast(t("s.resume")); runScan(s.kind, s.file, tries, why);
-}
-document.addEventListener("visibilitychange", () => {
-  if (!scanState?.busy) return;
-  if (document.hidden) { scanHiddenAt = Date.now(); return; }
-  // al ritorno si continua da dove si era: si ricomincia solo se in 15 secondi la lettura non fa nessun passo avanti
-  // (il sistema ha chiuso il motore mentre lo schermo era spento)
-  if (scanHiddenAt) { const s = scanState, t0 = s.tick; setTimeout(() => { if (scanState === s && s.busy && !document.hidden && s.tick === t0) restartScan("hidden"); }, 30000); }
-  scanHiddenAt = 0;
-});
+// lettura in secondo piano come Schiaccia PDF: tono muto (Sfondo) + schermo acceso (Wake Lock); niente ripartenze
+// al ritorno. Ogni lettura ha un numero: quelle abbandonate non scrivono più nulla. Se il sistema chiude comunque la
+// pagina, alla riapertura si riprende la stessa foto (pendingResume).
+let scanGen = 0, scanDog = 0, scanBg = null;
+const scanTick = () => { if (scanState?.busy) { scanState.tick = Date.now(); scanBg?.aggiorna(`${t("s.reading")} ${scanState.pct || 0}%`); } };
+function scanStop() { if (scanState?.busy) { scanGen++; scanEnd(); } scanState = null; render(); }
+function scanEnd() { clearInterval(scanDog); wakeOff(); pendingClear(); try { if (scanBg?.attivo()) scanBg.finisci(); } catch { /* niente */ } }
 async function startScan(kind, cam) {
   const file = await pickFile(cam); if (!file) return;
   runScan(kind, file, 0);
@@ -395,10 +383,14 @@ async function runScan(kind, file, tries) {
   if (scanState?.url && scanState.file === file) URL.revokeObjectURL(scanState.url);
   scanState = { kind, busy: true, pct: 3, file, tries, tick: Date.now(), url: file.type.startsWith("image/") ? URL.createObjectURL(file) : null };
   kapi.mood("think"); kapi.say("kapi.think"); render();
-  // sorveglianza: un minuto senza passi avanti (con la pagina visibile) → si riparte
-  clearInterval(scanDog);
-  scanDog = setInterval(() => { if (gen !== scanGen || !scanState?.busy) return clearInterval(scanDog); if (!document.hidden && Date.now() - scanState.tick > 60000) { clearInterval(scanDog); restartScan("stall"); } }, 5000);
   const ocr = await import("./ocr.js");
+  const engOk = (() => { try { return localStorage.getItem("kapibo.ocrOk") === ocr.ocrLang(lang()); } catch { return false; } })();
+  (engOk ? Promise.resolve(true) : ocr.engineCached(ocr.ocrLang(lang()))).then(ok => { if (scanState?.busy && gen === scanGen) { scanState.fresh = !ok; const h = $("#scanFirst"); if (h) h.hidden = ok; } });
+  scanBg = await ocr.sfondo();
+  try { scanBg?.inizia({ app: "Kapibo", titolo: t("s.reading"), icone: [{ src: "icons/icon-192.png", sizes: "192x192", type: "image/png" }], ferma: () => { if (gen === scanGen) scanStop(); } }); } catch { /* niente */ }
+  // sorveglianza: tre minuti senza passi avanti con la pagina visibile → errore con «Riprova con la stessa foto» (mai ripartenze da sole)
+  clearInterval(scanDog);
+  scanDog = setInterval(() => { if (gen !== scanGen || !scanState?.busy) return clearInterval(scanDog); if (document.hidden) { scanState.tick = Math.max(scanState.tick, Date.now() - 60000); return; } if (Date.now() - scanState.tick > 180000) { scanGen++; scanEnd(); scanState = { ...scanState, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops"); render(); } }, 5000);
   const lng = ocr.ocrLang(lang()), onStatus = (st, p) => { if (gen === scanGen) scanTick(); if (scanState && gen === scanGen) { scanState.pct = Math.round((/recogn/.test(st) ? 40 + p * 58 : 5 + (p || 0) * 35)); const bar = $("#scanBar"); if (bar) bar.style.setProperty("--w", scanState.pct + "%"); } };
   try {
     let text, merged = null;
@@ -448,7 +440,8 @@ async function runScan(kind, file, tries) {
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
     let res = merged || P[fn](text);
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
-    if (gen !== scanGen) return; clearInterval(scanDog); wakeOff(); pendingClear();
+    if (gen !== scanGen) return; scanEnd();
+    try { localStorage.setItem("kapibo.ocrOk", lng); } catch { /* niente */ }
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
     kapi.mood("wow");
@@ -459,7 +452,7 @@ async function runScan(kind, file, tries) {
       unlock();
     } else kapi.say("kapi.notFound");
   } catch (err) {
-    if (gen !== scanGen) return; clearInterval(scanDog); wakeOff(); pendingClear();
+    if (gen !== scanGen) return; scanEnd();
     console.error(err); scanState = { ...scanState, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops");
   }
   if (gen === scanGen) render();
@@ -493,7 +486,7 @@ async function askReceiptMode() {
 function scanView() {
   const st = scanState, back = `<button class="btn ghost small" data-act="scanBack">${ic("back")} ${t("ui.back")}</button>`;
   if (st.busy) return `<div class="card" aria-busy="true"><h2>${t("s.reading")}</h2><div class="progress" role="progressbar" aria-label="${esc(t("s.reading"))}"><i id="scanBar" style="--w:${st.pct}%"></i></div>
-    ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted">${t("s.firstTime")}</p><div class="btns">${back}</div></div>`;
+    ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted" id="scanFirst"${st.fresh ? "" : " hidden"}>${t("s.firstTime")}</p><div class="btns">${back}</div></div>`;
   if (st.error) return `<div class="card"><p class="warn">${t("s.error")}</p><div class="btns">${back}${st.file ? `<button class="btn" data-act="scanAgain">${t("s.retrySame")}</button>` : ""}<button class="btn soft" data-act="kind" data-kind="${st.kind}" data-cam="1">${t("s.retry")}</button></div></div>`;
   const body = { receipt: reviewReceipt, payslip: reviewPayslip, statement: reviewStatement, bill: reviewBill, meter: reviewMeter }[st.kind]();
   return `${body}<div class="card"><details><summary>${t("s.rawText")}</summary><pre style="white-space:pre-wrap;font-size:.8rem">${esc(st.text)}</pre></details>${back}</div>`;

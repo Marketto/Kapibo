@@ -491,6 +491,7 @@
 "tour.share.p":"Na vrhu svake stranice nalaze se verzija (dodirni za novosti), dugme za dijeljenje Kapibo i, ako je uključeno, dugme za kafu na Ko-fi. Kad skroluješ, zaglavlje se opet smanjuje.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Ako koristiš i Mochi Spesa, kupovine putuju između aplikacija: račun → smočnica, obavljena kupovina → budžet. Ovdje izaberi da li da pitam svaki put.",
+"news.174":"Kapi nastavlja čitati račun čak i ako promijeniš aplikaciju ili ugasiš ekran, kao Schiaccia PDF, i više ne počinje ispočetka. Obavijest o mehanizmu čitanja prikazuje se samo prvi put.",
 "news.173":"Stabilnije čitanje računa, kao u Schiaccia PDF: ekran ostaje upaljen dok Kapi čita, ako telefon zatvori aplikaciju čitanje se samo nastavlja pri ponovnom otvaranju, a na sporim telefonima više ne kreće iznova u nedogled.",
 "news.171":"Računi: odaberite kategoriju svake stavke jednim dodirom (Namirnice, Čišćenje, Osobna higijena, Dom, Kućni ljubimci); olovka je i dalje tu za ostalo. Kapi bolje prepoznaje sredstva za čišćenje i pamti vaše izbore.",
 "news.170":"Kapibo nudi da u ostavu Mochi Spesa stavi samo hranu, kućne stvari, poklone i elektroniku, a ne troškove apoteke ili usluga.",

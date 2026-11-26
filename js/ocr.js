@@ -79,6 +79,15 @@ export function scansione() {
     return window.Scansione?.pagina ? window.Scansione : null;
   })().catch(() => null));
 }
+/** Lavoro in secondo piano di Schiaccia PDF (sfondo.js, R-APP-23): tono muto che tiene viva la pagina su Android. */
+let sfP = null;
+export function sfondo() {
+  return (sfP ||= (async () => { await loadScript(new URL("/pdf-tiny-tools/sfondo.js", location.origin).href); return window.Sfondo || null; })().catch(() => { sfP = null; return null; }));
+}
+/** Il motore di lettura è già sul dispositivo? (cache del service worker di Kapibo) */
+export async function engineCached(lang) {
+  try { const c = await caches.open("kapibo-moduli"), ks = (await c.keys()).map(r => r.url); return ks.some(u => /tesseract-core/.test(u)) && ks.some(u => u.includes(lang + ".traineddata")); } catch { return false; }
+}
 /** Copia per l'OCR (grigio, contrasto, ingrandita di k): Scansione.perOcr di Schiaccia. */
 export const variant = (cv, k = 1) => window.Scansione.perOcr(cv, k);
 /** Parole con la posizione, a fasce raddrizzate sui fogli piegati (Scansione.parole, R-SCN-37), come righe per layoutText. */

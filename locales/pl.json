@@ -491,6 +491,7 @@
 "tour.share.p":"U góry każdej strony znajdziesz wersję (dotknij, by zobaczyć nowości), przycisk udostępniania Kapibo i, jeśli włączony, przycisk kawy na Ko-fi. Po przewinięciu nagłówek znów się zmniejsza.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Jeśli używasz też Mochi Spesa, zakupy wędrują między aplikacjami: paragon → spiżarnia, zakupy zrobione → budżet. Wybierz tu, czy mam pytać za każdym razem.",
+"news.174":"Kapi czyta paragon dalej, nawet gdy przełączysz aplikację lub wyłączysz ekran, tak jak Schiaccia PDF, i nie zaczyna już od nowa. Komunikat o silniku odczytu pojawia się tylko za pierwszym razem.",
 "news.173":"Solidniejsze czytanie paragonów, jak w Schiaccia PDF: ekran pozostaje włączony, gdy Kapi czyta, jeśli telefon zamknie aplikację, czytanie samo wznowi się po ponownym otwarciu, a na wolnych telefonach nie zaczyna się już w kółko od nowa.",
 "news.171":"Paragony: kategorię każdej pozycji wybierzesz jednym dotknięciem (Zakupy spożywcze, Środki czystości, Higiena i kosmetyki, Dom, Zwierzęta); ołówek został do reszty. Kapi lepiej rozpoznaje środki czystości i pamięta twoje wybory.",
 "news.170":"Kapibo proponuje dodawać do spiżarni Mochi Spesa tylko jedzenie, dom, prezenty i elektronikę, a nie wydatki na apteki czy usługi.",

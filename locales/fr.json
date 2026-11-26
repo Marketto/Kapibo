@@ -491,6 +491,7 @@
 "tour.share.p":"En haut de chaque page, tu trouves la version (touche pour les nouveautés), le bouton pour partager Kapibo et, si activé, un pour offrir un café sur Ko-fi. Quand tu défiles, l'en-tête rétrécit à nouveau.",
 "tour.mochi.t":"Kapibo et Mochi Spesa",
 "tour.mochi.p":"Si tu utilises aussi Mochi Spesa, les achats circulent entre les applis : ticket → garde-manger, courses faites → budget. Choisis ici si je dois demander à chaque fois.",
+"news.174":"Kapi continue de lire le ticket même si tu changes d'appli ou éteins l'écran, comme Schiaccia PDF, et ne recommence plus à zéro. L'avis sur le moteur de lecture n'apparaît que la première fois.",
 "news.173":"Lecture des tickets plus solide, comme dans Schiaccia PDF : l'écran reste allumé pendant que Kapi lit, si le téléphone ferme l'appli la lecture reprend toute seule à la réouverture, et sur les téléphones lents elle ne recommence plus à l'infini.",
 "news.171":"Tickets de caisse : choisis la catégorie de chaque ligne d'un seul geste (Courses, Produits ménagers, Hygiène, Maison, Animaux) ; le crayon reste là pour le reste. Kapi reconnaît mieux les produits ménagers et retient tes choix.",
 "news.170":"Kapibo ne propose de mettre dans le garde-manger de Mochi Spesa que l'alimentation, la maison, les cadeaux et l'électronique, pas les dépenses de pharmacie ou de services.",

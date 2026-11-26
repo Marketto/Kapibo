@@ -491,6 +491,7 @@
 "tour.share.p":"Minden oldal tetején ott a verzió (koppints az újdonságokért), a Kapibo megosztása gomb és, ha engedélyezett, egy kávé gomb a Ko-fin. Görgetéskor a fejléc újra összezsugorodik.",
 "tour.mochi.t":"Kapibo és Mochi Spesa",
 "tour.mochi.p":"Ha a Mochi Spesát is használod, a vásárlások mozognak az appok között: blokk → kamra, kész bevásárlás → költségvetés. Itt választhatod, kérdezzek-e minden alkalommal.",
+"news.174":"Kapi tovább olvassa a nyugtát akkor is, ha másik appra váltasz vagy kikapcsolod a képernyőt, mint a Schiaccia PDF, és nem kezdi újra elölről. Az olvasómotor értesítése csak az első alkalommal jelenik meg.",
 "news.173":"Strapabíróbb nyugtaolvasás, mint a Schiaccia PDF-ben: a képernyő bekapcsolva marad, amíg Kapi olvas, ha a telefon bezárja az appot, az olvasás újranyitáskor magától folytatódik, a lassú telefonokon pedig már nem indul újra a végtelenségig.",
 "news.171":"Blokkok: egy érintéssel választhatod ki minden sor kategóriáját (Élelmiszer, Tisztítószerek, Tisztálkodás, Otthon, Háziállatok); a ceruza megmarad a többihez. Kapi jobban felismeri a tisztítószereket, és megjegyzi a választásaidat.",
 "news.170":"A Kapibo csak élelmiszert, háztartási cikkeket, ajándékot és elektronikát javasol a Mochi Spesa kamrájába, gyógyszertári vagy szolgáltatási kiadást nem.",

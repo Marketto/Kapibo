@@ -491,6 +491,7 @@
 "tour.share.p":"Nahoře na každé stránce najdeš verzi (klepnutím zobrazíš novinky), tlačítko pro sdílení Kapibo a, je-li zapnuté, tlačítko pro kávu na Ko-fi. Při posouvání se záhlaví opět zmenší.",
 "tour.mochi.t":"Kapibo a Mochi Spesa",
 "tour.mochi.p":"Pokud používáš i Mochi Spesa, nákupy putují mezi aplikacemi: účtenka → spíž, hotový nákup → rozpočet. Tady vyber, jestli se mám ptát pokaždé.",
+"news.174":"Kapi čte účtenku dál, i když přepneš aplikaci nebo vypneš displej, stejně jako Schiaccia PDF, a už nezačíná od začátku. Upozornění na čtecí modul se ukáže jen poprvé.",
 "news.173":"Spolehlivější čtení účtenek jako v Schiaccia PDF: obrazovka zůstane svítit, zatímco Kapi čte, když telefon aplikaci zavře, čtení se po znovuotevření samo obnoví a na pomalých telefonech se už nespouští pořád dokola.",
 "news.171":"Účtenky: kategorii každé řádky vyberete jedním klepnutím (Potraviny, Úklid a drogerie, Osobní péče, Domov, Domácí mazlíčci); tužka zůstává pro ostatní. Kapi lépe pozná čisticí prostředky a pamatuje si vaše volby.",
 "news.170":"Kapibo nabízí do spižírny Mochi Spesa přidat jen potraviny, domácnost, dárky a elektroniku, ne výdaje za lékárnu či služby.",

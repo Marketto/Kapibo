@@ -491,6 +491,7 @@
 "tour.share.p":"A dalt de cada pàgina trobaràs la versió (toca per veure les novetats), el botó per compartir Kapibo i, si està activat, un per convidar a un cafè a Ko-fi. Quan desplaces, la capçalera es torna a reduir.",
 "tour.mochi.t":"Kapibo i Mochi Spesa",
 "tour.mochi.p":"Si també fas servir Mochi Spesa, les compres viatgen entre les apps: tiquet → rebost, compra feta → pressupost. Tria aquí si he de preguntar cada vegada.",
+"news.174":"Kapi continua llegint el tiquet encara que canviïs d'aplicació o apaguis la pantalla, com Schiaccia PDF, i ja no comença de zero. L'avís del motor de lectura només surt la primera vegada.",
 "news.173":"Lectura de tiquets més sòlida, com a Schiaccia PDF: la pantalla es manté encesa mentre Kapi llegeix, si el telèfon tanca l'app la lectura continua sola en reobrir-la, i als telèfons lents ja no es reinicia sense fi.",
 "news.171":"Tiquets: tria la categoria de cada línia amb un sol toc (Supermercat, Neteja, Higiene personal, Llar, Mascotes); el llapis continua allà per a la resta. Kapi reconeix millor els productes de neteja i recorda les teves tries.",
 "news.170":"Kapibo només proposa posar a la rebost de Mochi Spesa aliments, llar, regals i electrònica, no les despeses de farmàcia o serveis.",
