@@ -547,7 +547,11 @@ async function askMochi(title, text) {
   if (r?._btn === "never") { lsSet("kapibo.mochi", "never"); toast(t("mochi.neverToast")); return false; }
   return !!r && !r._btn;
 }
-async function sendToMochi(items, r, d) {
+// in dispensa vanno solo le cose da riporre: alimentari, casa, regali, elettronica/elettrodomestici
+const PANTRY_CATS = new Set(["food", "home", "gifts", "tech"]);
+async function sendToMochi(all, r, d) {
+  const items = all.filter(i => (i.cats?.length ? i.cats : [r.main || "other"]).some(c => PANTRY_CATS.has(c)));
+  if (!items.length) return;
   if (!(await askMochi(t("mochi.sendT"), t("mochi.sendP", { n: items.length })))) return;
   if (bridge.send("mochi", { from: "kapibo", store: r.store || "", date: d, items: items.map(i => ({ name: i.name, qty: i.qty || 1, amount: i.amount })) })) toast(t("mochi.sent", { n: items.length }));
 }
