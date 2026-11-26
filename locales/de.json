@@ -491,6 +491,7 @@
 "tour.share.p":"Oben auf jeder Seite findest du die Version (tippen für Neuigkeiten), den Button zum Teilen von Kapibo und, falls aktiviert, einen für einen Kaffee auf Ko-fi. Beim Scrollen wird die Kopfzeile wieder kleiner.",
 "tour.mochi.t":"Kapibo und Mochi Spesa",
 "tour.mochi.p":"Wenn du auch Mochi Spesa nutzt, wandern Einkäufe zwischen den Apps: Bon → Vorrat, erledigter Einkauf → Budget. Wähl hier, ob ich jedes Mal fragen soll.",
+"news.173":"Robusteres Auslesen von Belegen, wie in Schiaccia PDF: Der Bildschirm bleibt an, solange Kapi liest, wenn das Handy die App schließt, geht das Lesen beim erneuten Öffnen von selbst weiter, und auf langsamen Handys startet es nicht mehr endlos neu.",
 "news.171":"Kassenbons: Wähle die Kategorie jeder Zeile mit einem Tipp (Lebensmittel, Putzmittel, Körperpflege, Zuhause, Haustiere); der Stift bleibt für den Rest. Kapi erkennt Putzmittel besser und merkt sich deine Auswahl.",
 "news.170":"Kapibo schlägt nur Lebensmittel, Haushalt, Geschenke und Elektronik für die Vorratskammer von Mochi Spesa vor, nicht Apotheken- oder Dienstleistungsausgaben.",
 "news.169":"Wenn du den Bildschirm ausschaltest, während Kapi einen Beleg liest, startet das Lesen bei deiner Rückkehr von selbst neu, statt zu hängen.",

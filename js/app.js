@@ -89,6 +89,7 @@ async function boot() {
   render();
   await legal.gate(kapi.KAPI_SVG);
   startTour(false);
+  setTimeout(pendingResume, 900); // lettura interrotta dal sistema: si riprende da sola
   setTimeout(checkMochi, 1200); bridge.listen("kapibo", checkMochi);
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") setTimeout(checkMochi, 600); });
   inst.onChange(() => tab === "more" && render());
@@ -190,7 +191,7 @@ async function onAction(e) {
         extra: `<div class="src-pick"><button class="btn" value="cam">${ic("photo")} ${esc(t("s.srcCam"))}</button><button class="btn soft" value="file">${ic("file")} ${esc(t("s.srcFile"))}</button></div>` });
       if (r?._btn === "cam" || r?._btn === "file") startScan(b.dataset.kind, r._btn === "cam");
     },
-    scanBack: () => { scanState = null; render(); },
+    scanBack: () => { if (scanState?.busy) { scanGen++; clearInterval(scanDog); wakeOff(); pendingClear(); } scanState = null; render(); },
     meter: () => meterDialog(S().meters.find(x => x.id === id)),
     reading: () => readingDialog(id),
     bill: () => billDialog(S().bills.find(x => x.id === id)),
@@ -358,7 +359,7 @@ async function restartScan(why) {
   const s = scanState; if (!s?.busy || !s.file) return;
   const tries = (s.tries || 0) + 1, ocr = await import("./ocr.js");
   ocr.reset();
-  if (tries > 2) { scanGen++; scanState = { ...s, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops"); render(); return; }
+  if (tries > 2) { scanGen++; wakeOff(); pendingClear(); scanState = { ...s, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops"); render(); return; }
   toast(t("s.resume")); runScan(s.kind, s.file, tries, why);
 }
 document.addEventListener("visibilitychange", () => {
@@ -366,15 +367,31 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) { scanHiddenAt = Date.now(); return; }
   // al ritorno si continua da dove si era: si ricomincia solo se in 15 secondi la lettura non fa nessun passo avanti
   // (il sistema ha chiuso il motore mentre lo schermo era spento)
-  if (scanHiddenAt) { const s = scanState, t0 = s.tick; setTimeout(() => { if (scanState === s && s.busy && !document.hidden && s.tick === t0) restartScan("hidden"); }, s.phase === "page" ? 35000 : 15000); }
+  if (scanHiddenAt) { const s = scanState, t0 = s.tick; setTimeout(() => { if (scanState === s && s.busy && !document.hidden && s.tick === t0) restartScan("hidden"); }, 30000); }
   scanHiddenAt = 0;
 });
 async function startScan(kind, cam) {
   const file = await pickFile(cam); if (!file) return;
   runScan(kind, file, 0);
 }
+// come Schiaccia PDF: schermo acceso durante la lettura (Wake Lock) e lavoro salvato sul dispositivo, così se il
+// sistema chiude la pagina Kapibo riprende da sola la stessa foto alla riapertura (entro 15 minuti)
+let wake = null;
+async function wakeOn() { try { wake = navigator.wakeLock ? await navigator.wakeLock.request("screen") : null; } catch { wake = null; } }
+function wakeOff() { try { wake?.release(); } catch { /* niente */ } wake = null; }
+document.addEventListener("visibilitychange", () => { if (!document.hidden && scanState?.busy && !wake) wakeOn(); });
+const PENDING = "scanPending";
+async function pendingSave(kind, file) { try { await idbSet(PENDING, { kind, t: Date.now(), name: file.name || "", type: file.type, blob: file }); } catch { /* memoria piena: niente ripresa */ } }
+async function pendingClear() { try { await idbSet(PENDING, null); } catch { /* niente */ } }
+async function pendingResume() {
+  let p = null; try { p = await idbGet(PENDING); } catch { /* niente */ }
+  if (!p?.blob || Date.now() - p.t > 15 * 60000) { if (p) pendingClear(); return; }
+  const file = p.blob instanceof File ? p.blob : new File([p.blob], p.name || "scontrino", { type: p.type || p.blob.type });
+  toast(t("s.resume")); go("scan"); runScan(p.kind, file, 0);
+}
 async function runScan(kind, file, tries) {
   const gen = ++scanGen;
+  wakeOn(); pendingSave(kind, file);
   if (scanState?.url && scanState.file === file) URL.revokeObjectURL(scanState.url);
   scanState = { kind, busy: true, pct: 3, file, tries, tick: Date.now(), url: file.type.startsWith("image/") ? URL.createObjectURL(file) : null };
   kapi.mood("think"); kapi.say("kapi.think"); render();
@@ -387,7 +404,11 @@ async function runScan(kind, file, tries) {
     let text, merged = null;
     // la preparazione della pagina non dà segnali di avanzamento: al ritorno le si concede più tempo (Schiaccia smette da sé dopo 25 s)
     scanState.phase = "page";
-    const pg = file.type !== "application/pdf" && kind !== "meter" ? await ocr.page(file) : null;
+    // la preparazione con Schiaccia non dà avanzamento: la barra avanza piano da sola e, se dopo 90 s non ha finito
+    // (telefono lento, poca memoria), si prosegue con la preparazione di Kapibo invece di aspettare per sempre
+    const beat = setInterval(() => { if (gen !== scanGen || !scanState?.busy) return clearInterval(beat); scanTick(); scanState.pct = Math.min(19, (scanState.pct || 3) + 1); $("#scanBar")?.style.setProperty("--w", scanState.pct + "%"); }, 1500);
+    const pg = file.type !== "application/pdf" && kind !== "meter" ? await Promise.race([ocr.page(file), new Promise(r => setTimeout(() => r(null), 90000))]) : null;
+    clearInterval(beat);
     if (scanState && gen === scanGen) scanState.phase = "ocr";
     if (gen !== scanGen) return; scanTick(); if (pg) { scanState.pct = 20; $("#scanBar")?.style.setProperty("--w", "20%"); }
     if (file.type === "application/pdf") text = await ocr.pdfText(file, { lang: lng, onStatus });
@@ -427,7 +448,7 @@ async function runScan(kind, file, tries) {
     const fn = { receipt: "parseReceipt", payslip: "parsePayslip", statement: "parseStatement", bill: "parseBill", meter: "parseMeter" }[kind];
     let res = merged || P[fn](text);
     if (kind === "receipt" && ai.ready()) { try { const o = await ai.structureReceipt(text, cats().map(c => c.id), LANGS[lang()]); if (o.items.length) res = { ...res, ...o, ai: true }; } catch (e) { toast(t(e.code || "ai.fail")); } }
-    if (gen !== scanGen) return; clearInterval(scanDog);
+    if (gen !== scanGen) return; clearInterval(scanDog); wakeOff(); pendingClear();
     scanState = { ...scanState, busy: false, text, res };
     if (kind === "receipt") prepReceipt();
     kapi.mood("wow");
@@ -438,7 +459,7 @@ async function runScan(kind, file, tries) {
       unlock();
     } else kapi.say("kapi.notFound");
   } catch (err) {
-    if (gen !== scanGen) return; clearInterval(scanDog);
+    if (gen !== scanGen) return; clearInterval(scanDog); wakeOff(); pendingClear();
     console.error(err); scanState = { ...scanState, busy: false, error: true }; kapi.mood("idle"); kapi.say("kapi.oops");
   }
   if (gen === scanGen) render();
@@ -472,7 +493,7 @@ async function askReceiptMode() {
 function scanView() {
   const st = scanState, back = `<button class="btn ghost small" data-act="scanBack">${ic("back")} ${t("ui.back")}</button>`;
   if (st.busy) return `<div class="card" aria-busy="true"><h2>${t("s.reading")}</h2><div class="progress" role="progressbar" aria-label="${esc(t("s.reading"))}"><i id="scanBar" style="--w:${st.pct}%"></i></div>
-    ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted">${t("s.firstTime")}</p></div>`;
+    ${st.url ? `<img class="preview" src="${st.url}" alt="">` : ""}<p class="muted">${t("s.firstTime")}</p><div class="btns">${back}</div></div>`;
   if (st.error) return `<div class="card"><p class="warn">${t("s.error")}</p><div class="btns">${back}${st.file ? `<button class="btn" data-act="scanAgain">${t("s.retrySame")}</button>` : ""}<button class="btn soft" data-act="kind" data-kind="${st.kind}" data-cam="1">${t("s.retry")}</button></div></div>`;
   const body = { receipt: reviewReceipt, payslip: reviewPayslip, statement: reviewStatement, bill: reviewBill, meter: reviewMeter }[st.kind]();
   return `${body}<div class="card"><details><summary>${t("s.rawText")}</summary><pre style="white-space:pre-wrap;font-size:.8rem">${esc(st.text)}</pre></details>${back}</div>`;

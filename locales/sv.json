@@ -491,6 +491,7 @@
 "tour.share.p":"Överst på varje sida hittar du versionen (tryck för nyheter), knappen för att dela Kapibo och, om den är aktiverad, en för att bjuda på kaffe på Ko-fi. När du scrollar blir rubriken mindre igen.",
 "tour.mochi.t":"Kapibo och Mochi Spesa",
 "tour.mochi.p":"Använder du även Mochi Spesa flyttas köp mellan apparna: kvitto → skafferi, inköp klara → budget. Välj här om jag ska fråga varje gång.",
+"news.173":"Stabilare läsning av kvitton, som i Schiaccia PDF: skärmen förblir tänd medan Kapi läser, om telefonen stänger appen fortsätter läsningen av sig själv när du öppnar den igen, och på långsamma telefoner börjar den inte längre om i det oändliga.",
 "news.171":"Kvitton: välj kategori för varje rad med ett tryck (Mat & matvaror, Städ, Personlig vård, Hem, Husdjur); pennan finns kvar för resten. Kapi känner igen städprodukter bättre och minns dina val.",
 "news.170":"Kapibo föreslår bara att mat, hem, presenter och elektronik läggs i skafferiet i Mochi Spesa, inte utgifter för apotek eller tjänster.",
 "news.169":"Om du släcker skärmen medan Kapi läser ett kvitto startar läsningen om av sig själv när du kommer tillbaka, i stället för att hänga sig.",
