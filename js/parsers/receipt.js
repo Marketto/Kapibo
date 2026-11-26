@@ -8,7 +8,10 @@ const VOUCHER = ["buoni pasto", "buono pasto", "ticket restaurant", "ticket", "e
 const DISCOUNT = ["sconto", "sc ", "promo", "offerta", "coupon", "risparmio", "rabatt", "remise", "descuento", "discount", "скидка", "割引", "할인"];
 const CODE = /^\W*art\s*\/|^\W*(?:art\.?\s*\/?\s*ean|ean|cod(?:ice)?\.?|plu|sku|rif\.?)\b\s*[:.]?\s*[\w-]*\d{4,}/i;
 // "2 x 0,89", "5 PZ x 0.89 EUR/PZ", "0,512 KG x 2,49 €/KG"
-const QTY = /^(\d+(?:[.,]\d+)?)\s*(?:pz|pezzi|pc|pcs|n|nr|st|stk|kg|g|lt?)?\.?\s*[x×*]+\s*(\d+[.,]\d{2,3})/i;
+// "2 x 1,29", "Pz. 1 x 0,10" (OCR: "z. 1 Xx = 0,10")
+const QTY = /^(?:(?:p?z|pz|nr?)\.?\s*)?(\d+(?:[.,]\d+)?)\s*(?:pz|pezzi|pc|pcs|n|nr|st|stk|kg|g|lt?)?\.?\s*[x×*]+[\s=]*(\d+[.,]\d{2,3})/i;
+// riga del peso sotto il nome letta sporca ("(Pî<‘2 pogy1©'"9  29,44"): non è un nome
+const junk = s => /^\s*\(/.test(s) || (s.match(/[<>©®"“”‘|{}[\]=^~]/g) || []).length >= 2 || (s.match(/\d/g) || []).length >= (s.match(/\p{L}/gu) || []).length;
 const UNIT = /\b(?:eur|euro|€)?\s*\/?\s*(?:pz|pezzo|pezzi|kg|lt?|cad|pc|stk)\b|€|\beur(?:o)?\b/gi;
 // Catene note: il nome si cerca in tutto lo scontrino (il logo spesso non si legge), poi il sito www.<nome>.it
 const CHAINS = [["eurospin", "Eurospin"], ["esselunga", "Esselunga"], ["ipercoop", "Ipercoop"], ["coop", "Coop"], ["conad", "Conad"], ["lidl", "Lidl"], ["aldi", "Aldi"], ["carrefour", "Carrefour"], ["penny", "Penny"], ["despar", "Despar"], ["eurospar", "Eurospar"], ["interspar", "Interspar"], ["tigros", "Tigros"], ["famila", "Famila"], ["bennet", "Bennet"], ["unes", "Unes"], ["crai", "Crai"], ["todis", "Todis"], ["naturasi", "NaturaSì"], ["tuodi", "Tuodì"], ["in's mercato", "In's"], ["md spa", "MD"], ["pam panorama", "Pam"], ["panorama", "Panorama"], ["simply", "Simply"], ["sigma", "Sigma"], ["iper la grande", "Iper"], ["decathlon", "Decathlon"], ["ikea", "IKEA"], ["leroy merlin", "Leroy Merlin"], ["mediaworld", "MediaWorld"], ["unieuro", "Unieuro"], ["euronics", "Euronics"], ["tigota", "Tigotà"], ["acqua & sapone", "Acqua & Sapone"], ["acqua e sapone", "Acqua & Sapone"], ["rewe", "REWE"], ["edeka", "EDEKA"], ["mercadona", "Mercadona"], ["auchan", "Auchan"], ["leclerc", "E.Leclerc"], ["tesco", "Tesco"], ["sainsbury", "Sainsbury's"], ["emisfero", "Emisfero"], ["misfero", "Emisfero"], ["sfero", "Emisfero"], ["gros", "GROS"], ["elite", "Elite"], ["prix", "Prix"], ["deco", "Decò"], ["dpiu", "Dpiù"], ["mercato", null]].filter(c => c[1]);
@@ -72,6 +75,7 @@ export function parseReceipt(text) {
     }
     const isDisc = amount < 0 || hasAny(l, DISCOUNT);
     if (isDisc) { const prev = items[items.length - 1]; if (prev) { prev.amount = round2(prev.amount - Math.abs(amount)); prev.discount = round2((prev.discount || 0) + Math.abs(amount)); } continue; }
+    if (lastName && junk(name)) { push(lastName, amount); continue; }
     if (!/\p{L}{2}/u.test(cleanName(name))) {
       // solo importo: appartiene al nome sulla riga sopra
       if (lastName) { push(lastName, amount); continue; }
@@ -148,7 +152,13 @@ export function mergeReceipts(list) {
     // nessuna combinazione torna: con molte letture si tengono le righe viste almeno due volte e con un nome vero
     else if (list.length >= 4) slots = slots.filter(s => s.seen >= 2 && /\p{L}{3}/u.test(s.name));
   }
-  const items = slots.filter(s => s.on).map(s => ({ name: s.name, amount: s.pick, ...(s.qty ? { qty: s.qty } : {}) }));
+  let items = slots.filter(s => s.on).map(s => ({ name: s.name, amount: s.pick, ...(s.qty ? { qty: s.qty } : {}) }));
+  // i conti non tornano comunque (totale letto male): se una lettura da sola è più vicina al totale dell'unione, vince
+  // lei (le letture sporche non aggiungono voci a quella buona)
+  if (total != null) {
+    const off = its => Math.abs(round2(its.reduce((a, b) => a + b.amount, 0)) - total);
+    if (off(items) >= 0.02) { const one = list.filter(r => r.items.length).sort((a, b) => off(a.items) - off(b.items) || b.items.length - a.items.length)[0]; if (one && off(one.items) < off(items) - 0.01) items = one.items.map(x => ({ ...x })); }
+  }
   const r0 = list.find(r => r.total === total) || base;
   // negozio: quello riconosciuto come catena nel maggior numero di letture
   const chains = list.map(r => r.store).filter(x => x && CHAINS.some(c => c[1] === x)), store = chains.length ? mode2(chains) : r0.store;

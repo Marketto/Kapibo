@@ -2,7 +2,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseAmount, findAmounts } from "../js/money.js";
-import { parseReceipt } from "../js/parsers/receipt.js";
+import { parseReceipt, mergeReceipts } from "../js/parsers/receipt.js";
 import { parsePayslip } from "../js/parsers/payslip.js";
 import { parseStatement } from "../js/parsers/statement.js";
 import { parseBill } from "../js/parsers/bill.js";
@@ -184,7 +184,6 @@ test("ocr: ritaglio del foglio chiaro su un fondo colorato", async () => {
 });
 
 test("scontrino: più letture unite riga per riga finché la somma torna", async () => {
-  const { mergeReceipts } = await import("../js/parsers/receipt.js");
   const a = parseReceipt("NEGOZIO\nVIA FINTA\nX\nPane comune     1,20 1\nBiscotti avena  4,50 1\nLatte intero    1,10 1\nTOTALE COMPLESSIVO 3,80");
   const b = parseReceipt("NEGOZIO\nVIA FINTA\nX\nPane comune     1,20 1\nBiscotti avena  1,50 4\nTOTALE COMPLESSIVO 3,80");
   const m = mergeReceipts([a, b]);
@@ -204,4 +203,18 @@ test("scontrino: carta stropicciata, nomi e prezzi abbinati per ordine; voce olt
   assert.equal(r.total, 4.6);
   const a = parseReceipt("NEG\nVIA\nX\nArt/rs Xyz 7,00\nPane 1,00\nFrittura 93,25\nTOTALE 10,25"), b = parseReceipt("NEG\nVIA\nX\nPane 1,00\nFrittura 93,25\nTOTALE 10,25");
   assert.deepEqual(mergeReceipts([a, b]).items.map(i => i.amount), [1, 9.25]);
+});
+
+test("scontrino a peso: nome sopra, riga del peso sporca, «Pz. 1 x» letto male", () => {
+  const r = parseReceipt(["MACELLERIA PROVA", "VIA DEI TEST 1", "CITTA 00000", "26-NOV-26 12:12", "NETTO PREZZO IMPORTO", "1. ARROSTO MISTO", "(Pî<‘2 pogy1©'\"9   12,34", "PETTO DI POLLO", "0,500 10,00   5,00", "(PT= 0.006)", "BUSTA COMPOST", "z. 1 Xx =   0,10", "PEZZI 3 TOTALE 17,44"].join("\n"));
+  assert.deepEqual(r.items.map(i => [i.name, i.amount]), [["Arrosto Misto", 12.34], ["Petto Di Pollo", 5], ["Busta Compost", 0.1]]);
+  assert.equal(r.total, 17.44);
+});
+
+test("unione: con il totale letto male vince la lettura da sola più vicina, senza voci sporche", () => {
+  const good = { items: [{ name: "Arrosto", amount: 12.34 }, { name: "Pollo", amount: 5 }, { name: "Busta", amount: 0.1 }], total: 17.8, sum: 17.44 };
+  const bad = { items: [{ name: "Xq Zz", amount: 9.99 }, { name: "Ale", amount: 17.5 }], total: null, sum: 27.49 };
+  const bad2 = { items: [{ name: "Pio O. 006", amount: 5 }, { name: "Cose D18", amount: 3.3 }], total: null, sum: 8.3 };
+  const m = mergeReceipts([good, good, bad, bad, bad2, bad2]);
+  assert.deepEqual(m.items.map(i => i.amount), [12.34, 5, 0.1]);
 });
