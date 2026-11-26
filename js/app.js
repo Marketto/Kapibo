@@ -494,8 +494,10 @@ const itemRow = it => `<div class="ritem ${it.on ? "" : "off"}" data-i="${it.i}"
   <input type="checkbox" class="chk" ${it.on ? "checked" : ""} aria-label="${esc(t("s.include", { name: it.name }))}">
   <input class="inp" data-f="name" value="${esc(it.name)}" aria-label="${esc(t("s.itemName"))}">
   <input class="inp" data-f="amount" inputmode="decimal" value="${fmtNum(it.amount, locale())}" aria-label="${esc(t("e.amount"))}">
-  <div class="chips">${it.qty > 1 ? `<span class="chip qty" title="${esc(t("s.qty"))}">×${fmtNum(it.qty, locale(), 3)}</span>` : ""}${it.cats.map(c => { const k = catById(c); return `<button type="button" class="chip" data-cat-edit aria-pressed="true">${catIcon(k)} ${esc(cname(k))}</button>`; }).join("")}
+  <div class="chips qcats" role="group" aria-label="${esc(t("s.catsFor", { name: it.name }))}">${it.qty > 1 ? `<span class="chip qty" title="${esc(t("s.qty"))}">×${fmtNum(it.qty, locale(), 3)}</span>` : ""}${[...it.cats.filter(c => !QUICK_CATS.includes(c)), ...QUICK_CATS].map(c => { const k = catById(c), on = it.cats.includes(c); return `<button type="button" class="chip${on ? "" : " ghost ico"}" data-cat-quick="${c}" aria-pressed="${on}" title="${esc(cname(k))}" aria-label="${esc(cname(k))}">${catIcon(k)}${on ? " " + esc(cname(k)) : ""}</button>`; }).join("")}
   <button type="button" class="chip add" data-cat-edit aria-label="${esc(t("s.changeCat"))}">${ic("edit")}</button></div></div>`;
+// categorie a portata di tocco sotto ogni voce: quelle di una spesa al supermercato
+const QUICK_CATS = ["food", "clean", "hygiene", "home", "pets"];
 function receiptGroups(on) {
   const g = {}; for (const it of on) for (const c of it.cats) g[c] = round2((g[c] || 0) + it.amount / it.cats.length);
   return `<ul class="legend">${Object.entries(g).map(([c, v]) => { const k = catById(c); return `<li><i style="--c:${k.color}"></i>${catIcon(k)} ${esc(cname(k))} <b>${money(v)}</b></li>`; }).join("")}</ul>`;
@@ -511,6 +513,9 @@ function bindReceipt() {
     if (e.target.dataset.f === "amount") { const v = num(e.target.value); if (v != null) it.amount = round2(v); refresh(); }
   };
   box.onclick = async e => {
+    // un tocco: la voce va in quella categoria (per più categorie insieme c'è la matita)
+    const q = e.target.closest("[data-cat-quick]");
+    if (q) { const it = r.items.find(x => x.i == q.closest(".ritem").dataset.i); it.cats = [q.dataset.catQuick]; it.changed = true; return refresh(); }
     const b = e.target.closest("[data-cat-edit]"); if (!b) return;
     const it = r.items.find(x => x.i == b.closest(".ritem").dataset.i);
     const res = await dialog(t("s.catsFor", { name: it.name }), `<p class="hint">${t("s.multiHint")}</p>${catChips("cats", it.cats, true)}`, { ok: t("ui.ok") });

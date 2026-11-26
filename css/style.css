@@ -378,3 +378,12 @@ table.t th, table.t th.n { white-space: normal; vertical-align: bottom; }
 /* scelta della sorgente: fotocamera o foto/PDF già pronti */
 .src-pick { display: grid; gap: 10px; width: 100%; }
 .src-pick .btn { width: 100%; min-height: 52px; justify-content: center; }
+/* scontrino: categorie a un tocco sotto ogni voce, su una riga che scorre di lato */
+.ritem .qcats { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+.ritem .qcats::-webkit-scrollbar { display: none; }
+.ritem .qcats .chip { flex: none; min-height: 44px; white-space: nowrap; }
+.ritem .qcats .chip.ghost { background: transparent; border: 2px dashed color-mix(in srgb, var(--c-text) 28%, transparent); color: var(--c-text); opacity: .85; font-weight: 600; }
+.ritem .qcats .chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c-pri); }
+.ritem .qcats { flex-wrap: wrap; overflow: visible; }
+.ritem .qcats .chip.ico { min-width: 44px; padding-inline: 0; justify-content: center; }
+.ritem .qcats .chip.ico i, .ritem .qcats .chip.ico .ki { font-size: 1.2rem; }
