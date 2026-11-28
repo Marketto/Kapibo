@@ -2,8 +2,8 @@
 
 | File | Cosa | Funzioni chiave |
 |---|---|---|
-| `js/app.js` | UI. Sezioni con commento `// ---------- nome ----------`: avvio, azioni, mese, dialoghi, scansione, consumi, grafici, altro, sync, service worker | `render`, `onAction` (mappa `data-act`), `dialog`, `catChips`, `entryDialog`, `monthDialog`, `startScan`, `review*`, `saveReceipt`, `view*` |
-| `js/store.js` | Schema, IndexedDB, merge, calcoli | `createStore` (`put`, `putMany`, `remove`, `setMonth`, `learn`, `cats`), `merge`, `monthSummary`, `monthsWithData` |
+| `js/app.js` | UI. Sezioni con commento `// ---------- nome ----------`: avvio, azioni, mese, dialoghi, scansione, consumi, grafici, altro, sync, service worker | `render`, `onAction` (mappa `data-act`), `dialog`, `catChips`, `entryDialog`, `incomeDialog` (entrate come le spese), `bindTot` (totale del mese sotto le chip), `startScan`, `review*`, `saveReceipt`, `view*` |
+| `js/store.js` | Schema, IndexedDB, merge, calcoli | `createStore` (`put`, `putMany`, `remove`, `setMonth`, `learn`, `cats`), `merge`, `monthSummary`, `monthsWithData`, `incomeTotals`, `INC_KINDS` (entrate = raccolta `incomes`, schema 2; il saldo iniziale resta in `months[m].start`) |
 | `js/categories.js` | Categorie predefinite e parole chiave | `DEFAULT_CATS`, `guessCats`, `isGrocer`, `norm` |
 | `js/money.js` | Importi | `parseAmount`, `findAmounts`, `fmt`, `fmtNum`, `round2` |
 | `js/parsers/*.js` | Testo → dati (puri, testati) | `parseReceipt`, `parsePayslip`, `parseStatement`, `parseBill`, `parseMeter`, `util.parseMonth` |

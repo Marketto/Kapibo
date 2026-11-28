@@ -1,6 +1,6 @@
 // Kapibo — interfaccia. Sezioni: avvio · utilità · mese · scansione · consumi · grafici · altro · dialoghi · sync.
 import { t, setLang, detect, lang, locale, LANGS, monthLabel, apply } from "./i18n.js";
-import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthOf, today, uid, live, normalize, merge } from "./store.js";
+import { createStore, idbGet, idbSet, monthSummary, prevMonth, nextMonth, monthOf, today, uid, live, normalize, merge, incomeTotals } from "./store.js";
 import { guessCats, guessReceipt, storeKey, catName, catIcon, norm, isGrocer } from "./categories.js";
 import * as bridge from "./bridge.js";
 import { fmt as fmtMoney, parseAmount, round2, fmtNum } from "./money.js";
@@ -181,7 +181,7 @@ async function onAction(e) {
   const acts = {
     add: () => entryDialog({ cat: b.dataset.cat }),
     edit: () => entryDialog(S().entries.find(x => x.id === id)),
-    meta: monthDialog, album: () => go("more", "#stickers"),
+    meta: () => incomeDialog(), inc: () => incomeDialog(id === "start" ? { k: "start" } : S().incomes.find(x => x.id === id)), album: () => go("more", "#stickers"),
     cat: () => catDetail(id),
     scanAgain: () => { if (scanState?.file) runScan(scanState.kind, scanState.file, 0); },
     kind: async () => {
@@ -213,6 +213,7 @@ function viewMonth() {
   const rows = Object.entries(s.byCat).sort((a, b) => b[1] - a[1]);
   const max = Math.max(1, ...rows.map(r => r[1]));
   const recent = live(S().entries).filter(e => e.m === cur).sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : (b.u || 0) - (a.u || 0))).slice(0, 8);
+  const incs = live(S().incomes).filter(e => e.m === cur).sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : (b.u || 0) - (a.u || 0)));
   const sv = s.savings, unt = s.untracked;
   const got = Object.keys(S().settings.stickers || {}).length, pct = Math.round(Math.max(0, Math.min(100, (s.rate ?? 0) * 100)));
   const jar = `<div class="card jar-card"><div class="jar" role="img" aria-label="${esc(s.rate == null ? t("jar.ariaEmpty") : t("jar.aria", { pct }))}">${jarSVG(s.rate)}</div>
@@ -229,7 +230,7 @@ function viewMonth() {
       <div class="stat"><small>${t("m.end")}</small><b>${s.end == null ? "—" : money(s.end)}</b></div>
     </div>
     ${unt != null && Math.abs(unt) >= 1 ? `<p class="muted" style="margin:.8em 0 0">${t(unt > 0 ? "m.untracked" : "m.overtracked", { amt: money(Math.abs(unt)) })}</p>` : ""}
-    <div class="btns"><button class="btn" data-act="add">${ic("plus")} ${t("m.addExpense")}</button><button class="btn soft" data-act="meta">${ic("coin")} ${t("m.editMeta")}</button></div>
+    <div class="btns"><button class="btn" data-act="add">${ic("plus")} ${t("m.addExpense")}</button><button class="btn soft" data-act="meta">${ic("coin")} ${t("m.addIncome")}</button></div>
   </div>
   ${jar}
   <div class="card"><h2>${t("m.byCat")}</h2>
@@ -238,10 +239,15 @@ function viewMonth() {
     : empty("m.empty")}
   </div>
   ${recent.length ? `<div class="card"><h2>${t("m.recent")}</h2><ul class="list">${recent.map(entryRow).join("")}</ul></div>` : ""}
+  ${incs.length || s.start != null ? `<div class="card" id="incomes"><h2>${t("m.incomes")}</h2><ul class="list">${s.start != null ? incRow({ id: "start", k: "start", amt: s.start, d: cur + "-01", auto: S().months[cur]?.start == null }) : ""}${incs.map(incRow).join("")}</ul></div>` : ""}
   <div class="card"><h3>${t("m.quick")}</h3><div class="chips">${list.filter(c => c.kind === "var").slice(0, 8).map(c => `<button class="chip" data-act="add" data-cat="${c.id}">${catIcon(c)}${esc(cname(c))}</button>`).join("")}</div></div>`;
 }
 const entryRow = e => { const c = catById(e.cat); return `<li><button class="item" data-act="edit" data-id="${e.id}" style="--c:${c.color}"><span class="emo">${catIcon(c)}</span>
   <span class="name">${esc(e.note || cname(c))}<br><small class="muted">${esc(new Date(e.d).toLocaleDateString(locale(), { day: "numeric", month: "short" }))} · ${esc(cname(c))}${e.items ? " · " + t("m.items", { n: e.items.length }) : ""}</small></span><span class="amt">${money(e.amt)}</span></button></li>`; };
+const INC = [["salary", "payslip"], ["extra", "sparkle"], ["refunds", "coin"], ["vIn", "ticket"], ["vUsed", "ticket"], ["start", "bank"]];
+const incIc = k => ic((INC.find(x => x[0] === k) || INC[1])[1]);
+const incRow = e => `<li><button class="item" data-act="inc" data-id="${esc(e.id)}"><span class="emo">${incIc(e.k)}</span>
+  <span class="name">${esc(e.note || t("inc.k." + e.k))}<br><small class="muted">${e.k === "start" ? esc(e.auto ? t("meta.auto") : t("inc.startHint")) : esc(new Date(e.d).toLocaleDateString(locale(), { day: "numeric", month: "short" })) + " · " + esc(t("inc.k." + e.k))}</small></span><span class="amt ${e.k === "vUsed" ? "" : "pos"}">${money(e.amt)}</span></button></li>`;
 const empty = key => `<div class="empty"><div class="hero-kapi">${kapi.KAPI_SVG}</div><p>${t(key)}</p></div>`;
 
 async function catDetail(id) {
@@ -285,11 +291,12 @@ async function entryDialog(e = {}) {
   const isNew = !e.id;
   const r = await dialog(isNew ? t("e.new") : t("e.edit"), `
     <label class="f">${t("e.amount")}<input class="amt" name="amt" inputmode="decimal" autocomplete="off" required value="${e.amt != null ? fmtNum(e.amt, locale()) : ""}" placeholder="0,00"></label>
-    <fieldset><legend>${t("e.cat")}</legend>${catChips("cat", [e.cat || "food"])}</fieldset>
+    <fieldset><legend>${t("e.cat")}</legend>${catChips("cat", [e.cat || "food"])}${totLine}</fieldset>
     <div class="grid2"><label class="f">${t("e.date")}<input type="date" name="d" value="${e.d || (cur === monthOf(today()) ? today() : cur + "-01")}" required></label>
     <label class="f">${t("e.note")}<input name="note" value="${esc(e.note || "")}" maxlength="80"></label></div>
     ${e.items ? `<details><summary>${t("m.items", { n: e.items.length })}</summary><ul>${e.items.map(i => `<li>${esc(i.n)} — ${money(i.a)}</li>`).join("")}</ul></details>` : ""}`,
-    { extra: isNew ? "" : `<button class="btn danger" value="del" formnovalidate>${t("ui.delete")}</button>` });
+    { extra: isNew ? "" : `<button class="btn danger" value="del" formnovalidate>${t("ui.delete")}</button>`,
+      onOpen: f => bindTot(f, (c, m) => t("inc.monthTot", { amt: money(monthSummary(S(), m).byCat[c] || 0) })) });
   if (!r) return;
   if (r._btn === "del") { store.remove("entries", e.id); ch.cheer("delete"); toast(t("e.deleted"), { label: t("ui.undo"), run: () => store.put("entries", { ...e, del: 0 }) }); return; }
   const amt = num(r.amt); if (amt == null) return toast(t("e.badAmount"));
@@ -300,24 +307,46 @@ async function entryDialog(e = {}) {
   if (isNew) afterSave({ say: addSay(cat), before, cats: [cat], m: monthOf(r.d) }); else { ch.cheer("edit"); unlock(); }
 }
 
-async function monthDialog() {
-  const m = S().months[cur] || {}, s = monthSummary(S(), cur), vv = S().settings.voucher || 8;
-  const f = (k, v, hint = "") => `<label class="f">${t("meta." + k)}${hint ? ` <span class="hint">${hint}</span>` : ""}<input name="${k}" inputmode="decimal" value="${v != null ? fmtNum(v, locale()) : ""}"></label>`;
-  const r = await dialog(t("meta.title", { m: monthLabel(cur) }), `
-    <div class="grid2">${f("start", m.start ?? s.start, m.start == null && s.start != null ? t("meta.auto") : "")}${f("end", m.end)}</div>
-    <div class="grid2">${f("salary", m.salary)}${f("extra", m.extra)}</div>${f("refunds", m.refunds)}
-    <fieldset><legend>${ic("ticket")} ${t("meta.vouchers")}</legend><div class="grid2">${f("vIn", m.vIn)}${f("vUsed", m.vUsed)}</div>
-    <p class="hint">${t("meta.vhint", { v: money(vv) })}</p></fieldset>`);
+// totale del mese per la categoria (o il tipo di entrata) scelta, sotto le chip: si aggiorna a ogni tocco
+let dlgTot = null;
+document.addEventListener("click", e => { if (dlgTot && e.target.closest("#dlg [data-multi] .chip")) setTimeout(dlgTot); });
+document.addEventListener("change", e => { if (dlgTot && e.target.closest("#dlg input[name=d]")) dlgTot(); });
+const totLine = `<p class="hint cat-tot" id="catTot" aria-live="polite"></p>`;
+function bindTot(f, calc) {
+  dlgTot = () => { const g = f.querySelector("[data-multi] [aria-pressed=true]"), d = f.querySelector("input[name=d]")?.value || cur + "-01", el = f.querySelector("#catTot"); if (el) el.textContent = g ? calc(g.dataset.v, monthOf(d)) : ""; };
+  dlgTot(); $("#dlg").addEventListener("close", () => (dlgTot = null), { once: true });
+}
+
+/** Entrata del mese: importo + tipo (come una spesa). «Saldo iniziale» è un saldo: sostituisce, non si somma. */
+async function incomeDialog(e = {}) {
+  const isNew = !e.id, vv = S().settings.voucher || 8, k0 = e.k || "salary";
+  const amt0 = e.k === "start" ? (S().months[cur]?.start ?? monthSummary(S(), cur).start) : e.amt;
+  const r = await dialog(isNew ? t("inc.new") : t("inc.edit"), `
+    <label class="f">${t("e.amount")}<input class="amt" name="amt" inputmode="decimal" autocomplete="off" required value="${amt0 != null ? fmtNum(amt0, locale()) : ""}" placeholder="0,00"></label>
+    <fieldset><legend>${t("inc.kind")}</legend><div class="catgrid" data-multi="k" data-single="1" role="group">${INC.map(([k, i]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === k0}">${ic(i)} ${t("inc.k." + k)}</button>`).join("")}</div>${totLine}</fieldset>
+    <div class="grid2"><label class="f">${t("e.date")}<input type="date" name="d" value="${e.d || (cur === monthOf(today()) ? today() : cur + "-01")}" required></label>
+    <label class="f">${t("e.note")}<input name="note" value="${esc(e.note || "")}" maxlength="80"></label></div>
+    <p class="hint">${t("meta.vhint", { v: money(vv) })}</p>`,
+    { extra: isNew || (e.k === "start" && S().months[cur]?.start == null) ? "" : `<button class="btn danger" value="del" formnovalidate>${t("ui.delete")}</button>`,
+      onOpen: f => bindTot(f, (k, m) => k === "start" ? t("inc.startNow", { amt: monthSummary(S(), m).start == null ? "—" : money(monthSummary(S(), m).start) }) : t("inc.monthTot", { amt: money(incomeTotals(S(), m)[k]) })) });
   if (!r) return;
-  const patch = {};
-  for (const k of ["start", "end", "salary", "extra", "refunds", "vIn", "vUsed"]) {
-    const raw = String(r[k] || "").trim();
-    // "5x" o "5 x" = numero di buoni × valore
-    const cnt = raw.match(/^(\d+)\s*[x×*]$/i);
-    patch[k] = raw === "" ? null : cnt ? round2(+cnt[1] * vv) : num(raw);
+  if (r._btn === "del") {
+    if (e.k === "start") { const old = S().months[cur]?.start; store.setMonth(cur, { start: null }); toast(t("e.deleted"), { label: t("ui.undo"), run: () => store.setMonth(cur, { start: old }) }); return; }
+    store.remove("incomes", e.id); ch.cheer("delete"); toast(t("e.deleted"), { label: t("ui.undo"), run: () => store.put("incomes", { ...e, del: 0 }) }); return;
   }
-  store.setMonth(cur, patch);
-  const sv = monthSummary(S(), cur).savings;
+  const k = r.k?.[0] || "salary", raw = String(r.amt || "").trim(), cnt = raw.match(/^(\d+)\s*[x×*]$/i);
+  const amt = cnt && (k === "vIn" || k === "vUsed") ? round2(+cnt[1] * vv) : num(raw);
+  if (amt == null) return toast(t("e.badAmount"));
+  const m = monthOf(r.d);
+  if (k === "start") {
+    if (e.id && e.k !== "start") store.remove("incomes", e.id);
+    store.setMonth(m, { start: round2(amt) });
+  } else {
+    if (e.k === "start") store.setMonth(cur, { start: null });
+    store.put("incomes", { ...(e.k === "start" ? {} : e), k, amt: round2(amt), d: r.d, m, note: r.note.trim(), src: e.src || "manual" });
+  }
+  if (m !== cur) { cur = m; render(); }
+  const sv = monthSummary(S(), m).savings;
   afterSave({ say: sv == null ? ["meta"] : sv > 0 ? ["saveUp", { amt: money(sv) }, 1] : sv < 0 ? ["saveDown"] : ["meta"] });
 }
 
@@ -554,7 +583,7 @@ function saveReceipt() {
   for (const it of [...on, ...(r.lines || [])]) if (it.changed && !it.total) store.learn(it.name, it.cats);
   if (r.store && r.mode === "total" && on[0]?.changed) store.learn(storeKey(r.store), on[0].cats);
   store.putMany("entries", Object.entries(g).map(([cat, x]) => ({ d, m, cat, amt: round2(x.amt), items: x.items, note: r.store || t("s.k.receipt"), src: "receipt", doc })));
-  if (r.vouchers) { const mm = S().months[m] || {}; store.setMonth(m, { vUsed: round2((mm.vUsed || 0) + r.vouchers) }); }
+  if (r.vouchers) store.put("incomes", { k: "vUsed", amt: round2(r.vouchers), d, m, note: r.store || t("s.k.receipt"), src: "receipt", doc });
   const sum = round2(on.reduce((a, i) => a + i.amount, 0));
   scanState = null; cur = m; tab = "month"; kapi.confetti(); go("month");
   afterSave({ say: [sum > 100 ? "receiptBig" : "receipt", { n: on.length, sum: money(sum) }, 1], before, cats: Object.keys(g), m });
@@ -598,8 +627,10 @@ function reviewPayslip() {
   const r = scanState.res; scanState.after = () => ($("#pSave").onclick = () => {
     const m = $("#pMonth").value, net = num($("#pNet").value), v = num($("#pV").value);
     if (!m || net == null) return toast(t("e.badAmount"));
-    const patch = { salary: net }; if (v != null) patch.vIn = v;
-    store.setMonth(m, patch); scanState = null; cur = m; kapi.confetti(); go("month");
+    // la busta paga sostituisce lo stipendio (e i buoni) del mese già letti da una busta o dai vecchi campi del mese
+    const old = live(S().incomes).filter(x => x.m === m && (x.src === "migr" || x.src === "payslip") && (x.k === "salary" || (v != null && x.k === "vIn")));
+    old.forEach(x => store.remove("incomes", x.id));
+    store.putMany("incomes", [{ id: "ps-" + m, k: "salary", amt: round2(net), d: m + "-27", m, src: "payslip" }, ...(v != null ? [{ id: "psv-" + m, k: "vIn", amt: round2(v), d: m + "-27", m, src: "payslip" }] : [])]); scanState = null; cur = m; kapi.confetti(); go("month");
     afterSave({ say: ["payslip", { net: money(net) }, 1], ev: ["payslip"] });
   });
   return `<div class="card"><h2>${ic("payslip")} ${t("s.k.payslip")}</h2>
@@ -616,15 +647,20 @@ function reviewStatement() {
     const box = $("#stRows"); if (!box) return;
     box.onchange = e => { const row = r.rows[e.target.closest(".ritem").dataset.i]; if (e.target.type === "checkbox") row.on = e.target.checked; else if (e.target.tagName === "SELECT") row.cat = e.target.value; };
     $("#stSave").onclick = () => {
-      const es = [], months = {};
+      const es = [], ins = [];
       for (const x of r.rows.filter(x => x.on)) {
         const m = monthOf(x.date);
-        if (x.cat === "_salary" || x.cat === "_extra") { const k = x.cat === "_salary" ? "salary" : "extra"; months[m] ||= {}; months[m][k] = round2((months[m][k] || 0) + Math.abs(x.amount)); continue; }
+        if (x.cat === "_salary" || x.cat === "_extra") { ins.push({ id: "st-in-" + x.date + "-" + norm(x.desc).replace(/\s/g, "").slice(0, 20) + "-" + Math.round(Math.abs(x.amount) * 100), k: x.cat === "_salary" ? "salary" : "extra", amt: round2(Math.abs(x.amount)), d: x.date, m, note: x.desc, src: "statement" }); continue; }
         es.push({ id: "st-" + x.date + "-" + norm(x.desc).replace(/\s/g, "").slice(0, 20) + "-" + Math.round(Math.abs(x.amount) * 100), d: x.date, m, cat: x.cat, amt: round2(Math.abs(x.amount)), note: x.desc, src: "statement" });
         store.learn(x.desc, [x.cat]);
       }
       const before = nLive(); if (es.length) store.putMany("entries", es);
-      for (const [m, p] of Object.entries(months)) { const old = S().months[m] || {}; store.setMonth(m, { salary: p.salary != null ? p.salary : old.salary, extra: p.extra != null ? round2((old.extra || 0) + p.extra) : old.extra }); }
+      if (ins.length) {
+        // come la busta paga: lo stipendio dell'estratto sostituisce quello già letto da una busta o dai vecchi campi
+        const sm = new Set(ins.filter(x => x.k === "salary").map(x => x.m));
+        live(S().incomes).filter(x => sm.has(x.m) && x.k === "salary" && (x.src === "migr" || x.src === "payslip")).forEach(x => store.remove("incomes", x.id));
+        store.putMany("incomes", ins);
+      }
       scanState = null; kapi.confetti(); go("month"); toast(t("s.savedRows", { n: es.length }));
       afterSave({ say: ["statement", { n: es.length }], before, cats: [...new Set(es.map(x => x.cat))], m: cur });
     };

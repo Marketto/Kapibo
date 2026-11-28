@@ -2,8 +2,8 @@
 import { DEFAULT_CATS, norm } from "./categories.js";
 import { round2 } from "./money.js";
 
-export const SCHEMA = 1;
-const COLL = ["cats", "entries", "meters", "readings", "bills", "offers"]; // array di record {id,u,del}
+export const SCHEMA = 2;
+const COLL = ["cats", "entries", "incomes", "meters", "readings", "bills", "offers"]; // array di record {id,u,del}
 const MAPS = ["months", "rules"];                                         // oggetti chiave → record {u}
 
 export const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -14,7 +14,7 @@ export const today = () => new Date(Date.now() - new Date().getTimezoneOffset() 
 export function emptyState() {
   return {
     schema: SCHEMA, settings: { currency: "EUR", voucher: 8, u: 0 },
-    cats: [], entries: [], meters: [], readings: [], bills: [], offers: [], months: {}, rules: {},
+    cats: [], entries: [], incomes: [], meters: [], readings: [], bills: [], offers: [], months: {}, rules: {},
   };
 }
 
@@ -25,8 +25,33 @@ export function normalize(s) {
   const out = { ...e, ...s, settings: { ...e.settings, ...(s.settings || {}) } };
   for (const k of COLL) out[k] = Array.isArray(s[k]) ? s[k].filter(r => r && r.id) : [];
   for (const k of MAPS) out[k] = s[k] && typeof s[k] === "object" ? s[k] : {};
+  migrateIncomes(out);
   out.schema = SCHEMA;
   return out;
+}
+
+/** Tipi di entrata (raccolta incomes, record {id,m,d,k,amt,note,src}); vUsed = buoni pasto spesi. Il saldo iniziale
+ *  resta nel mese (months[m].start): è un saldo, non una somma. */
+export const INC_KINDS = ["salary", "extra", "refunds", "vIn", "vUsed"];
+/** Schema 1 → 2: i campi del mese (stipendio, extra, rimborsi, buoni) diventano entrate con id fisso "mig-<mese>-<tipo>",
+ *  così due dispositivi che migrano lo stesso mese non creano doppioni; una modifica più recente dell'entrata vince. */
+function migrateIncomes(out) {
+  const byId = new Map(out.incomes.map(r => [r.id, r]));
+  for (const [m, meta] of Object.entries(out.months)) {
+    if (!meta || !INC_KINDS.some(k => k in meta)) continue;
+    const rest = { ...meta };
+    for (const k of INC_KINDS) {
+      if (!(k in rest)) continue;
+      const v = rest[k]; delete rest[k];
+      if (typeof v !== "number" || !isFinite(v) || !v || meta.del) continue;
+      const id = "mig-" + m + "-" + k, old = byId.get(id);
+      if (old && (old.u || 0) >= (meta.u || 0)) continue;
+      const r = { id, m, d: m + "-01", k, amt: v, src: "migr", u: meta.u || 0 };
+      byId.set(id, r);
+    }
+    out.months[m] = rest;
+  }
+  out.incomes = [...byId.values()];
 }
 
 /** Unione di due copie (locale e cloud): per ogni record vince la modifica più recente. */
@@ -110,6 +135,15 @@ const prevMonth = m => { const [y, mo] = m.split("-").map(Number); const d = new
 export const nextMonth = m => { const [y, mo] = m.split("-").map(Number); const d = new Date(y, mo, 1); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); };
 export { prevMonth };
 
+/** Totali del mese per tipo di entrata (più gli eventuali campi vecchi non ancora migrati). */
+export function incomeTotals(s, m) {
+  const meta = s.months?.[m] || {}, o = {};
+  for (const k of INC_KINDS) o[k] = typeof meta[k] === "number" && isFinite(meta[k]) ? meta[k] : 0;
+  for (const r of s.incomes || []) if (!r.del && r.m === m && o[r.k] != null) o[r.k] += r.amt;
+  for (const k of INC_KINDS) o[k] = round2(o[k]);
+  return o;
+}
+
 /** Riepilogo di un mese. */
 export function monthSummary(s, m) {
   const meta = s.months[m] || {};
@@ -119,20 +153,21 @@ export function monthSummary(s, m) {
   const num = v => (typeof v === "number" && isFinite(v) ? v : null);
   const start = num(meta.start) ?? num(s.months[prevMonth(m)]?.end);
   const end = num(meta.end) ?? num(s.months[nextMonth(m)]?.start);
-  const salary = num(meta.salary) || 0, extra = num(meta.extra) || 0, refunds = num(meta.refunds) || 0;
-  const vIn = num(meta.vIn) || 0, vUsed = num(meta.vUsed) || 0;
+  const inc = incomeTotals(s, m);
+  const { salary, extra, refunds, vIn, vUsed } = inc;
   const income = round2(salary + extra + refunds);
   // spesa reale dal conto: quanto è uscito davvero (saldo iniziale + entrate − saldo finale)
   const effective = start != null && end != null ? round2(start + income - end) : null;
   const savings = start != null && end != null ? round2(end - start) : income > 0 ? round2(income - tracked + vUsed) : null;
   // spese pagate con i buoni non escono dal conto: si aggiungono prima del confronto
   const untracked = effective != null ? round2(effective + vUsed - tracked) : null;
-  return { m, meta, byCat, tracked: round2(tracked), start, end, salary, extra, refunds, income, vIn, vUsed, effective, savings, untracked,
+  return { m, meta, byCat, inc, tracked: round2(tracked), start, end, salary, extra, refunds, income, vIn, vUsed, effective, savings, untracked,
     rate: income > 0 && savings != null ? savings / income : null };
 }
 
 export function monthsWithData(s) {
   const set = new Set(Object.keys(s.months).filter(k => !s.months[k].del));
   for (const e of s.entries) if (!e.del) set.add(e.m);
+  for (const e of s.incomes || []) if (!e.del) set.add(e.m);
   return [...set].filter(Boolean).sort();
 }

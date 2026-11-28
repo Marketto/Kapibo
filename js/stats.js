@@ -1,5 +1,5 @@
 // Statistiche e consigli di risparmio (regole semplici, tutto in locale).
-import { monthSummary, monthsWithData, prevMonth, live } from "./store.js";
+import { monthSummary, monthsWithData, prevMonth, live, incomeTotals } from "./store.js";
 import { round2 } from "./money.js";
 import { norm } from "./categories.js";
 
@@ -243,7 +243,8 @@ export function tips(s, m, fmt, opts = {}) {
 
 /** Saldo buoni pasto: entrati − usati di sempre. */
 export function voucherBalance(s) {
-  if (!Object.values(s.months).some(x => x.vUsed)) return 0;
-  let b = 0; for (const k in s.months) { const x = s.months[k]; if (x.del) continue; b += (x.vIn || 0) - (x.vUsed || 0); }
+  const ms = new Set([...Object.keys(s.months), ...(s.incomes || []).filter(r => !r.del).map(r => r.m)]), tot = [...ms].filter(m => !s.months[m]?.del).map(m => incomeTotals(s, m));
+  if (!tot.some(x => x.vUsed)) return 0;
+  let b = 0; for (const x of tot) b += x.vIn - x.vUsed;
   return round2(Math.max(0, b));
 }

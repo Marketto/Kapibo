@@ -22,6 +22,7 @@ export const STEPS = [
   { id: "trends", v: "1.3.0", tab: "stats", sel: "#trends" },
   { id: "share", v: "1.5.0", sel: "#heroRow", top: true },
   { id: "mochi", v: "1.6.0", tab: "more", sel: "#oMochi" },
+  { id: "income", v: "1.8.0", tab: "month", sel: 'main [data-act="meta"]' },
   { id: "yoy", v: "1.4.0", tab: "stats", sel: "#yoy" },
   { id: "end", v: "1.0.0" },
 ];
